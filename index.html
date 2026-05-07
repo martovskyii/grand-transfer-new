@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grand Transfer — сайт у розробці</title>
+  <meta name="description" content="Grand Transfer — VIP трансфери Україна, Молдова, Польща. Сайт у розробці." />
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(196, 157, 87, 0.16), transparent 28%),
+        radial-gradient(circle at 85% 25%, rgba(23, 67, 48, 0.35), transparent 32%),
+        linear-gradient(135deg, #030604 0%, #07100b 45%, #020302 100%);
+      color: #f5efe1;
+    }
+
+    .page {
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+
+    .card {
+      width: min(920px, 100%);
+      padding: clamp(32px, 6vw, 72px);
+      border: 1px solid rgba(218, 180, 108, 0.22);
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(10, 16, 12, 0.86), rgba(3, 6, 4, 0.74));
+      box-shadow: 0 30px 100px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255,255,255,0.04);
+      text-align: center;
+    }
+
+    .brand {
+      font-family: Georgia, serif;
+      font-size: clamp(28px, 4vw, 48px);
+      letter-spacing: 0.08em;
+      color: #e7c37a;
+    }
+
+    .subbrand,
+    .eyebrow,
+    .note {
+      letter-spacing: 0.34em;
+      color: #c9a66b;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .logo {
+      margin-bottom: 48px;
+    }
+
+    .subbrand {
+      margin-top: 8px;
+    }
+
+    h1 {
+      margin: 18px 0;
+      font-family: Georgia, serif;
+      font-weight: 400;
+      font-size: clamp(36px, 6vw, 76px);
+      line-height: 1.05;
+    }
+
+    .text {
+      max-width: 680px;
+      margin: 0 auto 32px;
+      color: rgba(245, 239, 225, 0.76);
+      font-size: clamp(16px, 2vw, 20px);
+      line-height: 1.7;
+    }
+
+    .button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 56px;
+      padding: 0 34px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #f0d59a, #c79a51);
+      color: #070604;
+      text-decoration: none;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: 0.2s;
+    }
+
+    .button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(199, 154, 81, 0.25);
+    }
+
+    .note {
+      margin-top: 24px;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <section class="card">
+
+      <div class="logo">
+        <div class="brand">GRAND TRANSFER</div>
+        <div class="subbrand">VIP СЕРВІС</div>
+      </div>
+
+      <p class="eyebrow">САЙТ У РОЗРОБЦІ</p>
+
+      <h1>
+        VIP трансфери<br>
+        Україна — Молдова — Польща
+      </h1>
+
+      <p class="text">
+        Ми готуємо сайт до запуску. Якщо потрібно замовити трансфер або уточнити маршрут —
+        напишіть нам у Telegram.
+      </p>
+
+      <a class="button" href="https://t.me/grand_transfer_com" target="_blank">
+        Написати в Telegram
+      </a>
+
+      <p class="note">@grand_transfer_com</p>
+
+    </section>
+  </main>
+</body>
+</html>
