@@ -1,16 +1,22 @@
 import type { MetadataRoute } from "next";
 import { supabase } from "@/lib/supabase";
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+const defaultSiteUrl = "https://www.grand-transfer.com";
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || defaultSiteUrl).replace(
+  /\/+$/,
+  ""
+);
 const languages = ["ua"] as const;
 const reservedStaticSlugs = new Set([
   "about",
+  "api",
   "avtopark",
   "blog",
   "kontakty",
   "pro-kompaniiu",
-  "pro-nas",
-  "routes"
+  "routes",
+  "sitemap.xml",
+  "robots.txt"
 ]);
 
 type SitemapRouteRecord = {
@@ -20,7 +26,7 @@ type SitemapRouteRecord = {
 };
 
 function toAbsoluteUrl(path: string) {
-  return new URL(path, siteUrl).toString();
+  return new URL(path, `${siteUrl}/`).toString();
 }
 
 function buildLocalizedPath(
@@ -32,6 +38,22 @@ function buildLocalizedPath(
   }
 
   return path === "/" ? `/${language}` : `/${language}${path}`;
+}
+
+function resolveLastModified(
+  updatedAt: string | null | undefined,
+  createdAt: string | null | undefined,
+  fallback: Date
+) {
+  const source = updatedAt || createdAt;
+
+  if (!source) {
+    return fallback;
+  }
+
+  const parsed = new Date(source);
+
+  return Number.isNaN(parsed.getTime()) ? fallback : parsed;
 }
 
 function buildEntry(
@@ -66,6 +88,7 @@ async function fetchActiveRoutes(): Promise<SitemapRouteRecord[]> {
       .from("routes")
       .select(selectFields)
       .eq("is_active", true)
+      .eq("lang", "ua")
       .order("slug", { ascending: true });
 
     if (!error && data) {
@@ -80,6 +103,7 @@ export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
+  const entries = new Map<string, MetadataRoute.Sitemap[number]>();
   const staticPaths = [
     "/",
     "/avtopark",
@@ -87,32 +111,40 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/blog/odesa-kyshyniv-transfer",
     "/kontakty",
     "/pro-kompaniiu"
-  ];
+  ] as const;
 
-  const staticEntries = languages.flatMap((language) =>
-    staticPaths.map((path) =>
-      buildEntry(path, language, {
+  for (const language of languages) {
+    for (const path of staticPaths) {
+      const entry = buildEntry(path, language, {
         lastModified: now,
         changeFrequency: path === "/" ? "daily" : "weekly",
         priority: path === "/" ? 1 : 0.8
-      })
-    )
-  );
+      });
 
-  const routeEntries = (await fetchActiveRoutes())
-    .filter((route) => route.slug && !reservedStaticSlugs.has(route.slug))
-    .flatMap((route) => {
-      const routePath = `/${route.slug}`;
-      const lastModified = route.updated_at || route.created_at || now;
+      entries.set(entry.url, entry);
+    }
+  }
 
-      return languages.map((language) =>
-        buildEntry(routePath, language, {
-          lastModified,
-          changeFrequency: "weekly",
-          priority: 0.7
-        })
-      );
-    });
+  for (const route of await fetchActiveRoutes()) {
+    const slug = typeof route.slug === "string" ? route.slug.trim() : "";
 
-  return [...staticEntries, ...routeEntries];
+    if (!slug || reservedStaticSlugs.has(slug)) {
+      continue;
+    }
+
+    const routePath = `/${slug}`;
+    const lastModified = resolveLastModified(route.updated_at, route.created_at, now);
+
+    for (const language of languages) {
+      const entry = buildEntry(routePath, language, {
+        lastModified,
+        changeFrequency: "weekly",
+        priority: 0.7
+      });
+
+      entries.set(entry.url, entry);
+    }
+  }
+
+  return Array.from(entries.values());
 }

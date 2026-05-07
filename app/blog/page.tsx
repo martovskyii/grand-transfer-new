@@ -7,7 +7,10 @@ import { BlogStaticShell } from "../../components/blog-static-shell";
 export const metadata: Metadata = {
   title: "Блог про трансфери та поїздки",
   description:
-    "Корисна інформація про маршрути, кордон та поїздки між Україною та Європою."
+    "Корисна інформація про маршрути, кордон та поїздки між Україною та Європою.",
+  alternates: {
+    canonical: "/blog"
+  }
 };
 
 export default function BlogPage() {

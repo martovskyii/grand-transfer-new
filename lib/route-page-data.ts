@@ -74,9 +74,16 @@ export function buildRouteMetadata(route: DynamicRouteData | null): Metadata {
     };
   }
 
+  const normalizedSlug = typeof route.slug === "string" ? route.slug.trim() : "";
+
   return {
     title: route.seo_title || route.h1 || "Grand Transfer",
-    description: route.seo_description || route.description || undefined
+    description: route.seo_description || route.description || undefined,
+    alternates: normalizedSlug
+      ? {
+          canonical: `/${normalizedSlug}`
+        }
+      : undefined
   };
 }
 

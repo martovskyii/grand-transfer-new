@@ -7,7 +7,10 @@ import { BlogStaticShell } from "../../../components/blog-static-shell";
 export const metadata: Metadata = {
   title: "Трансфер Одеса — Кишинів: ціна, маршрут і час у дорозі",
   description:
-    "Як замовити приватний трансфер Одеса — Кишинів, скільки коштує поїздка, скільки часу займає дорога та як проходить маршрут до Молдови."
+    "Як замовити приватний трансфер Одеса — Кишинів, скільки коштує поїздка, скільки часу займає дорога та як проходить маршрут до Молдови.",
+  alternates: {
+    canonical: "/blog/odesa-kyshyniv-transfer"
+  }
 };
 
 export default function OdesaKyshynivTransferArticlePage() {
