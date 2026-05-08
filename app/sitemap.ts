@@ -72,31 +72,25 @@ function buildEntry(
   };
 }
 
-async function fetchActiveRoutes(): Promise<SitemapRouteRecord[]> {
+async function fetchPriorityRoutes(): Promise<SitemapRouteRecord[]> {
   if (!supabase) {
     return [];
   }
 
-  const attempts = [
-    "slug, updated_at, created_at",
-    "slug, created_at",
-    "slug"
-  ] as const;
+  const { data, error } = await supabase
+    .from("routes")
+    .select("slug, updated_at, created_at")
+    .eq("is_active", true)
+    .eq("lang", "ua")
+    .eq("sitemap_priority", true)
+    .order("slug", { ascending: true });
 
-  for (const selectFields of attempts) {
-    const { data, error } = await supabase
-      .from("routes")
-      .select(selectFields)
-      .eq("is_active", true)
-      .eq("lang", "ua")
-      .order("slug", { ascending: true });
-
-    if (!error && data) {
-      return data as unknown as SitemapRouteRecord[];
-    }
+  if (error) {
+    console.error("[sitemap] Failed to fetch priority routes:", error);
+    return [];
   }
 
-  return [];
+  return (data as SitemapRouteRecord[] | null) || [];
 }
 
 export const dynamic = "force-dynamic";
@@ -110,7 +104,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/blog",
     "/blog/odesa-kyshyniv-transfer",
     "/kontakty",
-    "/pro-kompaniiu"
+    "/pro-kompaniiu",
+    "/routes"
   ] as const;
 
   for (const language of languages) {
@@ -125,7 +120,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     }
   }
 
-  for (const route of await fetchActiveRoutes()) {
+  for (const route of await fetchPriorityRoutes()) {
     const slug = typeof route.slug === "string" ? route.slug.trim() : "";
 
     if (!slug || reservedStaticSlugs.has(slug)) {

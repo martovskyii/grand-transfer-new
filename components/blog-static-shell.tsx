@@ -31,6 +31,7 @@ const blogNavItems = [
 const blogFooterLinks = [
   { label: "Головна", href: "/" },
   { label: "Напрямки", href: "/#directions" },
+  { label: "Усі напрямки", href: "/routes" },
   { label: "Автопарк", href: "/avtopark" },
   { label: "Контакти", href: "/kontakty" },
   { label: "Про нас", href: "/pro-kompaniiu" },
