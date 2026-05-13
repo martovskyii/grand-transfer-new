@@ -160,6 +160,35 @@ const routeGroups: { title: string; routes: RouteGroupItem[] }[] = [
   }
 ];
 
+const preferredRouteCityOrder = [
+  "Київ",
+  "Одеса",
+  "Кишинів",
+  "Дніпро",
+  "Краків",
+  "Львів",
+  "Варшава",
+  "Ясси",
+  "Будапешт",
+  "Вінниця",
+  "Житомир",
+  "Запоріжжя",
+  "Івано-Франківськ",
+  "Кропивницький",
+  "Луцьк",
+  "Миколаїв",
+  "Полтава",
+  "Рівне",
+  "Суми",
+  "Тернопіль",
+  "Ужгород",
+  "Харків",
+  "Хмельницький",
+  "Черкаси",
+  "Чернівці",
+  "Чернігів"
+];
+
 const processSteps: ProcessStep[] = [
   {
     number: "01",
@@ -347,7 +376,24 @@ export default function HomePageClient({ initialHomepageRoutes }: HomePageClient
         .map((route) => (typeof route.from_city === "string" ? route.from_city.trim() : ""))
         .filter(Boolean)
     )
-  ).sort((left, right) => left.localeCompare(right, "uk"));
+  ).sort((left, right) => {
+    const leftPriority = preferredRouteCityOrder.indexOf(left);
+    const rightPriority = preferredRouteCityOrder.indexOf(right);
+
+    if (leftPriority !== -1 && rightPriority !== -1) {
+      return leftPriority - rightPriority;
+    }
+
+    if (leftPriority !== -1) {
+      return -1;
+    }
+
+    if (rightPriority !== -1) {
+      return 1;
+    }
+
+    return left.localeCompare(right, "uk");
+  });
 
   useEffect(() => {
     if (routeCities.length > 0 && !routeCities.includes(activeRouteCity)) {
