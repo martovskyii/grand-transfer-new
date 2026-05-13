@@ -11,6 +11,7 @@ import comfortCarImage from "../img/class-1.png";
 import businessCarImage from "../img/class-2.png";
 import premiumCarImage from "../img/class-3.png";
 import minivanCarImage from "../img/class-4.png";
+import routeInfoFallbackImage from "../img/route-map-fallback-2.png";
 import {
   DateField,
   PhoneField,
@@ -20,8 +21,10 @@ import {
 } from "./lux-form-fields";
 import type { CarClassCardData } from "./car-classes-grid";
 import { ReviewsSection } from "./reviews-section";
+import { TELEGRAM_URL } from "../lib/contact-links";
 import {
   FloatingContactWidget,
+  FooterContactLinks,
   HeaderPhoneLink,
   LanguageSwitcher,
   SuccessPopup
@@ -326,7 +329,10 @@ export default function RoutePageSupabaseClient({
   const routeLabel = `${fromCity} — ${toCity}`;
   const routeH1 = (routeData.h1 || routeLabel).replace(/\s*\([^)]*\)\s*$/, "").trim();
   const routeInfoBackground =
-    routeData.route_image_url || "/img/route-map-fallback-2.png";
+    typeof routeData.route_image_url === "string" &&
+    routeData.route_image_url.trim().length > 0
+      ? routeData.route_image_url.trim()
+      : routeInfoFallbackImage.src;
   const routeDescription = routeData.description || "";
   const routeSubtitle = /приватний\s+vip\s+трансфер/i.test(routeDescription)
     ? routeDescription
@@ -605,8 +611,10 @@ export default function RoutePageSupabaseClient({
                     >
                       ЗАМОВИТИ ТРАНСФЕР
                     </a>
-                    <button
-                      type="button"
+                    <a
+                      href={TELEGRAM_URL}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       onClick={() => {
                         trackMessengerClick({
                           messenger: "telegram",
@@ -623,7 +631,7 @@ export default function RoutePageSupabaseClient({
                     >
                       <TelegramIcon className="h-[15px] w-[15px]" />
                       НАПИСАТИ В TELEGRAM
-                    </button>
+                    </a>
                   </div>
                 </div>
 
@@ -1247,91 +1255,7 @@ export default function RoutePageSupabaseClient({
                 <h3 className="text-[0.76rem] font-bold uppercase tracking-[0.22em] text-[var(--champagne)]">
                   Контакти
                 </h3>
-                <div className="mt-5 flex flex-col gap-3 text-[0.95rem] text-[rgba(247,243,234,0.86)]">
-                  <a
-                    href={`tel:${phoneHref}`}
-                    onClick={() =>
-                      trackPhoneClick({
-                        phone: phoneHref,
-                        location: "footer",
-                        pageType: "route"
-                      })
-                    }
-                    className="transition hover:text-[var(--soft-gold)]"
-                  >
-                    {phoneNumber}
-                  </a>
-                  <a
-                    href="#"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      trackMessengerClick({
-                        messenger: "whatsapp",
-                        location: "footer",
-                        pageType: "route"
-                      });
-                    }}
-                    className="transition hover:text-[var(--soft-gold)]"
-                  >
-                    WhatsApp
-                  </a>
-                  <a
-                    href="#"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      trackMessengerClick({
-                        messenger: "telegram",
-                        location: "footer",
-                        pageType: "route"
-                      });
-                    }}
-                    className="transition hover:text-[var(--soft-gold)]"
-                  >
-                    Telegram
-                  </a>
-                  <a
-                    href="#"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      trackSocialClick({
-                        channel: "instagram",
-                        location: "footer",
-                        pageType: "route"
-                      });
-                    }}
-                    className="transition hover:text-[var(--soft-gold)]"
-                  >
-                    Instagram
-                  </a>
-                  <a
-                    href="#"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      trackSocialClick({
-                        channel: "tiktok",
-                        location: "footer",
-                        pageType: "route"
-                      });
-                    }}
-                    className="transition hover:text-[var(--soft-gold)]"
-                  >
-                    TikTok
-                  </a>
-                  <a
-                    href="#"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      trackSocialClick({
-                        channel: "youtube",
-                        location: "footer",
-                        pageType: "route"
-                      });
-                    }}
-                    className="transition hover:text-[var(--soft-gold)]"
-                  >
-                    YouTube
-                  </a>
-                </div>
+                <FooterContactLinks pageType="route" />
               </div>
 
               <div>

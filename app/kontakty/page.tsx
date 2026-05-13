@@ -13,10 +13,22 @@ import {
 } from "../../components/lux-form-fields";
 import {
   FloatingContactWidget,
+  FooterContactLinks,
   HeaderPhoneLink,
   LanguageSwitcher,
   SuccessPopup
 } from "../../components/site-ui";
+import {
+  EMAIL_HREF,
+  EMAIL_ADDRESS,
+  INSTAGRAM_URL,
+  PHONE_DISPLAY,
+  PHONE_HREF,
+  TELEGRAM_URL,
+  TIKTOK_URL,
+  VIBER_URL,
+  YOUTUBE_URL
+} from "../../lib/contact-links";
 import {
   trackCtaClick,
   trackFaqOpen,
@@ -50,7 +62,7 @@ type ContactMethod = {
   actionLabel: string;
   href: string;
   Icon: ComponentType<IconProps>;
-  kind: "phone" | "telegram" | "whatsapp" | "instagram" | "tiktok" | "youtube";
+  kind: "phone" | "telegram" | "viber" | "email" | "instagram" | "tiktok" | "youtube";
 };
 
 type ContactFaqItem = {
@@ -90,8 +102,8 @@ const footerLinks = [
   { label: "Блог", href: "/blog" }
 ];
 
-const phoneNumber = "+38 063 824 3223";
-const phoneHref = "+380638243223";
+const phoneNumber = PHONE_DISPLAY;
+const phoneHref = PHONE_HREF;
 const formPhoneMaxLength = 15;
 
 const contactFeatures: ContactFeature[] = [
@@ -118,41 +130,49 @@ const contactMethods: ContactMethod[] = [
   },
   {
     title: "Telegram",
-    value: "@grand_transfer",
+    value: "@grand_transfer_com",
     actionLabel: "Написати",
-    href: "#",
+    href: TELEGRAM_URL,
     Icon: TelegramIcon,
     kind: "telegram"
   },
   {
-    title: "WhatsApp",
+    title: "Viber",
     value: phoneNumber,
-    actionLabel: "Написати",
-    href: "#",
+    actionLabel: "Відкрити",
+    href: VIBER_URL,
     Icon: WhatsAppIcon,
-    kind: "whatsapp"
+    kind: "viber"
+  },
+  {
+    title: "Email",
+    value: EMAIL_ADDRESS,
+    actionLabel: "Написати",
+    href: EMAIL_HREF,
+    Icon: MailIcon,
+    kind: "email"
   },
   {
     title: "Instagram",
-    value: "@grand.transfer.vip",
+    value: "@grand_transfer_com",
     actionLabel: "Перейти",
-    href: "#",
+    href: INSTAGRAM_URL,
     Icon: InstagramIcon,
     kind: "instagram"
   },
   {
     title: "TikTok",
-    value: "@grand.transfer.vip",
+    value: "@grand_transfer.com",
     actionLabel: "Перейти",
-    href: "#",
+    href: TIKTOK_URL,
     Icon: TikTokIcon,
     kind: "tiktok"
   },
   {
     title: "YouTube",
-    value: "Grand Transfer",
+    value: "@grand-transfer",
     actionLabel: "Перейти",
-    href: "#",
+    href: YOUTUBE_URL,
     Icon: YouTubeIcon,
     kind: "youtube"
   }
@@ -305,7 +325,7 @@ export default function KontaktyPage() {
     });
   }
 
-  function handleMethodClick(method: ContactMethod, event: React.MouseEvent<HTMLAnchorElement>) {
+  function handleMethodClick(method: ContactMethod) {
     if (method.kind === "phone") {
       trackPhoneClick({
         phone: phoneHref,
@@ -315,22 +335,22 @@ export default function KontaktyPage() {
       return;
     }
 
-    event.preventDefault();
-
-    if (method.kind === "telegram" || method.kind === "whatsapp") {
+    if (method.kind === "telegram") {
       trackMessengerClick({
-        messenger: method.kind,
+        messenger: "telegram",
         location: "contacts_page",
         pageType: "contacts"
       });
       return;
     }
 
-    trackSocialClick({
-      channel: method.kind,
-      location: "contacts_page",
-      pageType: "contacts"
-    });
+    if (method.kind === "instagram" || method.kind === "tiktok" || method.kind === "youtube") {
+      trackSocialClick({
+        channel: method.kind,
+        location: "contacts_page",
+        pageType: "contacts"
+      });
+    }
   }
 
   function validateForm() {
@@ -551,12 +571,11 @@ export default function KontaktyPage() {
                   </p>
                   <a
                     href={href}
-                    onClick={(event) =>
-                      handleMethodClick(
-                        { title, value, actionLabel, href, Icon, kind },
-                        event
-                      )
+                    onClick={() =>
+                      handleMethodClick({ title, value, actionLabel, href, Icon, kind })
                     }
+                    target={kind === "telegram" || kind === "instagram" || kind === "tiktok" || kind === "youtube" ? "_blank" : undefined}
+                    rel={kind === "telegram" || kind === "instagram" || kind === "tiktok" || kind === "youtube" ? "noopener noreferrer" : undefined}
                     className="contacts-method-button mt-5"
                   >
                     {actionLabel}
@@ -780,91 +799,7 @@ export default function KontaktyPage() {
                 <h3 className="text-[0.76rem] font-bold uppercase tracking-[0.22em] text-[var(--champagne)]">
                   Контакти
                 </h3>
-                <div className="mt-5 flex flex-col gap-3 text-[0.95rem] text-[rgba(247,243,234,0.86)]">
-                  <a
-                    href={`tel:${phoneHref}`}
-                    onClick={() =>
-                      trackPhoneClick({
-                        phone: phoneHref,
-                        location: "footer",
-                        pageType: "contacts"
-                      })
-                    }
-                    className="transition hover:text-[var(--soft-gold)]"
-                  >
-                    {phoneNumber}
-                  </a>
-                  <a
-                    href="#"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      trackMessengerClick({
-                        messenger: "whatsapp",
-                        location: "footer",
-                        pageType: "contacts"
-                      });
-                    }}
-                    className="transition hover:text-[var(--soft-gold)]"
-                  >
-                    WhatsApp
-                  </a>
-                  <a
-                    href="#"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      trackMessengerClick({
-                        messenger: "telegram",
-                        location: "footer",
-                        pageType: "contacts"
-                      });
-                    }}
-                    className="transition hover:text-[var(--soft-gold)]"
-                  >
-                    Telegram
-                  </a>
-                  <a
-                    href="#"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      trackSocialClick({
-                        channel: "instagram",
-                        location: "footer",
-                        pageType: "contacts"
-                      });
-                    }}
-                    className="transition hover:text-[var(--soft-gold)]"
-                  >
-                    Instagram
-                  </a>
-                  <a
-                    href="#"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      trackSocialClick({
-                        channel: "tiktok",
-                        location: "footer",
-                        pageType: "contacts"
-                      });
-                    }}
-                    className="transition hover:text-[var(--soft-gold)]"
-                  >
-                    TikTok
-                  </a>
-                  <a
-                    href="#"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      trackSocialClick({
-                        channel: "youtube",
-                        location: "footer",
-                        pageType: "contacts"
-                      });
-                    }}
-                    className="transition hover:text-[var(--soft-gold)]"
-                  >
-                    YouTube
-                  </a>
-                </div>
+                <FooterContactLinks pageType="contacts" />
               </div>
 
               <div>
@@ -1046,6 +981,29 @@ function PhoneIcon({ className = "h-4 w-4" }: IconProps) {
     <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
       <path
         d="M7.3 4.7h2.1l1.1 4-1.4 1.4a13.2 13.2 0 0 0 4.8 4.8l1.4-1.4 4 1.1v2.1a1.8 1.8 0 0 1-1.8 1.8A14.8 14.8 0 0 1 5.5 6.5 1.8 1.8 0 0 1 7.3 4.7Z"
+        stroke="currentColor"
+        strokeWidth="1.45"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function MailIcon({ className = "h-4 w-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+      <rect
+        x="4"
+        y="6"
+        width="16"
+        height="12"
+        rx="2"
+        stroke="currentColor"
+        strokeWidth="1.45"
+      />
+      <path
+        d="m5.6 7.5 6.4 5 6.4-5"
         stroke="currentColor"
         strokeWidth="1.45"
         strokeLinecap="round"

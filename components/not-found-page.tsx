@@ -10,6 +10,7 @@ import {
 } from "./lux-form-fields";
 import {
   FloatingContactWidget,
+  FooterContactLinks,
   HeaderPhoneLink,
   LanguageSwitcher,
   SuccessPopup
@@ -20,6 +21,7 @@ import {
   trackPhoneClick
 } from "../lib/tracking";
 import { useTransferForm } from "../lib/use-transfer-form";
+import { EMAIL_HREF, TELEGRAM_URL } from "../lib/contact-links";
 
 const navItems = [
   { label: "ГОЛОВНА", href: "/" },
@@ -42,7 +44,7 @@ const footerLinks = [
 
 const phoneNumber = "+38 063 824 3223";
 const phoneHref = "+380638243223";
-const telegramHref = "https://t.me/grand_transfer_com";
+const telegramHref = TELEGRAM_URL;
 
 const trustPoints = [
   "Подача 24/7",
@@ -207,6 +209,8 @@ export function NotFoundPage() {
                   <div className="mt-4 flex w-full flex-col justify-center gap-3 sm:flex-row sm:flex-wrap">
                     <a
                       href={telegramHref}
+                      target="_blank"
+                      rel="noopener noreferrer"
                       onClick={() =>
                         trackMessengerClick({
                           messenger: "telegram",
@@ -219,18 +223,10 @@ export function NotFoundPage() {
                       Написати в Telegram
                     </a>
                     <a
-                      href="#"
-                      onClick={(event) => {
-                        event.preventDefault();
-                        trackMessengerClick({
-                          messenger: "whatsapp",
-                          location: "not_found_hero",
-                          pageType: "about"
-                        });
-                      }}
+                      href={EMAIL_HREF}
                       className="button-outline inline-flex h-12 items-center justify-center rounded-full px-5 text-[0.74rem] font-semibold tracking-[0.08em]"
                     >
-                      WhatsApp
+                      Email
                     </a>
                     <a
                       href={`tel:${phoneHref}`}
@@ -456,48 +452,7 @@ export function NotFoundPage() {
                 <h3 className="text-[0.76rem] font-bold uppercase tracking-[0.22em] text-[var(--champagne)]">
                   Контакти
                 </h3>
-                <div className="mt-5 flex flex-col gap-3 text-[0.95rem] text-[rgba(247,243,234,0.86)]">
-                  <a
-                    href={`tel:${phoneHref}`}
-                    onClick={() =>
-                      trackPhoneClick({
-                        phone: phoneHref,
-                        location: "footer",
-                        pageType: "about"
-                      })
-                    }
-                    className="transition hover:text-[var(--soft-gold)]"
-                  >
-                    {phoneNumber}
-                  </a>
-                  <a
-                    href={telegramHref}
-                    onClick={() =>
-                      trackMessengerClick({
-                        messenger: "telegram",
-                        location: "footer",
-                        pageType: "about"
-                      })
-                    }
-                    className="transition hover:text-[var(--soft-gold)]"
-                  >
-                    Telegram
-                  </a>
-                  <a
-                    href="#"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      trackMessengerClick({
-                        messenger: "whatsapp",
-                        location: "footer",
-                        pageType: "about"
-                      });
-                    }}
-                    className="transition hover:text-[var(--soft-gold)]"
-                  >
-                    WhatsApp
-                  </a>
-                </div>
+                <FooterContactLinks pageType="about" />
               </div>
 
               <div>

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
-import { HeaderPhoneLink, LanguageSwitcher } from "./site-ui";
+import { HeaderPhoneLink, FooterContactLinks, LanguageSwitcher } from "./site-ui";
 
 type BreadcrumbItem = {
   label: string;
@@ -310,20 +310,7 @@ export function BlogStaticShell({
                 <h3 className="text-[0.76rem] font-bold uppercase tracking-[0.22em] text-[var(--champagne)]">
                   Контакти
                 </h3>
-                <div className="mt-5 flex flex-col gap-3 text-[0.95rem] text-[rgba(247,243,234,0.86)]">
-                  <a href={`tel:${phoneHref}`} className="transition hover:text-[var(--soft-gold)]">
-                    {phoneNumber}
-                  </a>
-                  <a
-                    href="https://t.me/grand_transfer_com"
-                    className="transition hover:text-[var(--soft-gold)]"
-                  >
-                    Telegram
-                  </a>
-                  <a href="#" className="transition hover:text-[var(--soft-gold)]">
-                    WhatsApp
-                  </a>
-                </div>
+                <FooterContactLinks pageType="about" />
               </div>
 
               <div>

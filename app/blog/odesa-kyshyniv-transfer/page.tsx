@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import routeHeroDesktop from "../../../img/main-2-screen-desk.png";
 import { BlogStaticShell } from "../../../components/blog-static-shell";
+import { PHONE_TEL_HREF, TELEGRAM_URL } from "../../../lib/contact-links";
 
 export const metadata: Metadata = {
   title: "Трансфер Одеса — Кишинів: ціна, маршрут і час у дорозі",
@@ -112,13 +113,15 @@ export default function OdesaKyshynivTransferArticlePage() {
           </div>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row lg:mt-0">
             <Link
-              href="https://t.me/grand_transfer_com"
+              href={TELEGRAM_URL}
+              target="_blank"
+              rel="noopener noreferrer"
               className="button-outline inline-flex h-11 items-center justify-center rounded-full px-5 text-[0.78rem] font-semibold tracking-[0.1em]"
             >
               Написати в Telegram
             </Link>
             <a
-              href="tel:+380638243223"
+              href={PHONE_TEL_HREF}
               className="button-gold inline-flex h-11 items-center justify-center rounded-full px-5 text-[0.78rem] font-semibold tracking-[0.1em]"
             >
               Зателефонувати

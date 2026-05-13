@@ -1,9 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import {
-  trackContactOptionClick,
-  trackContactWidgetOpen,
+  EMAIL_ADDRESS,
+  EMAIL_HREF,
+  INSTAGRAM_URL,
+  PHONE_DISPLAY,
+  PHONE_TEL_HREF,
+  TELEGRAM_URL,
+  TIKTOK_URL,
+  YOUTUBE_URL
+} from "../lib/contact-links";
+import {
   trackMessengerClick,
   trackPhoneClick,
   trackSocialClick,
@@ -39,6 +47,10 @@ type FloatingContactWidgetProps = {
   pageType: PageType;
   phoneHref: string;
   phoneLabel: string;
+};
+
+type FooterContactLinksProps = {
+  pageType: PageType;
 };
 
 function cx(...classNames: Array<string | undefined | false>) {
@@ -89,6 +101,89 @@ export function HeaderPhoneLink({
         </>
       ) : null}
     </a>
+  );
+}
+
+export function FooterContactLinks({ pageType }: FooterContactLinksProps) {
+  return (
+    <div className="mt-5 flex flex-col gap-3 text-[0.95rem] text-[rgba(247,243,234,0.86)]">
+      <a
+        href={PHONE_TEL_HREF}
+        onClick={() =>
+          trackPhoneClick({
+            phone: PHONE_TEL_HREF.replace("tel:", ""),
+            location: "footer",
+            pageType
+          })
+        }
+        className="transition hover:text-[var(--soft-gold)]"
+      >
+        {PHONE_DISPLAY}
+      </a>
+      <a href={EMAIL_HREF} className="transition hover:text-[var(--soft-gold)]">
+        {EMAIL_ADDRESS}
+      </a>
+      <a
+        href={TELEGRAM_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() =>
+          trackMessengerClick({
+            messenger: "telegram",
+            location: "footer",
+            pageType
+          })
+        }
+        className="transition hover:text-[var(--soft-gold)]"
+      >
+        Telegram
+      </a>
+      <a
+        href={INSTAGRAM_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() =>
+          trackSocialClick({
+            channel: "instagram",
+            location: "footer",
+            pageType
+          })
+        }
+        className="transition hover:text-[var(--soft-gold)]"
+      >
+        Instagram
+      </a>
+      <a
+        href={TIKTOK_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() =>
+          trackSocialClick({
+            channel: "tiktok",
+            location: "footer",
+            pageType
+          })
+        }
+        className="transition hover:text-[var(--soft-gold)]"
+      >
+        TikTok
+      </a>
+      <a
+        href={YOUTUBE_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() =>
+          trackSocialClick({
+            channel: "youtube",
+            location: "footer",
+            pageType
+          })
+        }
+        className="transition hover:text-[var(--soft-gold)]"
+      >
+        YouTube
+      </a>
+    </div>
   );
 }
 
@@ -181,122 +276,23 @@ export function FloatingContactWidget({
   phoneHref,
   phoneLabel
 }: FloatingContactWidgetProps) {
-  const [open, setOpen] = useState(false);
-  const widgetRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (!widgetRef.current?.contains(event.target as Node)) {
-        setOpen(false);
-      }
-    }
-
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setOpen(false);
-      }
-    }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
-
-  function handleToggle() {
-    setOpen((current) => {
-      const next = !current;
-      if (next) {
-        trackContactWidgetOpen({ pageType });
-      }
-      return next;
-    });
-  }
-
   return (
-    <div ref={widgetRef} className="floating-contact-widget">
-      <div className={`floating-contact-menu ${open ? "is-open" : ""}`}>
-        <a
-          href="#"
-          onClick={(event) => {
-            event.preventDefault();
-            trackContactOptionClick({ channel: "instagram", pageType });
-            trackSocialClick({
-              channel: "instagram",
-              location: "floating_contact_widget",
-              pageType
-            });
-            setOpen(false);
-          }}
-          className="floating-contact-item"
-        >
-          <InstagramIcon className="h-4 w-4" />
-          <span>Instagram</span>
-        </a>
-        <a
-          href="#"
-          onClick={(event) => {
-            event.preventDefault();
-            trackContactOptionClick({ channel: "telegram", pageType });
-            trackMessengerClick({
-              messenger: "telegram",
-              location: "floating_contact_widget",
-              pageType
-            });
-            setOpen(false);
-          }}
-          className="floating-contact-item"
-        >
-          <TelegramIcon className="h-4 w-4" />
-          <span>Telegram</span>
-        </a>
-        <a
-          href="#"
-          onClick={(event) => {
-            event.preventDefault();
-            trackContactOptionClick({ channel: "whatsapp", pageType });
-            trackMessengerClick({
-              messenger: "whatsapp",
-              location: "floating_contact_widget",
-              pageType
-            });
-            setOpen(false);
-          }}
-          className="floating-contact-item"
-        >
-          <MessageIcon className="h-4 w-4" />
-          <span>WhatsApp</span>
-        </a>
-        <a
-          href={`tel:${phoneHref}`}
-          onClick={() => {
-            trackContactOptionClick({ channel: "phone", pageType });
-            trackPhoneClick({
-              phone: phoneHref,
-              location: "floating_contact_widget",
-              pageType
-            });
-            setOpen(false);
-          }}
-          className="floating-contact-item"
-        >
-          <PhoneIcon className="h-4 w-4" />
-          <span>{phoneLabel}</span>
-        </a>
-      </div>
-
-      <button
-        type="button"
-        aria-label="Відкрити контакти"
-        aria-expanded={open}
-        onClick={handleToggle}
+    <div className="floating-contact-widget">
+      <a
+        href={`tel:${phoneHref}`}
+        aria-label="Зателефонувати"
+        title={phoneLabel}
+        onClick={() =>
+          trackPhoneClick({
+            phone: phoneHref,
+            location: "floating_contact_widget",
+            pageType
+          })
+        }
         className="floating-contact-trigger"
       >
         <PhoneIcon className="h-6 w-6 sm:h-[26px] sm:w-[26px]" />
-      </button>
+      </a>
     </div>
   );
 }
@@ -310,56 +306,6 @@ function PhoneIcon({ className = "h-4 w-4" }: { className?: string }) {
         strokeWidth="1.45"
         strokeLinejoin="round"
       />
-    </svg>
-  );
-}
-
-function TelegramIcon({ className = "h-4 w-4" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-      <path
-        d="M20.47 4.38 3.92 10.7c-1.13.45-1.12 1.08-.2 1.36l4.24 1.32 1.63 5.09c.2.62.1.86.77.86.52 0 .75-.24 1.04-.53l2.06-2 4.29 3.16c.79.44 1.35.21 1.55-.73l2.82-13.3c.29-1.15-.44-1.67-1.25-1.31Z"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinejoin="round"
-      />
-      <path
-        d="m8.52 13.1 9.63-6.1M9.36 18.47l1.42-4.82"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
-    </svg>
-  );
-}
-
-function MessageIcon({ className = "h-4 w-4" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-      <path
-        d="M20 11.3c0 4.1-3.7 7.4-8.3 7.4-.82 0-1.62-.1-2.35-.32L4 20l1.76-4.5A6.94 6.94 0 0 1 3.4 11.3C3.4 7.2 7.1 4 11.7 4S20 7.2 20 11.3Z"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function InstagramIcon({ className = "h-4 w-4" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-      <rect
-        x="4.5"
-        y="4.5"
-        width="15"
-        height="15"
-        rx="4.2"
-        stroke="currentColor"
-        strokeWidth="1.4"
-      />
-      <circle cx="12" cy="12" r="3.3" stroke="currentColor" strokeWidth="1.4" />
-      <circle cx="16.7" cy="7.5" r="0.9" fill="currentColor" />
     </svg>
   );
 }

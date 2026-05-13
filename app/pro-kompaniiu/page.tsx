@@ -9,6 +9,7 @@ import missionImage from "../../img/two-screen-about.png";
 import fleetPreviewImage from "../../img/about-us.png";
 import {
   FloatingContactWidget,
+  FooterContactLinks,
   HeaderPhoneLink,
   LanguageSwitcher
 } from "../../components/site-ui";
@@ -441,91 +442,7 @@ export default function ProKompaniiuPage() {
                 <h3 className="text-[0.76rem] font-bold uppercase tracking-[0.22em] text-[var(--champagne)]">
                   Контакти
                 </h3>
-                <div className="mt-5 flex flex-col gap-3 text-[0.95rem] text-[rgba(247,243,234,0.86)]">
-                  <a
-                    href={`tel:${phoneHref}`}
-                    onClick={() =>
-                      trackPhoneClick({
-                        phone: phoneHref,
-                        location: "footer",
-                        pageType: "about"
-                      })
-                    }
-                    className="transition hover:text-[var(--soft-gold)]"
-                  >
-                    {phoneNumber}
-                  </a>
-                  <a
-                    href="#"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      trackMessengerClick({
-                        messenger: "whatsapp",
-                        location: "footer",
-                        pageType: "about"
-                      });
-                    }}
-                    className="transition hover:text-[var(--soft-gold)]"
-                  >
-                    WhatsApp
-                  </a>
-                  <a
-                    href="#"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      trackMessengerClick({
-                        messenger: "telegram",
-                        location: "footer",
-                        pageType: "about"
-                      });
-                    }}
-                    className="transition hover:text-[var(--soft-gold)]"
-                  >
-                    Telegram
-                  </a>
-                  <a
-                    href="#"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      trackSocialClick({
-                        channel: "instagram",
-                        location: "footer",
-                        pageType: "about"
-                      });
-                    }}
-                    className="transition hover:text-[var(--soft-gold)]"
-                  >
-                    Instagram
-                  </a>
-                  <a
-                    href="#"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      trackSocialClick({
-                        channel: "tiktok",
-                        location: "footer",
-                        pageType: "about"
-                      });
-                    }}
-                    className="transition hover:text-[var(--soft-gold)]"
-                  >
-                    TikTok
-                  </a>
-                  <a
-                    href="#"
-                    onClick={(event) => {
-                      event.preventDefault();
-                      trackSocialClick({
-                        channel: "youtube",
-                        location: "footer",
-                        pageType: "about"
-                      });
-                    }}
-                    className="transition hover:text-[var(--soft-gold)]"
-                  >
-                    YouTube
-                  </a>
-                </div>
+                <FooterContactLinks pageType="about" />
               </div>
 
               <div>
