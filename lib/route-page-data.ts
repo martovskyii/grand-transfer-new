@@ -29,8 +29,19 @@ export type DynamicRelatedRoute = {
   price_from: number | null;
 };
 
+export type RouteLanguage = "ua" | "ru";
+
+export type RouteLanguageLinks = Partial<Record<"ua" | "ru" | "en", string>>;
+
+export type RouteAlternatesData = {
+  canonicalPath: string;
+  languageLinks: RouteLanguageLinks;
+  metadataLanguages?: Record<string, string>;
+};
+
 export async function getRouteBySlug(
-  slug: string
+  slug: string,
+  lang: RouteLanguage = "ua"
 ): Promise<DynamicRouteData | null> {
   if (!supabase) {
     return null;
@@ -46,11 +57,13 @@ export async function getRouteBySlug(
     .from("routes")
     .select("*")
     .eq("slug", normalizedSlug)
+    .eq("lang", lang)
     .eq("is_active", true)
     .maybeSingle();
 
   if (process.env.NODE_ENV === "development") {
     console.log("[clean-route] slug:", normalizedSlug);
+    console.log("[clean-route] lang:", lang);
     console.log("[clean-route] data:", data);
     console.log("[clean-route] error:", error);
   }
@@ -67,21 +80,128 @@ export async function getRouteBySlug(
   return data as unknown as DynamicRouteData;
 }
 
-export function buildRouteMetadata(route: DynamicRouteData | null): Metadata {
+function resolveRouteCanonicalPath(
+  route: DynamicRouteData | null,
+  lang: RouteLanguage = "ua"
+) {
+  const normalizedSlug =
+    typeof route?.slug === "string" ? route.slug.trim() : "";
+
+  if (!normalizedSlug) {
+    return lang === "ru" ? "/ru" : "/";
+  }
+
+  return lang === "ru" ? `/ru/${normalizedSlug}` : `/${normalizedSlug}`;
+}
+
+export async function getRouteAlternates(
+  route: DynamicRouteData,
+  currentLang: RouteLanguage
+): Promise<RouteAlternatesData> {
+  const canonicalPath = resolveRouteCanonicalPath(route, currentLang);
+  const languageLinks: RouteLanguageLinks = {
+    ua: "/",
+    ru: "/ru"
+  };
+  const metadataLanguages: Record<string, string> = {};
+  const currentSlug =
+    typeof route.slug === "string" ? route.slug.trim() : "";
+
+  if (currentLang === "ua" && currentSlug) {
+    languageLinks.ua = canonicalPath;
+    metadataLanguages["uk-UA"] = canonicalPath;
+  }
+
+  if (currentLang === "ru" && currentSlug) {
+    languageLinks.ru = canonicalPath;
+    metadataLanguages["ru-UA"] = canonicalPath;
+  }
+
+  const translationGroup =
+    typeof route.translation_group === "string"
+      ? route.translation_group.trim()
+      : "";
+
+  if (!translationGroup || !supabase) {
+    metadataLanguages["x-default"] = languageLinks.ua || canonicalPath;
+
+    return {
+      canonicalPath,
+      languageLinks,
+      metadataLanguages
+    };
+  }
+
+  const { data, error } = await supabase
+    .from("routes")
+    .select("slug, lang")
+    .eq("translation_group", translationGroup)
+    .eq("is_active", true)
+    .in("lang", ["ua", "ru"]);
+
+  if (error) {
+    console.error("[route-alternates] Failed to fetch translation group:", error);
+    metadataLanguages["x-default"] = languageLinks.ua || canonicalPath;
+
+    return {
+      canonicalPath,
+      languageLinks,
+      metadataLanguages
+    };
+  }
+
+  for (const item of (data as Array<{ slug: string | null; lang: string | null }> | null) ||
+    []) {
+    const slug = typeof item.slug === "string" ? item.slug.trim() : "";
+    const lang = typeof item.lang === "string" ? item.lang.trim() : "";
+
+    if (!slug) {
+      continue;
+    }
+
+    if (lang === "ua") {
+      const href = `/${slug}`;
+      languageLinks.ua = href;
+      metadataLanguages["uk-UA"] = href;
+    }
+
+    if (lang === "ru") {
+      const href = `/ru/${slug}`;
+      languageLinks.ru = href;
+      metadataLanguages["ru-UA"] = href;
+    }
+  }
+
+  metadataLanguages["x-default"] = languageLinks.ua || canonicalPath;
+
+  return {
+    canonicalPath,
+    languageLinks,
+    metadataLanguages
+  };
+}
+
+export function buildRouteMetadata(
+  route: DynamicRouteData | null,
+  alternatesData?: RouteAlternatesData,
+  lang: RouteLanguage = "ua"
+): Metadata {
   if (!route) {
     return {
       title: "Маршрут не знайдено | Grand Transfer"
     };
   }
 
-  const normalizedSlug = typeof route.slug === "string" ? route.slug.trim() : "";
+  const canonicalPath =
+    alternatesData?.canonicalPath || resolveRouteCanonicalPath(route, lang);
 
   return {
     title: route.seo_title || route.h1 || "Grand Transfer",
     description: route.seo_description || route.description || undefined,
-    alternates: normalizedSlug
+    alternates: canonicalPath
       ? {
-          canonical: `/${normalizedSlug}`
+          canonical: canonicalPath,
+          languages: alternatesData?.metadataLanguages
         }
       : undefined
   };
@@ -144,7 +264,8 @@ export async function getApprovedReviews(): Promise<DynamicRouteReview[]> {
 export async function getRelatedRoutesForRoute(
   currentSlug: string,
   currentFromCity: string | null,
-  currentToCity: string | null
+  currentToCity: string | null,
+  lang: RouteLanguage = "ua"
 ): Promise<DynamicRelatedRoute[]> {
   if (!supabase || !currentSlug) {
     return [];
@@ -157,6 +278,7 @@ export async function getRelatedRoutesForRoute(
       .from("routes")
       .select("slug, from_city, to_city, price_from")
       .eq("is_active", true)
+      .eq("lang", lang)
       .neq("slug", currentSlug)
       .eq("from_city", currentFromCity)
       .order("to_city", { ascending: true })
@@ -174,6 +296,7 @@ export async function getRelatedRoutesForRoute(
       .from("routes")
       .select("slug, from_city, to_city, price_from")
       .eq("is_active", true)
+      .eq("lang", lang)
       .neq("slug", currentSlug)
       .eq("to_city", currentToCity)
       .order("from_city", { ascending: true })

@@ -6,7 +6,6 @@ const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || defaultSiteUrl).replace(
   /\/+$/,
   ""
 );
-const languages = ["ua"] as const;
 const reservedStaticSlugs = new Set([
   "about",
   "api",
@@ -14,6 +13,7 @@ const reservedStaticSlugs = new Set([
   "blog",
   "kontakty",
   "pro-kompaniiu",
+  "ru",
   "routes",
   "sitemap.xml",
   "robots.txt"
@@ -21,23 +21,13 @@ const reservedStaticSlugs = new Set([
 
 type SitemapRouteRecord = {
   slug: string | null;
+  lang?: string | null;
   updated_at?: string | null;
   created_at?: string | null;
 };
 
 function toAbsoluteUrl(path: string) {
   return new URL(path, `${siteUrl}/`).toString();
-}
-
-function buildLocalizedPath(
-  path: string,
-  language: (typeof languages)[number]
-) {
-  if (language === "ua") {
-    return path;
-  }
-
-  return path === "/" ? `/${language}` : `/${language}${path}`;
 }
 
 function resolveLastModified(
@@ -58,14 +48,13 @@ function resolveLastModified(
 
 function buildEntry(
   path: string,
-  language: (typeof languages)[number],
   options: Pick<
     MetadataRoute.Sitemap[number],
     "priority" | "changeFrequency" | "lastModified"
   >
 ): MetadataRoute.Sitemap[number] {
   return {
-    url: toAbsoluteUrl(buildLocalizedPath(path, language)),
+    url: toAbsoluteUrl(path),
     lastModified: options.lastModified,
     changeFrequency: options.changeFrequency,
     priority: options.priority
@@ -79,10 +68,11 @@ async function fetchPriorityRoutes(): Promise<SitemapRouteRecord[]> {
 
   const { data, error } = await supabase
     .from("routes")
-    .select("slug, updated_at, created_at")
+    .select("slug, lang, updated_at, created_at")
     .eq("is_active", true)
-    .eq("lang", "ua")
+    .in("lang", ["ua", "ru"])
     .eq("sitemap_priority", true)
+    .order("lang", { ascending: true })
     .order("slug", { ascending: true });
 
   if (error) {
@@ -100,6 +90,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const entries = new Map<string, MetadataRoute.Sitemap[number]>();
   const staticPaths = [
     "/",
+    "/ru",
     "/avtopark",
     "/blog",
     "/blog/odesa-kyshyniv-transfer",
@@ -108,37 +99,34 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/routes"
   ] as const;
 
-  for (const language of languages) {
-    for (const path of staticPaths) {
-      const entry = buildEntry(path, language, {
-        lastModified: now,
-        changeFrequency: path === "/" ? "daily" : "weekly",
-        priority: path === "/" ? 1 : 0.8
-      });
+  for (const path of staticPaths) {
+    const entry = buildEntry(path, {
+      lastModified: now,
+      changeFrequency: path === "/" ? "daily" : "weekly",
+      priority: path === "/" ? 1 : 0.8
+    });
 
-      entries.set(entry.url, entry);
-    }
+    entries.set(entry.url, entry);
   }
 
   for (const route of await fetchPriorityRoutes()) {
     const slug = typeof route.slug === "string" ? route.slug.trim() : "";
+    const lang = typeof route.lang === "string" ? route.lang.trim() : "";
 
     if (!slug || reservedStaticSlugs.has(slug)) {
       continue;
     }
 
-    const routePath = `/${slug}`;
+    const routePath = lang === "ru" ? `/ru/${slug}` : `/${slug}`;
     const lastModified = resolveLastModified(route.updated_at, route.created_at, now);
 
-    for (const language of languages) {
-      const entry = buildEntry(routePath, language, {
-        lastModified,
-        changeFrequency: "weekly",
-        priority: 0.7
-      });
+    const entry = buildEntry(routePath, {
+      lastModified,
+      changeFrequency: "weekly",
+      priority: 0.7
+    });
 
-      entries.set(entry.url, entry);
-    }
+    entries.set(entry.url, entry);
   }
 
   return Array.from(entries.values());

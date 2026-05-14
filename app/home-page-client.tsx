@@ -79,17 +79,6 @@ type RouteGroupItem = {
   toCity: string;
 };
 
-const navItems: NavItem[] = [
-  { label: "ГОЛОВНА", href: "/" },
-  { label: "НАПРЯМКИ", href: "/#directions" },
-  { label: "АВТОПАРК", href: "/avtopark" },
-  { label: "КОНТАКТИ", href: "/kontakty" },
-  { label: "ПРО НАС", href: "/pro-kompaniiu" },
-  { label: "БЛОГ", href: "/blog" }
-];
-
-const mobileNavItems = navItems;
-
 const featureChips: FeatureChip[] = [
   { label: "Приватний трансфер без попутників", Icon: CarIcon },
   { label: "Подача 24/7", Icon: ClockIcon },
@@ -235,16 +224,6 @@ const faqItems: FaqItem[] = [
   }
 ];
 
-const footerLinks = [
-  { label: "Головна", href: "/" },
-  { label: "Напрямки", href: "/#directions" },
-  { label: "Усі напрямки", href: "/routes" },
-  { label: "Автопарк", href: "/avtopark" },
-  { label: "Контакти", href: "/kontakty" },
-  { label: "Про нас", href: "/pro-kompaniiu" },
-  { label: "Блог", href: "/blog" }
-];
-
 const reviewsSeoRoutes = [
   "трансфер Одеса — Кишинів",
   "трансфер Київ — Кишинів",
@@ -272,9 +251,36 @@ const carClasses = ["Комфорт", "Бізнес", "Преміум", "Мін�
 
 type HomePageClientProps = {
   initialHomepageRoutes: HomepageRoute[];
+  currentLanguage?: "ua" | "ru";
+  routeLanguage?: "ua" | "ru";
+  routeHrefPrefix?: "" | "/ru";
 };
 
-export default function HomePageClient({ initialHomepageRoutes }: HomePageClientProps) {
+export default function HomePageClient({
+  initialHomepageRoutes,
+  currentLanguage = "ua",
+  routeLanguage = "ua",
+  routeHrefPrefix = ""
+}: HomePageClientProps) {
+  const homeHref = currentLanguage === "ru" ? "/ru" : "/";
+  const directionsHref = currentLanguage === "ru" ? "/ru#directions" : "/#directions";
+  const navItems: NavItem[] = [
+    { label: "ГОЛОВНА", href: homeHref },
+    { label: "НАПРЯМКИ", href: directionsHref },
+    { label: "АВТОПАРК", href: "/avtopark" },
+    { label: "КОНТАКТИ", href: "/kontakty" },
+    { label: "ПРО НАС", href: "/pro-kompaniiu" },
+    { label: "БЛОГ", href: "/blog" }
+  ];
+  const footerLinks = [
+    { label: "Головна", href: homeHref },
+    { label: "Напрямки", href: directionsHref },
+    { label: "Усі напрямки", href: "/routes" },
+    { label: "Автопарк", href: "/avtopark" },
+    { label: "Контакти", href: "/kontakty" },
+    { label: "Про нас", href: "/pro-kompaniiu" },
+    { label: "Блог", href: "/blog" }
+  ];
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const defaultRouteCity = initialHomepageRoutes.some((route) => route.from_city === "Одеса")
@@ -284,11 +290,6 @@ export default function HomePageClient({ initialHomepageRoutes }: HomePageClient
   const [showAllRoutes, setShowAllRoutes] = useState(false);
   const [homepageRoutes, setHomepageRoutes] = useState<HomepageRoute[]>(initialHomepageRoutes);
   const [routesLoaded, setRoutesLoaded] = useState(initialHomepageRoutes.length > 0);
-  const homeHeroForm = useTransferForm({
-    formName: "homepage_quick_form",
-    pageType: "home",
-    route: null
-  });
   const homeFinalForm = useTransferForm({
     formName: "homepage_booking_form",
     pageType: "home",
@@ -346,7 +347,7 @@ export default function HomePageClient({ initialHomepageRoutes }: HomePageClient
         .from("routes")
         .select("slug, from_city, to_city, price_from")
         .eq("is_active", true)
-        .eq("lang", "ua")
+        .eq("lang", routeLanguage)
         .order("from_city", { ascending: true })
         .order("to_city", { ascending: true });
 
@@ -368,7 +369,7 @@ export default function HomePageClient({ initialHomepageRoutes }: HomePageClient
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [routeLanguage]);
 
   const routeCities = Array.from(
     new Set(
@@ -402,6 +403,7 @@ export default function HomePageClient({ initialHomepageRoutes }: HomePageClient
   }, [activeRouteCity, routeCities]);
 
   const routeLookup = new Map<string, HomepageRoute>();
+  const buildRouteHref = (slug: string) => `${routeHrefPrefix}/${slug}`;
 
   homepageRoutes.forEach((route) => {
     if (route.slug && route.from_city && route.to_city) {
@@ -443,7 +445,7 @@ export default function HomePageClient({ initialHomepageRoutes }: HomePageClient
         <div className="mx-auto max-w-[1536px] px-4 pt-5 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-14">
           <header className="header-shell relative z-30 rounded-[24px] px-[18px] py-3 sm:px-5 md:rounded-[30px] md:px-7 lg:px-[34px]">
             <div className="flex min-h-[72px] items-center justify-between gap-3 md:min-h-[74px] lg:grid lg:min-h-[88px] lg:grid-cols-[190px_1fr_300px] lg:justify-normal lg:gap-4 xl:grid-cols-[202px_1fr_310px]">
-              <Link href="/" className="header-brand block">
+              <Link href={homeHref} className="header-brand block">
                 <div className="luxury-logo-title">GRAND TRANSFER</div>
                 <div className="luxury-logo-subtitle">VIP СЕРВІС</div>
               </Link>
@@ -468,9 +470,12 @@ export default function HomePageClient({ initialHomepageRoutes }: HomePageClient
                   iconOnly
                   className="hidden lg:inline-flex"
                 />
-                <LanguageSwitcher />
-                <button
-                  type="button"
+                <LanguageSwitcher
+                  currentLanguage={currentLanguage}
+                  links={{ ua: "/", ru: "/ru" }}
+                />
+                <a
+                  href="#booking-form"
                   onClick={() =>
                     trackCtaClick({
                       ctaType: "order",
@@ -481,7 +486,7 @@ export default function HomePageClient({ initialHomepageRoutes }: HomePageClient
                   className="button-gold inline-flex h-11 items-center justify-center rounded-full px-6 text-[0.75rem] font-bold uppercase tracking-[0.09em] xl:h-12 xl:px-7 xl:text-[0.78rem] xl:tracking-[0.11em]"
                 >
                   ЗАМОВИТИ
-                </button>
+                </a>
               </div>
 
               <div className="flex items-center justify-end lg:hidden">
@@ -522,7 +527,7 @@ export default function HomePageClient({ initialHomepageRoutes }: HomePageClient
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(29,42,31,0.32),transparent_34%),linear-gradient(180deg,rgba(6,8,7,0.12)_0%,rgba(6,8,7,0.56)_100%)] md:bg-[radial-gradient(circle_at_14%_20%,rgba(29,42,31,0.32),transparent_34%),linear-gradient(180deg,rgba(6,8,7,0.06)_0%,rgba(6,8,7,0.34)_100%)]" />
               </div>
 
-              <div className="relative z-10 flex min-h-[780px] flex-col px-5 pb-5 pt-10 sm:px-6 sm:pt-12 md:min-h-[650px] md:px-[4.5rem] md:pb-6 md:pt-[4.2rem] lg:px-[5rem] lg:pb-7 lg:pt-[4.5rem] xl:px-[5.5rem]">
+              <div className="relative z-10 flex min-h-[640px] flex-col justify-center px-5 py-10 sm:px-6 sm:py-12 md:min-h-[620px] md:px-[4.5rem] md:py-[4.2rem] lg:min-h-[640px] lg:px-[5rem] lg:py-[4.5rem] xl:min-h-[660px] xl:px-[5.5rem]">
                 <div className="max-w-[56rem] md:mt-3 lg:mt-4">
                   <h1 className="headline-lux mt-2 max-w-[56rem] text-[clamp(2.375rem,11vw,3rem)] font-medium leading-[1.05] tracking-[-0.035em] text-[var(--text)] md:text-[clamp(3.25rem,5vw,4.75rem)] md:leading-[1.02]">
                     VIP трансфери Україна — Молдова — Польща
@@ -585,80 +590,6 @@ export default function HomePageClient({ initialHomepageRoutes }: HomePageClient
                   </div>
                 </div>
 
-                <div id="quick-form" className="mt-auto pt-8 md:pt-12">
-                  <div className="panel-form rounded-[24px] p-3 md:rounded-[28px] md:p-[1.05rem]">
-                    <div className="mb-3.5 px-1 md:mb-4">
-                      <p className="text-[0.8rem] font-semibold uppercase tracking-[0.18em] text-[rgba(247,243,234,0.92)]">
-                        Швидке замовлення
-                      </p>
-                      <p className="mt-1.5 max-w-[26rem] text-[0.9rem] leading-[1.6] text-[var(--muted)]">
-                        Залиште контакт — ми уточнимо маршрут і вартість поїздки.
-                      </p>
-                    </div>
-                    <form
-                      noValidate
-                      onSubmit={homeHeroForm.handleSubmit}
-                      className="grid gap-3 md:grid-cols-[1.05fr_1.05fr_1fr_1fr_auto]"
-                    >
-                      <TextField
-                        label="Ім’я"
-                        name="full_name"
-                        value={homeHeroForm.values.fullName}
-                        onChange={homeHeroForm.handleTextChange("fullName")}
-                        placeholder="Ваше ім’я"
-                        autoComplete="name"
-                        error={homeHeroForm.errors.fullName}
-                        fieldClassName="h-[58px] rounded-[17px] px-4 text-[0.94rem]"
-                      />
-                      <PhoneField
-                        label="Телефон"
-                        phoneValue={homeHeroForm.phoneDisplayValue}
-                        phonePlaceholder="Ваш телефон"
-                        phoneMaxLength={homeHeroForm.phoneMaxLength}
-                        onPhoneChange={homeHeroForm.handlePhoneNumberChange}
-                        error={homeHeroForm.errors.phone}
-                        inputClassName="h-[58px] rounded-[17px] px-4 text-[0.94rem]"
-                      />
-                      <TextField
-                        label="Звідки"
-                        name="from_city"
-                        value={homeHeroForm.values.fromCity}
-                        onChange={homeHeroForm.handleTextChange("fromCity")}
-                        placeholder="Звідки"
-                        error={homeHeroForm.errors.fromCity}
-                        fieldClassName="h-[58px] rounded-[17px] px-4 text-[0.94rem]"
-                      />
-                      <TextField
-                        label="Куди"
-                        name="to_city"
-                        value={homeHeroForm.values.toCity}
-                        onChange={homeHeroForm.handleTextChange("toCity")}
-                        placeholder="Куди"
-                        error={homeHeroForm.errors.toCity}
-                        fieldClassName="h-[58px] rounded-[17px] px-4 text-[0.94rem]"
-                      />
-                      <div className="flex items-end">
-                        <button
-                          type="submit"
-                          disabled={homeHeroForm.isSubmitting}
-                          onClick={() =>
-                            trackCtaClick({
-                              ctaType: "order",
-                              location: "hero",
-                              pageType: "home"
-                            })
-                          }
-                          className="button-gold inline-flex h-[58px] w-full items-center justify-center rounded-[17px] px-8 text-[0.76rem] font-bold uppercase tracking-[0.1em] md:text-[0.8rem] lg:tracking-[0.12em] disabled:cursor-not-allowed disabled:opacity-70"
-                        >
-                          ЗАМОВИТИ
-                        </button>
-                      </div>
-                      {homeHeroForm.submitError ? (
-                        <p className="field-error md:col-span-5">{homeHeroForm.submitError}</p>
-                      ) : null}
-                    </form>
-                  </div>
-                </div>
               </div>
             </div>
           </section>
@@ -726,7 +657,7 @@ export default function HomePageClient({ initialHomepageRoutes }: HomePageClient
                           );
                         }
 
-                        const href = `/${routeMatch.slug}`;
+                        const href = buildRouteHref(routeMatch.slug);
 
                         return (
                           <Link
@@ -827,7 +758,7 @@ export default function HomePageClient({ initialHomepageRoutes }: HomePageClient
                     return (
                       <a
                         key={route.slug}
-                        href={`/${route.slug}`}
+                        href={buildRouteHref(route.slug)}
                         onClick={() =>
                           trackRouteClick({
                             route: formatRouteId(routeLabel),
@@ -1375,7 +1306,7 @@ export default function HomePageClient({ initialHomepageRoutes }: HomePageClient
           </div>
 
           <nav className="mt-10 flex flex-col gap-5">
-            {mobileNavItems.map(({ label, href }) => (
+            {navItems.map(({ label, href }) => (
               <Link
                 key={label}
                 href={href}
@@ -1387,7 +1318,11 @@ export default function HomePageClient({ initialHomepageRoutes }: HomePageClient
             ))}
           </nav>
 
-          <LanguageSwitcher className="mt-8 self-start" />
+          <LanguageSwitcher
+            className="mt-8 self-start"
+            currentLanguage={currentLanguage}
+            links={{ ua: "/", ru: "/ru" }}
+          />
 
           <div className="mt-auto space-y-5 pt-10">
                 <HeaderPhoneLink
@@ -1397,8 +1332,8 @@ export default function HomePageClient({ initialHomepageRoutes }: HomePageClient
                   compactLabel="Подзвонити"
                   className="inline-flex"
                 />
-            <button
-              type="button"
+            <a
+              href="#booking-form"
               onClick={() =>
                 trackCtaClick({
                   ctaType: "order",
@@ -1409,18 +1344,11 @@ export default function HomePageClient({ initialHomepageRoutes }: HomePageClient
               className="button-gold inline-flex h-[52px] w-full items-center justify-center rounded-full px-7 text-[0.76rem] font-bold uppercase tracking-[0.1em]"
             >
               ЗАМОВИТИ
-            </button>
+            </a>
           </div>
         </aside>
       </div>
 
-      <SuccessPopup
-        open={homeHeroForm.isSuccessOpen}
-        onClose={homeHeroForm.closeSuccessModal}
-        pageType="home"
-        phoneHref={phoneHref}
-        phoneLabel={phoneNumber}
-      />
       <SuccessPopup
         open={homeFinalForm.isSuccessOpen}
         onClose={homeFinalForm.closeSuccessModal}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Link from "next/link";
 import {
   EMAIL_ADDRESS,
   EMAIL_HREF,
@@ -20,6 +21,8 @@ import {
 
 type LanguageSwitcherProps = {
   className?: string;
+  currentLanguage?: "ua" | "ru" | "en";
+  links?: Partial<Record<"ua" | "ru" | "en", string>>;
 };
 
 type SuccessPopupProps = {
@@ -57,18 +60,47 @@ function cx(...classNames: Array<string | undefined | false>) {
   return classNames.filter(Boolean).join(" ");
 }
 
-export function LanguageSwitcher({ className }: LanguageSwitcherProps) {
+export function LanguageSwitcher({
+  className,
+  currentLanguage = "ua",
+  links
+}: LanguageSwitcherProps) {
   return (
     <div className={cx("language-switcher", className)} aria-label="Мови">
-      {["UA", "RU", "EN"].map((language) => (
-        <button
-          key={language}
-          type="button"
-          className={`language-switcher-item ${language === "UA" ? "is-active" : ""}`}
-        >
-          {language}
-        </button>
-      ))}
+      {[
+        { key: "ua" as const, label: "UA" },
+        { key: "ru" as const, label: "RU" },
+        { key: "en" as const, label: "EN" }
+      ].map(({ key, label }) => {
+        const href = links?.[key];
+        const isActive = currentLanguage === key;
+        const itemClassName = `language-switcher-item ${isActive ? "is-active" : ""}`;
+
+        if (href) {
+          return (
+            <Link
+              key={key}
+              href={href}
+              aria-current={isActive ? "page" : undefined}
+              className={itemClassName}
+            >
+              {label}
+            </Link>
+          );
+        }
+
+        return (
+          <button
+            key={key}
+            type="button"
+            disabled={!isActive}
+            aria-current={isActive ? "page" : undefined}
+            className={itemClassName}
+          >
+            {label}
+          </button>
+        );
+      })}
     </div>
   );
 }

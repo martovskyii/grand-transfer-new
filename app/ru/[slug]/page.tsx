@@ -3,25 +3,16 @@ import { notFound } from "next/navigation";
 import RoutePageSupabaseClient from "@/components/route-page-supabase-client";
 import {
   buildRouteMetadata,
-  getRouteAlternates,
   getApprovedReviews,
   getRelatedRoutesForRoute,
+  getRouteAlternates,
   getRouteBySlug,
   type DynamicRoutePageProps
 } from "@/lib/route-page-data";
 
 export const dynamic = "force-dynamic";
 
-const reservedSlugs = new Set([
-  "api",
-  "avtopark",
-  "blog",
-  "kontakty",
-  "about",
-  "pro-kompaniiu",
-  "routes",
-  "ru"
-]);
+const reservedSlugs = new Set(["api", "routes"]);
 
 function isReservedSlug(slug: string) {
   return reservedSlugs.has(slug);
@@ -37,18 +28,18 @@ export async function generateMetadata({
     return buildRouteMetadata(null);
   }
 
-  const route = await getRouteBySlug(slug, "ua");
+  const route = await getRouteBySlug(slug, "ru");
 
   if (!route) {
     return buildRouteMetadata(null);
   }
 
-  const alternates = await getRouteAlternates(route, "ua");
+  const alternates = await getRouteAlternates(route, "ru");
 
-  return buildRouteMetadata(route, alternates, "ua");
+  return buildRouteMetadata(route, alternates, "ru");
 }
 
-export default async function CleanDynamicRoutePage({
+export default async function RussianDynamicRoutePage({
   params
 }: DynamicRoutePageProps) {
   const resolvedParams = await params;
@@ -58,16 +49,16 @@ export default async function CleanDynamicRoutePage({
     notFound();
   }
 
-  const route = await getRouteBySlug(slug, "ua");
+  const route = await getRouteBySlug(slug, "ru");
 
   if (!route) {
     notFound();
   }
 
-  const alternates = await getRouteAlternates(route, "ua");
+  const alternates = await getRouteAlternates(route, "ru");
   const [routeReviews, relatedRoutes] = await Promise.all([
     getApprovedReviews(),
-    getRelatedRoutesForRoute(route.slug, route.from_city, route.to_city, "ua")
+    getRelatedRoutesForRoute(route.slug, route.from_city, route.to_city, "ru")
   ]);
 
   return (
@@ -75,7 +66,7 @@ export default async function CleanDynamicRoutePage({
       routeData={route}
       routeReviews={routeReviews}
       relatedRoutes={relatedRoutes}
-      currentLanguage="ua"
+      currentLanguage="ru"
       languageLinks={alternates.languageLinks}
     />
   );

@@ -30,6 +30,8 @@ import {
   SuccessPopup
 } from "./site-ui";
 import type {
+  RouteLanguage,
+  RouteLanguageLinks,
   DynamicRelatedRoute,
   DynamicRouteReview
 } from "../lib/route-page-data";
@@ -98,6 +100,8 @@ export interface DynamicRouteData {
   seo_title: string | null;
   seo_description: string | null;
   seo_text: string | null;
+  lang: string | null;
+  translation_group: string | null;
   is_active: boolean | null;
 }
 
@@ -105,18 +109,9 @@ type RoutePageSupabaseClientProps = {
   routeData: DynamicRouteData;
   routeReviews?: DynamicRouteReview[];
   relatedRoutes?: DynamicRelatedRoute[];
+  currentLanguage?: RouteLanguage;
+  languageLinks?: RouteLanguageLinks;
 };
-
-const navItems = [
-  { label: "ГОЛОВНА", href: "/" },
-  { label: "НАПРЯМКИ", href: "/#directions" },
-  { label: "АВТОПАРК", href: "/avtopark" },
-  { label: "КОНТАКТИ", href: "/kontakty" },
-  { label: "ПРО НАС", href: "/pro-kompaniiu" },
-  { label: "БЛОГ", href: "/blog" }
-];
-
-const mobileNavItems = navItems;
 
 const phoneNumber = "+38 063 824 3223";
 const phoneHref = "+380638243223";
@@ -297,16 +292,6 @@ const passengerOptions = [
 
 const carClassOptions = ["Комфорт", "Бізнес", "Преміум", "Мінівен"];
 
-const footerLinks = [
-  { label: "Головна", href: "/" },
-  { label: "Напрямки", href: "/#directions" },
-  { label: "Усі напрямки", href: "/routes" },
-  { label: "Автопарк", href: "/avtopark" },
-  { label: "Контакти", href: "/kontakty" },
-  { label: "Про нас", href: "/pro-kompaniiu" },
-  { label: "Блог", href: "/blog" }
-];
-
 const carClassTrackingKeyByTitle: Record<string, "comfort" | "business" | "premium" | "minivan"> = {
   "Комфорт": "comfort",
   "Бізнес": "business",
@@ -317,8 +302,30 @@ const carClassTrackingKeyByTitle: Record<string, "comfort" | "business" | "premi
 export default function RoutePageSupabaseClient({
   routeData,
   routeReviews = [],
-  relatedRoutes = []
+  relatedRoutes = [],
+  currentLanguage = "ua",
+  languageLinks
 }: RoutePageSupabaseClientProps) {
+  const homeHref = currentLanguage === "ru" ? "/ru" : "/";
+  const directionsHref = currentLanguage === "ru" ? "/ru#directions" : "/#directions";
+  const routeHrefPrefix = currentLanguage === "ru" ? "/ru" : "";
+  const navItems = [
+    { label: "ГОЛОВНА", href: homeHref },
+    { label: "НАПРЯМКИ", href: directionsHref },
+    { label: "АВТОПАРК", href: "/avtopark" },
+    { label: "КОНТАКТИ", href: "/kontakty" },
+    { label: "ПРО НАС", href: "/pro-kompaniiu" },
+    { label: "БЛОГ", href: "/blog" }
+  ];
+  const footerLinks = [
+    { label: "Головна", href: homeHref },
+    { label: "Напрямки", href: directionsHref },
+    { label: "Усі напрямки", href: "/routes" },
+    { label: "Автопарк", href: "/avtopark" },
+    { label: "Контакти", href: "/kontakty" },
+    { label: "Про нас", href: "/pro-kompaniiu" },
+    { label: "Блог", href: "/blog" }
+  ];
   const priceFrom = routeData.price_from ?? 170;
   const priceBusiness = routeData.price_business ?? 220;
   const pricePremium = routeData.price_premium ?? 300;
@@ -416,7 +423,7 @@ export default function RoutePageSupabaseClient({
       title: `${route.from_city} → ${route.to_city}`,
       price:
         route.price_from != null ? `від €${route.price_from}` : "за запитом",
-      href: `/${route.slug}`
+      href: `${routeHrefPrefix}/${route.slug}`
     }));
   const sourceCityLabel = getSourceCityLabel(fromCity);
 
@@ -480,7 +487,7 @@ export default function RoutePageSupabaseClient({
         <div className="mx-auto max-w-[1536px] px-4 pt-4 sm:px-6 md:px-8 md:pt-5 lg:px-10 xl:px-12 2xl:px-14">
           <header className="header-shell relative z-30 rounded-[24px] px-[18px] py-3 sm:px-5 md:rounded-[30px] md:px-7 lg:px-[34px]">
             <div className="flex min-h-[72px] items-center justify-between gap-3 md:min-h-[74px] lg:grid lg:min-h-[88px] lg:grid-cols-[190px_1fr_300px] lg:justify-normal lg:gap-4 xl:grid-cols-[202px_1fr_310px]">
-              <Link href="/" className="header-brand block">
+              <Link href={homeHref} className="header-brand block">
                 <div className="luxury-logo-title">GRAND TRANSFER</div>
                 <div className="luxury-logo-subtitle">VIP СЕРВІС</div>
               </Link>
@@ -505,7 +512,13 @@ export default function RoutePageSupabaseClient({
                   iconOnly
                   className="hidden lg:inline-flex"
                 />
-                <LanguageSwitcher />
+                <LanguageSwitcher
+                  currentLanguage={currentLanguage}
+                  links={{
+                    ua: languageLinks?.ua || "/",
+                    ru: languageLinks?.ru || "/ru"
+                  }}
+                />
                 <a
                   href="#route-booking-final"
                   onClick={() =>
@@ -563,12 +576,12 @@ export default function RoutePageSupabaseClient({
               <div className="relative z-10 grid gap-8 px-5 pb-5 pt-8 sm:px-6 sm:pt-10 md:min-h-[640px] md:px-[3.25rem] md:pb-8 md:pt-[3.25rem] lg:grid-cols-[minmax(0,1fr)_400px] lg:items-center lg:gap-12 lg:px-[4rem] lg:pb-[3.5rem] lg:pt-[3.5rem] xl:min-h-[650px] xl:px-[4.4rem]">
                 <div className="max-w-[39rem]">
                   <div className="route-breadcrumb text-[0.7rem] uppercase tracking-[0.24em] text-[rgba(216,185,130,0.78)]">
-                    <Link href="/" className="transition hover:text-[var(--soft-gold)]">
+                    <Link href={homeHref} className="transition hover:text-[var(--soft-gold)]">
                       Головна
                     </Link>
                     <span className="mx-2 text-[rgba(183,178,168,0.6)]">&gt;</span>
                     <Link
-                      href="/#popular-routes"
+                      href={directionsHref}
                       className="transition hover:text-[var(--soft-gold)]"
                     >
                       Напрямки
@@ -1302,7 +1315,7 @@ export default function RoutePageSupabaseClient({
           }`}
         >
           <div className="flex items-start justify-between gap-4">
-            <Link href="/" className="header-brand" onClick={() => setMenuOpen(false)}>
+            <Link href={homeHref} className="header-brand" onClick={() => setMenuOpen(false)}>
               <div className="luxury-logo-title text-[1rem] leading-none">
                 GRAND TRANSFER
               </div>
@@ -1319,7 +1332,7 @@ export default function RoutePageSupabaseClient({
           </div>
 
           <nav className="mt-10 flex flex-col gap-5">
-            {mobileNavItems.map(({ label, href }) => (
+            {navItems.map(({ label, href }) => (
               <Link
                 key={label}
                 href={href}
@@ -1331,7 +1344,14 @@ export default function RoutePageSupabaseClient({
             ))}
           </nav>
 
-          <LanguageSwitcher className="mt-8 self-start" />
+          <LanguageSwitcher
+            className="mt-8 self-start"
+            currentLanguage={currentLanguage}
+            links={{
+              ua: languageLinks?.ua || "/",
+              ru: languageLinks?.ru || "/ru"
+            }}
+          />
 
           <div className="mt-auto space-y-5 pt-10">
             <HeaderPhoneLink
