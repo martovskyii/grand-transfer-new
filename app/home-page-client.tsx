@@ -262,30 +262,180 @@ export default function HomePageClient({
   routeLanguage = "ua",
   routeHrefPrefix = ""
 }: HomePageClientProps) {
+  const isRu = currentLanguage === "ru";
   const homeHref = currentLanguage === "ru" ? "/ru" : "/";
   const directionsHref = currentLanguage === "ru" ? "/ru#directions" : "/#directions";
+  const ui = {
+    navHome: isRu ? "ГЛАВНАЯ" : "ГОЛОВНА",
+    navDirections: isRu ? "НАПРАВЛЕНИЯ" : "НАПРЯМКИ",
+    navFleet: isRu ? "АВТОПАРК" : "АВТОПАРК",
+    navContacts: isRu ? "КОНТАКТЫ" : "КОНТАКТИ",
+    navAbout: isRu ? "О НАС" : "ПРО НАС",
+    navBlog: isRu ? "БЛОГ" : "БЛОГ",
+    order: isRu ? "ЗАКАЗАТЬ" : "ЗАМОВИТИ",
+    openMenu: isRu ? "Открыть меню" : "Відкрити меню",
+    closeMenu: isRu ? "Закрыть меню" : "Закрити меню",
+    heroTitle: isRu
+      ? "VIP трансферы Украина — Молдова — Польша"
+      : "VIP трансфери Україна — Молдова — Польща",
+    heroSubtitle: isRu
+      ? "Частные поездки Одесса, Киев, Днепр, Харьков, Львов — Кишинёв без попутчиков"
+      : "Приватні поїздки Одеса, Київ, Дніпро, Харків, Львів — Кишинів без попутників",
+    heroDescription: isRu
+      ? "Премиальные авто, помощь на границе, подача 24/7"
+      : "Преміальні авто, допомога на кордоні, подача 24/7",
+    heroOrder: isRu ? "ЗАКАЗАТЬ ТРАНСФЕР" : "ЗАМОВИТИ ТРАНСФЕР",
+    telegram: isRu ? "НАПИСАТЬ В TELEGRAM" : "НАПИСАТИ В TELEGRAM",
+    mainDirectionsEyebrow: isRu ? "ОСНОВНЫЕ НАПРАВЛЕНИЯ" : "ОСНОВНІ НАПРЯМКИ",
+    mainDirectionsTitle: isRu
+      ? "Маршруты между Украиной, Молдовой и Польшей"
+      : "Маршрути між Україною, Молдовою та Польщею",
+    mainDirectionsText: isRu
+      ? "Работаем с частными трансферами из Одессы, Киева, Днепра, Харькова и Львова в Кишинёв, Варшаву, Бухарест и другие города."
+      : "Працюємо з приватними трансферами з Одеси, Києва, Дніпра, Харкова та Львова до Кишинева, Варшави, Бухареста та інших міст.",
+    mainDirectionsText2: isRu
+      ? "Каждый маршрут доступен с частным водителем, без попутчиков и с подачей под ваш график."
+      : "Кожен маршрут доступний з приватним водієм, без попутників та з подачею під ваш графік.",
+    allDirectionsEyebrow: isRu ? "ВСЕ НАПРАВЛЕНИЯ" : "ВСІ НАПРЯМКИ",
+    chooseRoute: isRu ? "Выберите маршрут" : "Обрати маршрут",
+    chooseCity: isRu
+      ? "Выберите город подачи, чтобы посмотреть доступные маршруты."
+      : "Оберіть місто подачі, щоб переглянути доступні маршрути.",
+    clickRouteHint: isRu
+      ? "Нажмите на маршрут, чтобы посмотреть детали"
+      : "Натисніть на маршрут, щоб переглянути деталі",
+    routesFromCity: isRu ? "Маршруты из города" : "Маршрути з міста",
+    loadingRoutes: isRu ? "Загружаем маршруты..." : "Завантажуємо маршрути...",
+    noRoutes: isRu
+      ? "Маршруты для этого города скоро появятся."
+      : "Маршрути для цього міста скоро з’являться.",
+    showAllRoutes: isRu ? "Показать все направления" : "Показати всі напрямки",
+    collapse: isRu ? "Свернуть" : "Згорнути",
+    fromPrefix: isRu ? "от" : "від",
+    onRequest: isRu ? "по запросу" : "за запитом",
+    serviceEyebrow: isRu ? "ЧАСТНЫЙ VIP ТРАНСФЕР" : "ПРИВАТНИЙ VIP ТРАНСФЕР",
+    serviceTitle: isRu ? "Премиальный сервис\nна каждом этапе" : "Преміальний сервіс\nна кожному етапі",
+    serviceText: isRu
+      ? "Мы продумали каждую деталь вашей поездки, чтобы вы чувствовали комфорт и уверенность."
+      : "Ми подбали про кожну деталь вашої подорожі, щоб ви відчували комфорт та впевненість.",
+    howEyebrow: isRu ? "КАК ЭТО РАБОТАЕТ" : "ЯК ЦЕ ПРАЦЮЄ",
+    howTitle: isRu ? "Как это работает" : "Як це працює",
+    bookingEyebrow: isRu ? "ЗАЯВКА" : "ЗАЯВКА",
+    bookingTitle: isRu ? "Забронировать трансфер" : "Забронювати трансфер",
+    bookingText: isRu
+      ? "Мы свяжемся с вами, уточним маршрут, авто и финальную стоимость поездки."
+      : "Ми зв'яжемося з вами, уточнимо маршрут, авто та фінальну вартість поїздки.",
+    name: isRu ? "Имя" : "Ім’я",
+    yourName: isRu ? "Имя" : "Ім'я",
+    phone: isRu ? "Телефон" : "Телефон",
+    yourPhone: isRu ? "Ваш телефон" : "Ваш телефон",
+    from: isRu ? "Откуда" : "Звідки",
+    to: isRu ? "Куда" : "Куди",
+    date: isRu ? "Дата поездки" : "Дата поїздки",
+    chooseDate: isRu ? "Выберите дату" : "Оберіть дату",
+    passengers: isRu ? "Количество пассажиров" : "Кількість пасажирів",
+    carClass: isRu ? "Класс авто" : "Клас авто",
+    comment: isRu ? "Комментарий" : "Коментар",
+    bookTransfer: isRu ? "ЗАБРОНИРОВАТЬ ТРАНСФЕР" : "Забронювати трансфер",
+    faqTitle: isRu ? "Частые вопросы" : "Поширені питання",
+    faqCta: isRu ? "Не нашли ответ?" : "Не знайшли відповідь?",
+    telegramSentence: isRu ? "Написать в Telegram" : "Написати в Telegram",
+    call: isRu ? "Позвонить" : "Зателефонувати",
+    reviewSeoTitle: isRu ? "Популярные запросы клиентов" : "Популярні запити клієнтів",
+    reviewSeoIntro: isRu
+      ? "Популярные запросы клиентов в Google:"
+      : "Популярні запити клієнтів у Google:",
+    blogEyebrow: isRu ? "БЛОГ" : "БЛОГ",
+    blogTitle: isRu ? "Полезный блог" : "Корисний блог",
+    blogText: isRu
+      ? "Советы для поездок, маршруты и полезная информация для клиентов."
+      : "Поради для поїздок, маршрути та корисна інформація для клієнтів.",
+    mainRouteEyebrow: isRu ? "ОСНОВНОЙ МАРШРУТ" : "ОСНОВНИЙ МАРШРУТ",
+    read: isRu ? "Читать" : "Читати",
+    infoEyebrow: isRu ? "ИНФОРМАЦИЯ" : "ІНФОРМАЦІЯ",
+    infoTitle: isRu
+      ? "VIP трансферы Украина — Молдова — Польша"
+      : "VIP трансфери Україна — Молдова — Польща",
+    footerDescription: isRu
+      ? "Премиальные международные трансферы между Украиной, Молдовой и Польшей для частных, бизнес- и VIP-клиентов."
+      : "Преміальні міжнародні трансфери між Україною, Молдовою та Польщею для приватних, бізнес- та VIP-клієнтів.",
+    footerCompany: isRu ? "Компания" : "Компанія",
+    footerContacts: isRu ? "Контакты" : "Контакти",
+    footerLanguages: isRu ? "Языки" : "Мови",
+    footerHome: isRu ? "Главная" : "Головна",
+    footerDirections: isRu ? "Направления" : "Напрямки",
+    footerAllDirections: isRu ? "Все направления" : "Усі напрямки",
+    footerFleet: isRu ? "Автопарк" : "Автопарк",
+    footerContactsLink: isRu ? "Контакты" : "Контакти",
+    footerAbout: isRu ? "О нас" : "Про нас",
+    footerCopyright: isRu
+      ? "© 2026 Grand Transfer. Все права защищены."
+      : "© 2026 Grand Transfer. Усі права захищені.",
+    callCompact: isRu ? "Позвонить" : "Подзвонити",
+    successEyebrow: isRu ? "Заявка отправлена" : "Заявку надіслано",
+    successTitle: isRu ? "Спасибо за заявку" : "Дякуємо за заявку",
+    successBody: isRu
+      ? "Спасибо! Мы скоро свяжемся с вами."
+      : "Дякуємо! Ми скоро зв'яжемося з вами.",
+    successNote: isRu
+      ? "Если вопрос срочный — нажмите «Позвонить сейчас»."
+      : "Якщо питання термінове — натисніть “Подзвонити зараз”.",
+    successCallButton: isRu ? "Позвонить сейчас" : "Подзвонити зараз"
+  };
   const navItems: NavItem[] = [
-    { label: "ГОЛОВНА", href: homeHref },
-    { label: "НАПРЯМКИ", href: directionsHref },
-    { label: "АВТОПАРК", href: "/avtopark" },
-    { label: "КОНТАКТИ", href: "/kontakty" },
-    { label: "ПРО НАС", href: "/pro-kompaniiu" },
-    { label: "БЛОГ", href: "/blog" }
+    { label: ui.navHome, href: homeHref },
+    { label: ui.navDirections, href: directionsHref },
+    { label: ui.navFleet, href: "/avtopark" },
+    { label: ui.navContacts, href: "/kontakty" },
+    { label: ui.navAbout, href: "/pro-kompaniiu" },
+    { label: ui.navBlog, href: "/blog" }
   ];
   const footerLinks = [
-    { label: "Головна", href: homeHref },
-    { label: "Напрямки", href: directionsHref },
-    { label: "Усі напрямки", href: "/routes" },
-    { label: "Автопарк", href: "/avtopark" },
-    { label: "Контакти", href: "/kontakty" },
-    { label: "Про нас", href: "/pro-kompaniiu" },
-    { label: "Блог", href: "/blog" }
+    { label: ui.footerHome, href: homeHref },
+    { label: ui.footerDirections, href: directionsHref },
+    { label: ui.footerAllDirections, href: "/routes" },
+    { label: ui.footerFleet, href: "/avtopark" },
+    { label: ui.footerContactsLink, href: "/kontakty" },
+    { label: ui.footerAbout, href: "/pro-kompaniiu" },
+    { label: ui.navBlog, href: "/blog" }
   ];
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
-  const defaultRouteCity = initialHomepageRoutes.some((route) => route.from_city === "Одеса")
-    ? "Одеса"
-    : initialHomepageRoutes.find((route) => route.from_city)?.from_city || "Одеса";
+  const preferredRouteCityOrderLocalized = isRu
+    ? [
+        "Киев",
+        "Одесса",
+        "Кишинёв",
+        "Кишинев",
+        "Днепр",
+        "Краков",
+        "Львов",
+        "Варшава",
+        "Яссы",
+        "Будапешт",
+        "Винница",
+        "Житомир",
+        "Запорожье",
+        "Ивано-Франковск",
+        "Кропивницкий",
+        "Луцк",
+        "Николаев",
+        "Полтава",
+        "Ровно",
+        "Сумы",
+        "Тернополь",
+        "Ужгород",
+        "Харьков",
+        "Хмельницкий",
+        "Черкассы",
+        "Черновцы",
+        "Чернигов"
+      ]
+    : preferredRouteCityOrder;
+  const defaultPrimaryCity = isRu ? "Одесса" : "Одеса";
+  const defaultRouteCity = initialHomepageRoutes.some((route) => route.from_city === defaultPrimaryCity)
+    ? defaultPrimaryCity
+    : initialHomepageRoutes.find((route) => route.from_city)?.from_city || defaultPrimaryCity;
   const [activeRouteCity, setActiveRouteCity] = useState<string>(defaultRouteCity);
   const [showAllRoutes, setShowAllRoutes] = useState(false);
   const [homepageRoutes, setHomepageRoutes] = useState<HomepageRoute[]>(initialHomepageRoutes);
@@ -294,6 +444,7 @@ export default function HomePageClient({
     formName: "homepage_booking_form",
     pageType: "home",
     route: null,
+    language: isRu ? "ru" : "ua",
     requireDate: true,
     initialValues: {
       carClass: "Комфорт"
@@ -378,8 +529,8 @@ export default function HomePageClient({
         .filter(Boolean)
     )
   ).sort((left, right) => {
-    const leftPriority = preferredRouteCityOrder.indexOf(left);
-    const rightPriority = preferredRouteCityOrder.indexOf(right);
+    const leftPriority = preferredRouteCityOrderLocalized.indexOf(left);
+    const rightPriority = preferredRouteCityOrderLocalized.indexOf(right);
 
     if (leftPriority !== -1 && rightPriority !== -1) {
       return leftPriority - rightPriority;
@@ -393,21 +544,25 @@ export default function HomePageClient({
       return 1;
     }
 
-    return left.localeCompare(right, "uk");
+    return left.localeCompare(right, isRu ? "ru" : "uk");
   });
 
   useEffect(() => {
     if (routeCities.length > 0 && !routeCities.includes(activeRouteCity)) {
-      setActiveRouteCity(routeCities.includes("Одеса") ? "Одеса" : routeCities[0]);
+      setActiveRouteCity(routeCities.includes(defaultPrimaryCity) ? defaultPrimaryCity : routeCities[0]);
     }
-  }, [activeRouteCity, routeCities]);
+  }, [activeRouteCity, routeCities, defaultPrimaryCity]);
 
   const routeLookup = new Map<string, HomepageRoute>();
   const buildRouteHref = (slug: string) => `${routeHrefPrefix}/${slug}`;
+  const normalizeRouteKeyPart = (value: string) => value.trim().toLowerCase().replace(/ё/g, "е");
 
   homepageRoutes.forEach((route) => {
     if (route.slug && route.from_city && route.to_city) {
-      routeLookup.set(`${route.from_city}__${route.to_city}`, route);
+      routeLookup.set(
+        `${normalizeRouteKeyPart(route.from_city)}__${normalizeRouteKeyPart(route.to_city)}`,
+        route
+      );
     }
   });
   const visibleRouteLimit = 10;
@@ -421,8 +576,112 @@ export default function HomePageClient({
   const highlightedRouteLabels = activeRoutes
     .slice(0, Math.min(3, activeRoutes.length))
     .map((route) => `${route.from_city} → ${route.to_city}`);
-  const faqMidpoint = Math.ceil(faqItems.length / 2);
-  const faqColumns = [faqItems.slice(0, faqMidpoint), faqItems.slice(faqMidpoint)];
+  const featureChipsLocalized = isRu
+    ? [
+        { label: "Частный трансфер без попутчиков", Icon: CarIcon },
+        { label: "Подача 24/7", Icon: ClockIcon },
+        { label: "Помощь на границе", Icon: ShieldIcon },
+        { label: "Маршруты от €99", Icon: GemIcon }
+      ]
+    : featureChips;
+  const routeGroupsLocalized = isRu
+    ? [
+        {
+          title: "Украина → Молдова",
+          routes: [
+            { fromCity: "Одесса", toCity: "Кишинёв" },
+            { fromCity: "Киев", toCity: "Кишинёв" },
+            { fromCity: "Днепр", toCity: "Кишинёв" }
+          ]
+        },
+        {
+          title: "Украина → Польша",
+          routes: [
+            { fromCity: "Киев", toCity: "Варшава" },
+            { fromCity: "Львов", toCity: "Варшава" },
+            { fromCity: "Днепр", toCity: "Варшава" }
+          ]
+        },
+        {
+          title: "Украина → Румыния",
+          routes: [
+            { fromCity: "Одесса", toCity: "Бухарест" },
+            { fromCity: "Киев", toCity: "Бухарест" },
+            { fromCity: "Одесса", toCity: "Яссы" }
+          ]
+        }
+      ]
+    : routeGroups;
+  const serviceCardsLocalized = isRu
+    ? [
+        { title: "VIP комфорт", lines: ["Премиальные авто", "и тишина в дороге."], Icon: SeatIcon },
+        { title: "Пунктуальность", lines: ["Подача авто", "без задержек."], Icon: ClockIcon },
+        { title: "Безопасность", lines: ["Опытные водители", "и контроль качества."], Icon: ShieldIcon },
+        { title: "Индивидуальный подход", lines: ["Маршрут и подача", "под ваш график."], Icon: ConciergeIcon },
+        { title: "Помощь с багажом", lines: ["Помощь с багажом", "и встреча на месте."], Icon: LuggageIcon },
+        { title: "Сервис 24/7", lines: ["Поддержка и подача", "в любое время."], Icon: SupportIcon }
+      ]
+    : serviceCards;
+  const processStepsLocalized = isRu
+    ? [
+        { number: "01", title: "Оставляете заявку", description: "Отправляете основные детали поездки." },
+        { number: "02", title: "Согласовываем маршрут и авто", description: "Подбираем класс авто и время подачи." },
+        { number: "03", title: "Водитель прибывает вовремя", description: "Подача без задержек и лишнего ожидания." },
+        { number: "04", title: "Комфортная поездка до пункта назначения", description: "Спокойный трансфер под ваш график." }
+      ]
+    : processSteps;
+  const faqItemsLocalized = isRu
+    ? [
+        {
+          question: "Сколько стоит трансфер Одесса — Кишинёв?",
+          answer:
+            "Ориентировочная стоимость стартует от €170. Финальная цена зависит от даты, класса авто, времени выезда и индивидуальных пожеланий."
+        },
+        {
+          question: "Сколько стоит трансфер Киев — Кишинёв?",
+          answer:
+            "Ориентировочная стоимость стартует от €500. Финальная цена зависит от маршрута, класса авто, количества пассажиров и формата поездки."
+        },
+        {
+          question: "Помогает ли водитель на границе?",
+          answer:
+            "Да, водитель сопровождает вас по маршруту, помогает сориентироваться и подсказывает ключевые этапы прохождения границы."
+        },
+        {
+          question: "Доступны ли поездки 24/7?",
+          answer:
+            "Да, трансфер доступен в любое время — ранний выезд, ночная подача или индивидуальный график."
+        }
+      ]
+    : faqItems;
+  const reviewsSeoRoutesLocalized = isRu
+    ? [
+        "трансфер Одесса — Кишинёв",
+        "трансфер Киев — Кишинёв",
+        "трансфер Днепр — Кишинёв",
+        "трансфер Харьков — Кишинёв",
+        "трансфер Львов — Кишинёв"
+      ]
+    : reviewsSeoRoutes;
+  const featuredArticleLocalized = isRu
+    ? {
+        ...featuredArticle,
+        title: "Трансфер Одесса — Кишинёв: как быстро и комфортно добраться",
+        description:
+          "Коротко о маршруте, стоимости, времени в пути и преимуществах частного трансфера."
+      }
+    : featuredArticle;
+  const passengerOptionsLocalized = isRu
+    ? ["1 пассажир", "2 пассажира", "3 пассажира", "4 пассажира", "5+ пассажиров"]
+    : passengerOptions;
+  const carClassesLocalized = isRu
+    ? ["Комфорт", "Бизнес", "Премиум", "Минивэн"]
+    : carClasses;
+  const faqMidpointLocalized = Math.ceil(faqItemsLocalized.length / 2);
+  const faqColumns = [
+    faqItemsLocalized.slice(0, faqMidpointLocalized),
+    faqItemsLocalized.slice(faqMidpointLocalized)
+  ];
 
   function handleHomeFaqToggle(index: number, question: string) {
     setOpenFaqIndex((current) => {
@@ -447,7 +706,7 @@ export default function HomePageClient({
             <div className="flex min-h-[72px] items-center justify-between gap-3 md:min-h-[74px] lg:grid lg:min-h-[88px] lg:grid-cols-[190px_1fr_300px] lg:justify-normal lg:gap-4 xl:grid-cols-[202px_1fr_310px]">
               <Link href={homeHref} className="header-brand block">
                 <div className="luxury-logo-title">GRAND TRANSFER</div>
-                <div className="luxury-logo-subtitle">VIP СЕРВІС</div>
+                <div className="luxury-logo-subtitle">{isRu ? "VIP СЕРВИС" : "VIP СЕРВІС"}</div>
               </Link>
 
               <nav className="hidden items-center justify-self-center lg:flex lg:gap-2.5 xl:gap-4">
@@ -485,7 +744,7 @@ export default function HomePageClient({
                   }
                   className="button-gold inline-flex h-11 items-center justify-center rounded-full px-6 text-[0.75rem] font-bold uppercase tracking-[0.09em] xl:h-12 xl:px-7 xl:text-[0.78rem] xl:tracking-[0.11em]"
                 >
-                  ЗАМОВИТИ
+                  {ui.order}
                 </a>
               </div>
 
@@ -494,7 +753,7 @@ export default function HomePageClient({
                   type="button"
                   aria-expanded={menuOpen}
                   aria-controls="mobile-drawer"
-                  aria-label="Відкрити меню"
+                  aria-label={ui.openMenu}
                   onClick={() => setMenuOpen(true)}
                   className="burger-button inline-flex h-12 w-12 items-center justify-center rounded-full"
                 >
@@ -530,14 +789,13 @@ export default function HomePageClient({
               <div className="relative z-10 flex min-h-[640px] flex-col justify-center px-5 py-10 sm:px-6 sm:py-12 md:min-h-[620px] md:px-[4.5rem] md:py-[4.2rem] lg:min-h-[640px] lg:px-[5rem] lg:py-[4.5rem] xl:min-h-[660px] xl:px-[5.5rem]">
                 <div className="max-w-[56rem] md:mt-3 lg:mt-4">
                   <h1 className="headline-lux mt-2 max-w-[56rem] text-[clamp(2.375rem,11vw,3rem)] font-medium leading-[1.05] tracking-[-0.035em] text-[var(--text)] md:text-[clamp(3.25rem,5vw,4.75rem)] md:leading-[1.02]">
-                    VIP трансфери Україна — Молдова — Польща
+                    {ui.heroTitle}
                   </h1>
                   <p className="mt-5 max-w-[36rem] text-[1rem] leading-[1.9] text-[var(--muted)] md:text-[1.08rem]">
-                    Приватні поїздки Одеса, Київ, Дніпро, Харків, Львів —
-                    Кишинів без попутників
+                    {ui.heroSubtitle}
                   </p>
                   <p className="mt-4 max-w-[34rem] text-[0.86rem] font-semibold uppercase tracking-[0.22em] text-[var(--champagne)] md:text-[0.9rem]">
-                    Преміальні авто, допомога на кордоні, подача 24/7
+                    {ui.heroDescription}
                   </p>
 
                   <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap md:gap-3.5">
@@ -552,7 +810,7 @@ export default function HomePageClient({
                       }
                       className="button-gold cta-border-shine inline-flex h-14 items-center justify-center rounded-full px-7 text-[0.76rem] font-bold uppercase tracking-[0.1em] sm:w-auto md:text-[0.8rem] lg:tracking-[0.12em]"
                     >
-                      ЗАМОВИТИ ТРАНСФЕР
+                      {ui.heroOrder}
                     </a>
                     <a
                       href={TELEGRAM_URL}
@@ -573,12 +831,12 @@ export default function HomePageClient({
                       className="button-outline inline-flex h-14 items-center justify-center gap-2.5 rounded-full px-6 text-[0.76rem] font-bold uppercase tracking-[0.1em] sm:w-auto md:text-[0.8rem] lg:tracking-[0.12em]"
                     >
                       <TelegramIcon className="h-[15px] w-[15px]" />
-                      НАПИСАТИ В TELEGRAM
+                      {ui.telegram}
                     </a>
                   </div>
 
                   <div className="mt-7 flex flex-wrap gap-2.5 lg:flex-nowrap lg:gap-2">
-                    {featureChips.map(({ label, Icon }) => (
+                    {featureChipsLocalized.map(({ label, Icon }) => (
                       <div
                         key={label}
                         className="hero-chip chip-compact inline-flex h-10 shrink-0 items-center gap-2 rounded-full px-3.5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[rgba(247,243,234,0.9)] lg:px-3 xl:px-3.5"
@@ -612,26 +870,33 @@ export default function HomePageClient({
 
               <div id="popular-routes" className="relative z-10 max-w-[27.5rem]">
                 <p className="mb-6 text-[0.75rem] font-bold uppercase tracking-[0.26em] text-[var(--champagne)]">
-                  ОСНОВНІ НАПРЯМКИ
+                  {ui.mainDirectionsEyebrow}
                 </p>
                 <h2 className="section-title-lux text-[2.45rem] font-medium leading-[1.05] tracking-[-0.04em] text-[var(--text)] sm:text-[2.95rem] lg:text-[3.15rem] xl:text-[3.45rem]">
-                  Маршрути між Україною,
-                  <br />
-                  Молдовою та <span className="text-[var(--champagne)]">Польщею</span>
+                  {isRu ? (
+                    <>
+                      Маршруты между Украиной,
+                      <br />
+                      Молдовой и <span className="text-[var(--champagne)]">Польшей</span>
+                    </>
+                  ) : (
+                    <>
+                      Маршрути між Україною,
+                      <br />
+                      Молдовою та <span className="text-[var(--champagne)]">Польщею</span>
+                    </>
+                  )}
                 </h2>
                 <p className="mt-6 max-w-[24.5rem] text-[1rem] leading-[1.7] text-[var(--muted)]">
-                  Працюємо з приватними трансферами з Одеси, Києва, Дніпра,
-                  Харкова та Львова до Кишинева, Варшави, Бухареста та інших
-                  міст.
+                  {ui.mainDirectionsText}
                 </p>
                 <p className="mt-4 max-w-[24.5rem] text-[0.95rem] leading-[1.7] text-[var(--muted)]">
-                  Кожен маршрут доступний з приватним водієм, без попутників та
-                  з подачею під ваш графік.
+                  {ui.mainDirectionsText2}
                 </p>
               </div>
 
               <div className="relative z-10 mt-10 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:mt-auto lg:max-w-[58rem] lg:grid-cols-3 lg:gap-4">
-                {routeGroups.map(({ title, routes }) => (
+                {routeGroupsLocalized.map(({ title, routes }) => (
                   <article key={title} className="routes-wide-stat">
                     <div className="routes-wide-stat-icon">
                       <MapPinStrokeIcon className="h-[18px] w-[18px] text-[var(--champagne)]" />
@@ -641,7 +906,7 @@ export default function HomePageClient({
                     </div>
                     <div className="mt-3 grid gap-2 text-[0.92rem] leading-[1.65] text-[var(--text)]">
                       {routes.map(({ fromCity, toCity }) => {
-                        const routeKey = `${fromCity}__${toCity}`;
+                        const routeKey = `${normalizeRouteKeyPart(fromCity)}__${normalizeRouteKeyPart(toCity)}`;
                         const routeMatch = routeLookup.get(routeKey);
                         const label = `${fromCity} — ${toCity}`;
 
@@ -691,12 +956,12 @@ export default function HomePageClient({
           >
             <div className="all-routes-shell rounded-[30px] px-5 py-6 sm:px-7 md:px-9 md:py-8 lg:px-12 lg:py-10">
               <div className="max-w-[44rem]">
-                <p className="eyebrow-lux">ВСІ НАПРЯМКИ</p>
+                <p className="eyebrow-lux">{ui.allDirectionsEyebrow}</p>
                 <h2 className="section-title-lux mt-4 text-[2.05rem] font-medium leading-[1.06] tracking-[-0.04em] text-[var(--text)] md:text-[2.55rem] lg:text-[2.9rem]">
-                  Обрати маршрут
+                  {ui.chooseRoute}
                 </h2>
                 <p className="mt-4 max-w-[42rem] text-[0.97rem] leading-[1.8] text-[var(--muted)]">
-                  Оберіть місто подачі, щоб переглянути доступні маршрути.
+                  {ui.chooseCity}
                 </p>
               </div>
 
@@ -714,28 +979,28 @@ export default function HomePageClient({
               </div>
 
               <p className="mt-5 text-[0.82rem] leading-[1.7] text-[rgba(183,178,168,0.72)]">
-                Натисніть на маршрут, щоб переглянути деталі
+                {ui.clickRouteHint}
               </p>
 
               <div className="mt-7 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
                 <p className="md:col-span-2 xl:col-span-3 text-[0.76rem] font-bold uppercase tracking-[0.18em] text-[var(--champagne)]">
-                  Маршрути з міста {activeRouteCity}:
+                  {ui.routesFromCity} {activeRouteCity}:
                 </p>
                 {!routesLoaded ? (
                   <p className="md:col-span-2 xl:col-span-3 text-[0.94rem] leading-[1.7] text-[rgba(183,178,168,0.72)]">
-                    Завантажуємо маршрути...
+                    {ui.loadingRoutes}
                   </p>
                 ) : visibleRoutes.length === 0 ? (
                   <p className="md:col-span-2 xl:col-span-3 text-[0.94rem] leading-[1.7] text-[rgba(183,178,168,0.72)]">
-                    Маршрути для цього міста скоро з’являться.
+                    {ui.noRoutes}
                   </p>
                 ) : (
                   visibleRoutes.map((route) => {
                     const routeLabel = `${route.from_city} → ${route.to_city}`;
                     const routePrice =
                       route.price_from != null
-                        ? `від €${route.price_from}`
-                        : "за запитом";
+                        ? `${ui.fromPrefix} €${route.price_from}`
+                        : ui.onRequest;
 
                     if (!route.slug) {
                       return (
@@ -788,7 +1053,7 @@ export default function HomePageClient({
                   onClick={() => setShowAllRoutes((current) => !current)}
                   className="button-outline mt-7 inline-flex h-11 items-center justify-center rounded-full px-5 text-[0.78rem] font-semibold tracking-[0.1em]"
                 >
-                  {showAllRoutes ? "Згорнути" : "Показати всі напрямки"}
+                  {showAllRoutes ? ui.collapse : ui.showAllRoutes}
                 </button>
               ) : null}
             </div>
@@ -802,21 +1067,19 @@ export default function HomePageClient({
               <div className="service-section-overlay absolute inset-0" />
 
               <div className="relative z-10 max-w-[32.5rem]">
-                <p className="eyebrow-lux opacity-80">ПРИВАТНИЙ VIP ТРАНСФЕР</p>
+                <p className="eyebrow-lux opacity-80">{ui.serviceEyebrow}</p>
                 <h2 className="section-title-lux mt-4 text-[2.25rem] font-medium leading-[1.04] tracking-[-0.04em] text-[var(--text)] sm:text-[2.7rem] lg:text-[3.4rem]">
-                  Преміальний сервіс
+                  {ui.serviceTitle.split("\n")[0]}
                   <br />
-                  на кожному етапі
+                  {ui.serviceTitle.split("\n")[1]}
                 </h2>
                 <p className="mt-5 max-w-[32.5rem] text-[0.98rem] leading-[1.9] text-[var(--muted)] md:text-[1.04rem]">
-                  Ми подбали про кожну деталь вашої подорожі,
-                  <br className="hidden sm:block" /> щоб ви відчували комфорт та
-                  впевненість.
+                  {ui.serviceText}
                 </p>
               </div>
 
               <div className="relative z-10 mt-10 grid grid-cols-2 gap-4 md:mt-14 md:grid-cols-3 xl:mt-auto xl:grid-cols-6 xl:gap-4">
-                {serviceCards.map(({ title, lines, Icon }) => (
+                {serviceCardsLocalized.map(({ title, lines, Icon }) => (
                   <article key={title} className="service-card">
                     <div className="service-icon-ring mx-auto">
                       <Icon className="h-5 w-5 text-[var(--champagne)]" />
@@ -842,15 +1105,15 @@ export default function HomePageClient({
             className="relative z-10 mt-24 md:mt-28 xl:mt-32"
           >
             <div className="max-w-[28rem]">
-              <p className="eyebrow-lux">ЯК ЦЕ ПРАЦЮЄ</p>
+              <p className="eyebrow-lux">{ui.howEyebrow}</p>
               <h2 className="section-title-lux mt-4 text-[2.28rem] font-medium leading-[1.04] tracking-[-0.04em] text-[var(--text)] md:text-[2.9rem] lg:text-[3.2rem]">
-                Як це працює
+                {ui.howTitle}
               </h2>
             </div>
 
             <div className="how-shell mt-10 rounded-[30px] px-5 py-8 sm:px-7 md:px-9 lg:px-12 lg:py-12">
               <div className="how-grid">
-                {processSteps.map(({ number, title, description }) => (
+                {processStepsLocalized.map(({ number, title, description }) => (
                   <article key={number} className="how-step">
                     <span className="how-step-dot" aria-hidden="true" />
                     <div className="how-step-number">{number}</div>
@@ -874,13 +1137,12 @@ export default function HomePageClient({
             />
             <div className="booking-shell rounded-[32px] px-5 py-6 sm:px-7 md:px-9 md:py-9 lg:grid lg:grid-cols-[0.4fr_0.6fr] lg:gap-10 lg:px-12 lg:py-12">
               <div className="max-w-[24rem]">
-                <p className="eyebrow-lux">ЗАЯВКА</p>
+                <p className="eyebrow-lux">{ui.bookingEyebrow}</p>
                 <h2 className="booking-heading-lux mt-4 text-[2.3rem] font-medium leading-[1.05] tracking-[-0.04em] text-[var(--text)] md:text-[2.95rem] lg:text-[3.2rem]">
-                  Забронювати трансфер
+                  {ui.bookingTitle}
                 </h2>
                 <p className="mt-5 text-[0.98rem] leading-[1.85] text-[var(--muted)]">
-                  Ми зв&apos;яжемося з вами, уточнимо маршрут, авто та фінальну
-                  вартість поїздки.
+                  {ui.bookingText}
                 </p>
               </div>
 
@@ -891,85 +1153,87 @@ export default function HomePageClient({
                   className="grid gap-3 md:grid-cols-2"
                 >
                   <TextField
-                    label="Ім’я"
+                    label={ui.name}
                     name="full_name"
                     value={homeFinalForm.values.fullName}
                     onChange={homeFinalForm.handleTextChange("fullName")}
-                    placeholder="Ім'я"
+                    placeholder={ui.yourName}
                     autoComplete="name"
                     error={homeFinalForm.errors.fullName}
                     fieldClassName="h-14 rounded-[15px] px-4 text-[0.95rem]"
                   />
                   <PhoneField
-                    label="Телефон"
+                    label={ui.phone}
                     phoneValue={homeFinalForm.phoneDisplayValue}
-                    phonePlaceholder="Ваш телефон"
+                    phonePlaceholder={ui.yourPhone}
                     phoneMaxLength={homeFinalForm.phoneMaxLength}
                     onPhoneChange={homeFinalForm.handlePhoneNumberChange}
                     error={homeFinalForm.errors.phone}
                     inputClassName="h-14 rounded-[15px] px-4 text-[0.95rem]"
                   />
                   <TextField
-                    label="Звідки"
+                    label={ui.from}
                     name="from_city"
                     value={homeFinalForm.values.fromCity}
                     onChange={homeFinalForm.handleTextChange("fromCity")}
-                    placeholder="Звідки"
+                    placeholder={ui.from}
                     error={homeFinalForm.errors.fromCity}
                     fieldClassName="h-14 rounded-[15px] px-4 text-[0.95rem]"
                   />
                   <TextField
-                    label="Куди"
+                    label={ui.to}
                     name="to_city"
                     value={homeFinalForm.values.toCity}
                     onChange={homeFinalForm.handleTextChange("toCity")}
-                    placeholder="Куди"
+                    placeholder={ui.to}
                     error={homeFinalForm.errors.toCity}
                     fieldClassName="h-14 rounded-[15px] px-4 text-[0.95rem]"
                   />
                   <DateField
-                    label="Дата поїздки"
+                    label={ui.date}
                     name="travel_date"
                     value={homeFinalForm.values.travelDate}
                     onChange={homeFinalForm.handleTextChange("travelDate")}
                     min={homeFinalForm.today}
                     error={homeFinalForm.errors.travelDate}
+                    placeholderText={ui.chooseDate}
+                    locale={isRu ? "ru-RU" : "uk-UA"}
                     fieldClassName="h-14 rounded-[15px] px-4 text-[0.95rem]"
                   />
                   <SelectField
-                    label="Кількість пасажирів"
+                    label={ui.passengers}
                     name="passengers"
                     value={homeFinalForm.values.passengers}
                     onChange={homeFinalForm.handleTextChange("passengers")}
                     fieldClassName="h-14 rounded-[15px] px-4 pr-10 text-[0.95rem]"
                   >
-                    <option value="">Кількість пасажирів</option>
-                    {passengerOptions.map((option) => (
+                    <option value="">{ui.passengers}</option>
+                    {passengerOptionsLocalized.map((option) => (
                       <option key={option} value={option}>
                         {option}
                       </option>
                     ))}
                   </SelectField>
                   <SelectField
-                    label="Клас авто"
+                    label={ui.carClass}
                     name="car_class"
                     value={homeFinalForm.values.carClass}
                     onChange={homeFinalForm.handleTextChange("carClass")}
                     wrapperClassName="md:col-span-2"
                     fieldClassName="h-14 rounded-[15px] px-4 pr-10 text-[0.95rem]"
                   >
-                    {carClasses.map((option) => (
+                    {carClassesLocalized.map((option) => (
                       <option key={option} value={option}>
                         {option}
                       </option>
                     ))}
                   </SelectField>
                   <TextAreaField
-                    label="Коментар"
+                    label={ui.comment}
                     name="comment"
                     value={homeFinalForm.values.comment}
                     onChange={homeFinalForm.handleTextChange("comment")}
-                    placeholder="Коментар"
+                    placeholder={ui.comment}
                     wrapperClassName="md:col-span-2"
                     fieldClassName="min-h-[148px] rounded-[16px] px-4 py-4 text-[0.95rem]"
                   />
@@ -988,7 +1252,7 @@ export default function HomePageClient({
                     }
                     className="button-gold md:col-span-2 inline-flex h-14 items-center justify-center rounded-[16px] px-8 text-[0.8rem] font-bold uppercase tracking-[0.1em] lg:tracking-[0.12em] disabled:cursor-not-allowed disabled:opacity-70"
                   >
-                    Забронювати трансфер
+                    {ui.bookTransfer}
                   </button>
                 </form>
               </div>
@@ -1004,7 +1268,7 @@ export default function HomePageClient({
             <div className="max-w-[33rem]">
               <p className="eyebrow-lux">FAQ</p>
               <h2 className="section-title-lux mt-4 text-[2.28rem] font-medium leading-[1.04] tracking-[-0.04em] text-[var(--text)] md:text-[2.95rem] lg:text-[3.2rem]">
-                Поширені питання
+                {ui.faqTitle}
               </h2>
             </div>
 
@@ -1012,7 +1276,7 @@ export default function HomePageClient({
               {faqColumns.map((column, columnIndex) => (
                 <div key={`faq-column-${columnIndex}`} className="space-y-3">
                   {column.map(({ question, answer }, itemIndex) => {
-                    const index = columnIndex * faqMidpoint + itemIndex;
+                    const index = columnIndex * faqMidpointLocalized + itemIndex;
                     const isOpen = openFaqIndex === index;
 
                     return (
@@ -1054,7 +1318,7 @@ export default function HomePageClient({
 
             <div className="mt-8 flex flex-col items-center justify-center text-center">
               <p className="text-[0.96rem] leading-[1.8] text-[var(--muted)]">
-                Не знайшли відповідь?
+                {ui.faqCta}
               </p>
               <div className="mt-4 flex flex-col gap-3 sm:flex-row">
                 <a
@@ -1075,7 +1339,7 @@ export default function HomePageClient({
                   }}
                   className="button-outline inline-flex h-11 items-center justify-center rounded-full px-5 text-[0.78rem] font-semibold tracking-[0.1em]"
                 >
-                  Написати в Telegram
+                  {ui.telegramSentence}
                 </a>
                 <a
                   href="tel:+380638243223"
@@ -1093,7 +1357,7 @@ export default function HomePageClient({
                   }}
                   className="button-gold inline-flex h-11 items-center justify-center rounded-full px-5 text-[0.78rem] font-semibold tracking-[0.1em]"
                 >
-                  Зателефонувати
+                  {ui.call}
                 </a>
               </div>
             </div>
@@ -1102,16 +1366,17 @@ export default function HomePageClient({
           <ReviewsSection
             location="homepage"
             className="mt-12 md:mt-16 xl:mt-20"
+            language={currentLanguage}
           />
           <div className="mt-5 rounded-[24px] border border-[rgba(216,185,130,0.1)] bg-[rgba(10,13,11,0.34)] px-5 py-5 sm:px-6">
             <p className="text-[0.72rem] font-bold uppercase tracking-[0.2em] text-[var(--champagne)]">
-              Популярні запити клієнтів
+              {ui.reviewSeoTitle}
             </p>
             <p className="mt-2 text-[0.88rem] leading-[1.7] text-[rgba(183,178,168,0.8)]">
-              Популярні запити клієнтів у Google:
+              {ui.reviewSeoIntro}
             </p>
             <div className="mt-4 flex flex-wrap gap-2.5">
-              {reviewsSeoRoutes.map((item) => (
+              {reviewsSeoRoutesLocalized.map((item) => (
                 <span
                   key={item}
                   className="inline-flex rounded-full border border-[rgba(216,185,130,0.14)] bg-[rgba(216,185,130,0.04)] px-3.5 py-2 text-[0.78rem] leading-none text-[rgba(183,178,168,0.86)]"
@@ -1124,12 +1389,12 @@ export default function HomePageClient({
 
           <section className="relative z-10 mt-10 md:mt-12 xl:mt-14">
             <div className="max-w-[38rem]">
-              <p className="eyebrow-lux">БЛОГ</p>
+              <p className="eyebrow-lux">{ui.blogEyebrow}</p>
               <h2 className="section-title-lux mt-4 text-[2.05rem] font-medium leading-[1.06] tracking-[-0.04em] text-[var(--text)] md:text-[2.55rem] lg:text-[2.9rem]">
-                Корисний блог
+                {ui.blogTitle}
               </h2>
               <p className="mt-4 max-w-[36rem] text-[0.97rem] leading-[1.8] text-[var(--muted)]">
-                Поради для поїздок, маршрути та корисна інформація для клієнтів.
+                {ui.blogText}
               </p>
             </div>
 
@@ -1146,18 +1411,18 @@ export default function HomePageClient({
                 <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,9,8,0.1)_0%,rgba(7,9,8,0.78)_100%)]" />
               </div>
               <div className="p-5 sm:p-6 md:p-8">
-                <p className="eyebrow-lux">ОСНОВНИЙ МАРШРУТ</p>
+                <p className="eyebrow-lux">{ui.mainRouteEyebrow}</p>
                 <h3 className="section-title-lux mt-4 text-[1.95rem] font-medium leading-[1.08] tracking-[-0.04em] text-[var(--text)] md:text-[2.25rem]">
-                  {featuredArticle.title}
+                  {featuredArticleLocalized.title}
                 </h3>
                 <p className="mt-4 max-w-[32rem] text-[0.96rem] leading-[1.8] text-[var(--muted)]">
-                  {featuredArticle.description}
+                  {featuredArticleLocalized.description}
                 </p>
                 <Link
-                  href={featuredArticle.href}
+                  href={featuredArticleLocalized.href}
                   className="button-outline mt-6 inline-flex h-11 items-center justify-center rounded-full px-5 text-[0.78rem] font-semibold tracking-[0.1em]"
                 >
-                  Читати
+                  {ui.read}
                 </Link>
               </div>
             </article>
@@ -1165,38 +1430,74 @@ export default function HomePageClient({
 
           <section className="relative z-10 mt-10 md:mt-12 xl:mt-14">
             <div className="panel-soft rounded-[28px] px-5 py-6 sm:px-7 md:px-9 md:py-8 lg:px-12">
-              <p className="eyebrow-lux">ІНФОРМАЦІЯ</p>
+              <p className="eyebrow-lux">{ui.infoEyebrow}</p>
               <h2 className="section-title-lux mt-4 text-[2.05rem] font-medium leading-[1.08] tracking-[-0.04em] text-[var(--text)] md:text-[2.45rem]">
-                VIP трансфери Україна — Молдова — Польща
+                {ui.infoTitle}
               </h2>
               <div className="mt-5 max-w-[58rem] space-y-4 text-[0.96rem] leading-[1.85] text-[var(--muted)]">
-                <p>
-                  Grand Transfer організовує приватні VIP трансфери між
-                  Україною, Молдовою та Польщею для приватних клієнтів,
-                  сімейних поїздок і бізнес-маршрутів. Найчастіше клієнти
-                  замовляють трансфер Одеса Кишинів, трансфер Київ Кишинів,
-                  трансфер Дніпро Кишинів, трансфер Харків Кишинів і трансфер
-                  Львів Кишинів, а також міжнародні поїздки до Варшави,
-                  Бухареста та Ясс.
-                </p>
-                <p>
-                  Ми працюємо з індивідуальною подачею авто, приватним водієм,
-                  допомогою на кордоні та маршрутом без попутників. Ви можете
-                  замовити трансфер до міста, аеропорту, готелю, вокзалу або
-                  будь-якої адреси за попереднім погодженням. Для клієнтів, яким
-                  потрібен VIP трансфер Україна Європа, ми погоджуємо маршрут,
-                  час подачі та клас авто під індивідуальний запит.
-                </p>
-                <p>
-                  Фінальна вартість залежить від маршруту, класу авто, дати
-                  виїзду, кількості пасажирів, багажу та додаткових зупинок.
-                  Щоб уточнити ціну, залиште заявку на сайті або напишіть у
-                  Telegram.
-                </p>
-                <p>
-                  Ми обслуговуємо як приватні поїздки, так і трансфери для
-                  бізнес-клієнтів та партнерів.
-                </p>
+                {isRu ? (
+                  <>
+                    <p>
+                      Grand Transfer организует частные VIP трансферы между
+                      Украиной, Молдовой и Польшей для частных клиентов,
+                      семейных поездок и бизнес-маршрутов. Чаще всего клиенты
+                      заказывают трансфер Одесса Кишинёв, трансфер Киев
+                      Кишинёв, трансфер Днепр Кишинёв, трансфер Харьков
+                      Кишинёв и трансфер Львов Кишинёв, а также международные
+                      поездки в Варшаву, Бухарест и Яссы.
+                    </p>
+                    <p>
+                      Мы работаем с индивидуальной подачей авто, частным
+                      водителем, помощью на границе и маршрутом без
+                      попутчиков. Вы можете заказать трансфер в город,
+                      аэропорт, отель, на вокзал или по любому адресу по
+                      предварительному согласованию. Для клиентов, которым
+                      нужен VIP трансфер Украина Европа, мы согласовываем
+                      маршрут, время подачи и класс авто под индивидуальный
+                      запрос.
+                    </p>
+                    <p>
+                      Финальная стоимость зависит от маршрута, класса авто,
+                      даты выезда, количества пассажиров, багажа и
+                      дополнительных остановок. Чтобы уточнить цену, оставьте
+                      заявку на сайте или напишите в Telegram.
+                    </p>
+                    <p>
+                      Мы обслуживаем как частные поездки, так и трансферы для
+                      бизнес-клиентов и партнёров.
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p>
+                      Grand Transfer організовує приватні VIP трансфери між
+                      Україною, Молдовою та Польщею для приватних клієнтів,
+                      сімейних поїздок і бізнес-маршрутів. Найчастіше клієнти
+                      замовляють трансфер Одеса Кишинів, трансфер Київ Кишинів,
+                      трансфер Дніпро Кишинів, трансфер Харків Кишинів і трансфер
+                      Львів Кишинів, а також міжнародні поїздки до Варшави,
+                      Бухареста та Ясс.
+                    </p>
+                    <p>
+                      Ми працюємо з індивідуальною подачею авто, приватним водієм,
+                      допомогою на кордоні та маршрутом без попутників. Ви можете
+                      замовити трансфер до міста, аеропорту, готелю, вокзалу або
+                      будь-якої адреси за попереднім погодженням. Для клієнтів, яким
+                      потрібен VIP трансфер Україна Європа, ми погоджуємо маршрут,
+                      час подачі та клас авто під індивідуальний запит.
+                    </p>
+                    <p>
+                      Фінальна вартість залежить від маршруту, класу авто, дати
+                      виїзду, кількості пасажирів, багажу та додаткових зупинок.
+                      Щоб уточнити ціну, залиште заявку на сайті або напишіть у
+                      Telegram.
+                    </p>
+                    <p>
+                      Ми обслуговуємо як приватні поїздки, так і трансфери для
+                      бізнес-клієнтів та партнерів.
+                    </p>
+                  </>
+                )}
               </div>
             </div>
           </section>
@@ -1213,17 +1514,16 @@ export default function HomePageClient({
               <div className="max-w-[23rem]">
                 <div className="footer-brand">
                   <div className="luxury-logo-title">GRAND TRANSFER</div>
-                  <div className="footer-logo-subtitle">VIP СЕРВІС</div>
+                  <div className="footer-logo-subtitle">{isRu ? "VIP СЕРВИС" : "VIP СЕРВІС"}</div>
                 </div>
                 <p className="mt-6 text-[0.95rem] leading-[1.8] text-[var(--muted)]">
-                  Преміальні міжнародні трансфери між Україною, Молдовою та
-                  Польщею для приватних, бізнес- та VIP-клієнтів.
+                  {ui.footerDescription}
                 </p>
               </div>
 
               <div>
                 <h3 className="text-[0.76rem] font-bold uppercase tracking-[0.22em] text-[var(--champagne)]">
-                  Компанія
+                  {ui.footerCompany}
                 </h3>
                 <div className="mt-5 flex flex-col gap-3 text-[0.95rem] text-[rgba(247,243,234,0.86)]">
                   {footerLinks.map(({ label, href }) => (
@@ -1240,30 +1540,25 @@ export default function HomePageClient({
 
               <div>
                 <h3 className="text-[0.76rem] font-bold uppercase tracking-[0.22em] text-[var(--champagne)]">
-                  Контакти
+                  {ui.footerContacts}
                 </h3>
                 <FooterContactLinks pageType="home" />
               </div>
 
               <div>
                 <h3 className="text-[0.76rem] font-bold uppercase tracking-[0.22em] text-[var(--champagne)]">
-                  Мови
+                  {ui.footerLanguages}
                 </h3>
-                <div className="mt-5 flex flex-wrap gap-2.5">
-                  {["UA", "RU", "EN"].map((language) => (
-                    <span
-                      key={language}
-                      className={`language-pill ${language === "UA" ? "is-active" : ""}`}
-                    >
-                      {language}
-                    </span>
-                  ))}
-                </div>
+                <LanguageSwitcher
+                  className="mt-5"
+                  currentLanguage={currentLanguage}
+                  links={{ ua: "/", ru: "/ru" }}
+                />
               </div>
             </div>
 
             <div className="mt-10 border-t border-[rgba(216,185,130,0.08)] pt-5 text-[0.83rem] text-[rgba(183,178,168,0.78)]">
-              © 2026 Grand Transfer. Усі права захищені.
+              {ui.footerCopyright}
             </div>
           </div>
         </div>
@@ -1277,7 +1572,7 @@ export default function HomePageClient({
       >
         <button
           type="button"
-          aria-label="Закрити меню"
+          aria-label={ui.closeMenu}
           onClick={() => setMenuOpen(false)}
           className={`mobile-drawer-overlay ${menuOpen ? "is-open" : ""}`}
         />
@@ -1293,11 +1588,11 @@ export default function HomePageClient({
               <div className="luxury-logo-title text-[1rem] leading-none">
                 GRAND TRANSFER
               </div>
-              <div className="luxury-logo-subtitle mt-2">VIP СЕРВІС</div>
+              <div className="luxury-logo-subtitle mt-2">{isRu ? "VIP СЕРВИС" : "VIP СЕРВІС"}</div>
             </div>
             <button
               type="button"
-              aria-label="Закрити меню"
+              aria-label={ui.closeMenu}
               onClick={() => setMenuOpen(false)}
               className="burger-button inline-flex h-11 w-11 items-center justify-center rounded-full"
             >
@@ -1329,7 +1624,7 @@ export default function HomePageClient({
                   pageType="home"
                   phoneHref={phoneHref}
                   phoneLabel={phoneNumber}
-                  compactLabel="Подзвонити"
+                  compactLabel={ui.callCompact}
                   className="inline-flex"
                 />
             <a
@@ -1343,7 +1638,7 @@ export default function HomePageClient({
               }
               className="button-gold inline-flex h-[52px] w-full items-center justify-center rounded-full px-7 text-[0.76rem] font-bold uppercase tracking-[0.1em]"
             >
-              ЗАМОВИТИ
+              {ui.order}
             </a>
           </div>
         </aside>
@@ -1355,6 +1650,14 @@ export default function HomePageClient({
         pageType="home"
         phoneHref={phoneHref}
         phoneLabel={phoneNumber}
+        eyebrowText={ui.successEyebrow}
+        titleText={ui.successTitle}
+        bodyText={ui.successBody}
+        noteText={ui.successNote}
+        callButtonText={ui.successCallButton}
+        closeButtonText={isRu ? "Закрыть" : "Закрити"}
+        closeOverlayLabel={isRu ? "Закрыть сообщение" : "Закрити повідомлення"}
+        closeButtonLabel={isRu ? "Закрыть" : "Закрити"}
       />
       <FloatingContactWidget
         pageType="home"

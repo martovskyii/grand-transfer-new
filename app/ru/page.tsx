@@ -5,8 +5,8 @@ import { supabase } from "../../lib/supabase";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Grand Transfer",
-  description: "VIP трансфери між Україною та Молдовою.",
+  title: "Grand Transfer | VIP трансферы Украина — Молдова — Польша",
+  description: "Частные VIP трансферы между Украиной, Молдовой и Польшей.",
   alternates: {
     canonical: "/ru"
   }
