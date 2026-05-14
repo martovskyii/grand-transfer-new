@@ -37,6 +37,7 @@ type UseTransferFormOptions = {
   route: string | null;
   requireDate?: boolean;
   initialValues?: Partial<TransferFormValues>;
+  language?: "ua" | "ru";
 };
 
 type LeadMeta = {
@@ -165,8 +166,10 @@ export function useTransferForm({
   pageType,
   route,
   requireDate = false,
-  initialValues
+  initialValues,
+  language = "ua"
 }: UseTransferFormOptions) {
+  const isRu = language === "ru";
   const [values, setValues] = useState<TransferFormValues>({
     ...defaultValues,
     ...initialValues
@@ -232,9 +235,13 @@ export function useTransferForm({
     const digitsLength = phoneDigitsLength(normalizedPhone);
 
     if (digitsLength === 0) {
-      nextErrors.phone = "Вкажіть номер телефону.";
+      nextErrors.phone = isRu
+        ? "Укажите номер телефона."
+        : "Вкажіть номер телефону.";
     } else if (digitsLength < 8 || digitsLength > 15) {
-      nextErrors.phone = "Введіть коректний номер телефону";
+      nextErrors.phone = isRu
+        ? "Введите корректный номер телефона."
+        : "Введіть коректний номер телефону";
     }
 
     setErrors(nextErrors);
@@ -318,7 +325,9 @@ export function useTransferForm({
       setIsSuccessOpen(true);
     } catch {
       setSubmitError(
-        "Не вдалося надіслати заявку. Спробуйте ще раз або напишіть у Telegram."
+        isRu
+          ? "Не удалось отправить заявку. Попробуйте ещё раз или напишите в Telegram."
+          : "Не вдалося надіслати заявку. Спробуйте ще раз або напишіть у Telegram."
       );
     } finally {
       setIsSubmitting(false);

@@ -35,6 +35,10 @@ type SuccessPopupProps = {
   titleText?: string;
   bodyText?: string;
   noteText?: string;
+  callButtonText?: string;
+  closeButtonText?: string;
+  closeOverlayLabel?: string;
+  closeButtonLabel?: string;
 };
 
 type HeaderPhoneLinkProps = {
@@ -228,7 +232,11 @@ export function SuccessPopup({
   eyebrowText = "Заявку надіслано",
   titleText = "Дякуємо за заявку",
   bodyText = "Дякуємо! Ми скоро зв'яжемося з вами.",
-  noteText = "Якщо питання термінове — натисніть “Подзвонити зараз”."
+  noteText = "Якщо питання термінове — натисніть “Подзвонити зараз”.",
+  callButtonText = "Подзвонити зараз",
+  closeButtonText = "Закрити",
+  closeOverlayLabel = "Закрити повідомлення",
+  closeButtonLabel = "Закрити"
 }: SuccessPopupProps) {
   useEffect(() => {
     if (!open) {
@@ -258,14 +266,14 @@ export function SuccessPopup({
     <div className="success-popup-shell" role="dialog" aria-modal="true">
       <button
         type="button"
-        aria-label="Закрити повідомлення"
+        aria-label={closeOverlayLabel}
         className="success-popup-overlay"
         onClick={onClose}
       />
       <div className="success-popup-card">
         <button
           type="button"
-          aria-label="Закрити"
+          aria-label={closeButtonLabel}
           className="success-popup-close"
           onClick={onClose}
         >
@@ -287,14 +295,14 @@ export function SuccessPopup({
             }
             className="button-gold inline-flex h-[52px] items-center justify-center rounded-[14px] px-7 text-[0.76rem] font-bold uppercase tracking-[0.1em]"
           >
-            Подзвонити зараз
+            {callButtonText}
           </a>
           <button
             type="button"
             onClick={onClose}
             className="button-outline inline-flex h-[52px] items-center justify-center rounded-[14px] px-7 text-[0.76rem] font-bold uppercase tracking-[0.1em]"
           >
-            Закрити
+            {closeButtonText}
           </button>
         </div>
         <p className="success-popup-note">{noteText}</p>

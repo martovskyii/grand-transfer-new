@@ -18,6 +18,7 @@ type ReviewsSectionProps = {
   routeLabel?: string;
   routeSlug?: string | null;
   reviews?: DynamicRouteReview[];
+  language?: "ua" | "ru";
 };
 
 type MediaType = "instagram" | "messenger" | "photo" | "video";
@@ -51,24 +52,28 @@ const reviewFormInitialState: ReviewFormState = {
   review: ""
 };
 
-const mediaPreviewMeta: Record<MediaType, { title: string; Icon: typeof PhotoIcon }> = {
-  instagram: {
-    title: "Скрин відгуку з Instagram",
-    Icon: InstagramIcon
-  },
-  messenger: {
-    title: "Скрин переписки з клієнтом",
-    Icon: MessengerIcon
-  },
-  photo: {
-    title: "Фото після поїздки",
-    Icon: PhotoIcon
-  },
-  video: {
-    title: "Відеовідгук клієнта",
-    Icon: VideoIcon
-  }
-};
+function getMediaPreviewMeta(language: "ua" | "ru") {
+  const isRu = language === "ru";
+
+  return {
+    instagram: {
+      title: isRu ? "Скрин отзыва из Instagram" : "Скрин відгуку з Instagram",
+      Icon: InstagramIcon
+    },
+    messenger: {
+      title: isRu ? "Скрин переписки с клиентом" : "Скрин переписки з клієнтом",
+      Icon: MessengerIcon
+    },
+    photo: {
+      title: isRu ? "Фото после поездки" : "Фото після поїздки",
+      Icon: PhotoIcon
+    },
+    video: {
+      title: isRu ? "Видеоотзыв клиента" : "Відеовідгук клієнта",
+      Icon: VideoIcon
+    }
+  } satisfies Record<MediaType, { title: string; Icon: typeof PhotoIcon }>;
+}
 
 function cx(...classNames: Array<string | false | null | undefined>) {
   return classNames.filter(Boolean).join(" ");
@@ -98,9 +103,60 @@ export function ReviewsSection({
   className,
   routeLabel,
   routeSlug,
-  reviews
+  reviews,
+  language = "ua"
 }: ReviewsSectionProps) {
   const pageType = location === "homepage" ? "home" : "route";
+  const isRu = language === "ru";
+  const ui = {
+    sectionEyebrow: isRu ? "ОТЗЫВЫ КЛИЕНТОВ" : "ВІДГУКИ КЛІЄНТІВ",
+    sectionTitle: isRu
+      ? "Реальные впечатления после поездок"
+      : "Реальні враження після поїздок",
+    sectionSubtitle: isRu
+      ? "Короткие отзывы клиентов после частных трансферов Украина — Молдова — Польша."
+      : "Короткі відгуки клієнтів після приватних трансферів Україна — Молдова — Польща.",
+    ratingLabel: isRu ? "Рейтинг сервиса" : "Рейтинг сервісу",
+    ratingBasedOn: isRu ? "На основе реальных поездок" : "На основі реальних поїздок",
+    leaveReview: isRu ? "ОСТАВИТЬ ОТЗЫВ" : "ЗАЛИШИТИ ВІДГУК",
+    loading: isRu ? "Загружаем отзывы..." : "Завантажуємо відгуки...",
+    empty: isRu ? "Отзывы скоро появятся." : "Відгуки скоро з’являться.",
+    mediaButton: isRu ? "Смотреть скрин" : "Дивитись скрин",
+    scrollHint: isRu ? "Листайте отзывы" : "Гортайте відгуки",
+    reviewsCountSuffix: isRu ? "отзывов" : "відгуків",
+    closeReviewForm: isRu ? "Закрыть форму отзыва" : "Закрити форму відгуку",
+    formEyebrow: isRu ? "ОСТАВИТЬ ОТЗЫВ" : "ЗАЛИШИТИ ВІДГУК",
+    formTitle: isRu
+      ? "Поделитесь впечатлением после поездки"
+      : "Поділіться враженням після поїздки",
+    nameLabel: isRu ? "Имя" : "Ім’я",
+    namePlaceholder: isRu ? "Ваше имя" : "Ваше ім’я",
+    ratingField: isRu ? "Оценка" : "Оцінка",
+    ratingAriaPrefix: isRu ? "Оценка" : "Оцінка",
+    reviewLabel: isRu ? "Отзыв" : "Відгук",
+    reviewPlaceholder: isRu ? "Напишите коротко о поездке" : "Напишіть коротко про поїздку",
+    submitSending: isRu ? "ОТПРАВЛЯЕМ..." : "НАДСИЛАЄМО...",
+    submitReview: isRu ? "ОТПРАВИТЬ ОТЗЫВ" : "НАДІСЛАТИ ВІДГУК",
+    thanksEyebrow: isRu ? "СПАСИБО" : "ДЯКУЄМО",
+    thanksTitle: isRu ? "Отзыв получен" : "Відгук отримано",
+    thanksBody: isRu
+      ? "Спасибо за отзыв. После проверки он может быть опубликован на сайте."
+      : "Дякуємо за відгук. Після перевірки він може бути опублікований на сайті.",
+    close: isRu ? "Закрыть" : "Закрити",
+    addAnother: isRu ? "Добавить ещё один" : "Додати ще один",
+    closePreview: isRu ? "Закрыть просмотр" : "Закрити перегляд",
+    mediaEyebrow: isRu ? "МЕДИА ОТЗЫВ" : "МЕДІА ВІДГУК",
+    prevReviews: isRu ? "Предыдущие отзывы" : "Попередні відгуки",
+    nextReviews: isRu ? "Следующие отзывы" : "Наступні відгуки",
+    errors: {
+      name: isRu ? "Укажите имя." : "Вкажіть ім’я.",
+      rating: isRu ? "Выберите оценку." : "Оберіть оцінку.",
+      review: isRu ? "Напишите короткий отзыв." : "Напишіть короткий відгук.",
+      submit: isRu
+        ? "Сейчас не удалось отправить отзыв. Попробуйте позже."
+        : "Наразі не вдалося надіслати відгук. Спробуйте пізніше."
+    }
+  };
   const sectionRef = useRef<HTMLElement | null>(null);
   const reviewsTrackRef = useRef<HTMLDivElement | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -123,7 +179,11 @@ export function ReviewsSection({
     reviews ?? []
   );
   const [reviewsLoaded, setReviewsLoaded] = useState(Boolean(reviews));
-  const supabaseReviews = mapSupabaseReviewsToViewModel(resolvedReviews, routeLabel);
+  const supabaseReviews = mapSupabaseReviewsToViewModel(
+    resolvedReviews,
+    routeLabel,
+    language
+  );
   const visibleReviews = supabaseReviews;
   const ratingAverage =
     supabaseReviews.length > 0
@@ -375,15 +435,15 @@ export function ReviewsSection({
     const trimmedReview = formState.review.trim();
 
     if (!trimmedName) {
-      nextErrors.name = "Вкажіть ім’я.";
+      nextErrors.name = ui.errors.name;
     }
 
     if (!formState.rating || formState.rating < 1) {
-      nextErrors.rating = "Оберіть оцінку.";
+      nextErrors.rating = ui.errors.rating;
     }
 
     if (!trimmedReview) {
-      nextErrors.review = "Напишіть короткий відгук.";
+      nextErrors.review = ui.errors.review;
     }
 
     if (Object.keys(nextErrors).length > 0) {
@@ -393,7 +453,7 @@ export function ReviewsSection({
     }
 
     if (!supabase) {
-      setSubmitError("Наразі не вдалося надіслати відгук. Спробуйте пізніше.");
+      setSubmitError(ui.errors.submit);
       return;
     }
 
@@ -415,7 +475,7 @@ export function ReviewsSection({
     ]);
 
     if (error) {
-      setSubmitError("Наразі не вдалося надіслати відгук. Спробуйте пізніше.");
+      setSubmitError(ui.errors.submit);
       setIsSubmitting(false);
       return;
     }
@@ -474,6 +534,7 @@ export function ReviewsSection({
     });
   }
 
+  const mediaPreviewMeta = getMediaPreviewMeta(language);
   const selectedMediaMeta =
     selectedMediaReview?.mediaType &&
     mediaPreviewMeta[selectedMediaReview.mediaType];
@@ -490,19 +551,18 @@ export function ReviewsSection({
         <div className="absolute inset-x-0 top-0 h-px bg-[linear-gradient(90deg,transparent,rgba(234,214,172,0.18),transparent)]" />
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-end lg:gap-8">
           <div className="max-w-[46rem]">
-            <p className="eyebrow-lux">ВІДГУКИ КЛІЄНТІВ</p>
+            <p className="eyebrow-lux">{ui.sectionEyebrow}</p>
             <h2 className="section-title-lux mt-4 text-[2.1rem] font-medium leading-[1.04] tracking-[-0.04em] text-[var(--text)] md:text-[2.7rem] lg:text-[3rem]">
-              Реальні враження після поїздок
+              {ui.sectionTitle}
             </h2>
             <p className="mt-4 max-w-[38rem] text-[0.98rem] leading-7 text-[var(--muted)] md:text-[1.02rem]">
-              Короткі відгуки клієнтів після приватних трансферів Україна —
-              Молдова — Польща.
+              {ui.sectionSubtitle}
             </p>
           </div>
           <div className="reviews-card gap-4 rounded-[24px] p-5 sm:p-6">
             <div>
               <p className="text-[0.7rem] font-semibold uppercase tracking-[0.22em] text-[var(--champagne)]">
-                Рейтинг сервісу
+                {ui.ratingLabel}
               </p>
               <div className="mt-3 flex items-end gap-3">
                 <span className="text-[2rem] font-semibold leading-none text-[var(--text)]">
@@ -514,16 +574,16 @@ export function ReviewsSection({
               </div>
               <div className="mt-3">{renderStars(Math.round(ratingAverage))}</div>
               <p className="mt-3 text-sm leading-6 text-[var(--muted)]">
-                На основі реальних поїздок
+                {ui.ratingBasedOn}
               </p>
             </div>
             <button
               type="button"
               onClick={openReviewForm}
-              className="button-gold inline-flex h-12 items-center justify-center rounded-full px-5 text-[0.74rem] font-bold uppercase tracking-[0.14em]"
-            >
-              ЗАЛИШИТИ ВІДГУК
-            </button>
+            className="button-gold inline-flex h-12 items-center justify-center rounded-full px-5 text-[0.74rem] font-bold uppercase tracking-[0.14em]"
+          >
+            {ui.leaveReview}
+          </button>
           </div>
         </div>
 
@@ -536,7 +596,7 @@ export function ReviewsSection({
             {!reviewsLoaded ? (
               <div className="reviews-card flex min-h-[220px] w-full items-center justify-center rounded-[24px] p-6 text-center">
                 <p className="max-w-[28rem] text-[0.98rem] leading-7 text-[var(--muted)]">
-                  Завантажуємо відгуки...
+                  {ui.loading}
                 </p>
               </div>
             ) : visibleReviews.length > 0 ? (
@@ -565,7 +625,7 @@ export function ReviewsSection({
                         onClick={() => handleMediaOpen(review)}
                         className="button-outline mt-5 inline-flex h-10 items-center justify-center rounded-full px-4 text-[0.7rem] font-bold uppercase tracking-[0.12em]"
                       >
-                        Дивитись скрин
+                        {ui.mediaButton}
                       </button>
                     ) : null}
                   </div>
@@ -574,7 +634,7 @@ export function ReviewsSection({
             ) : (
               <div className="reviews-card flex min-h-[220px] w-full items-center justify-center rounded-[24px] p-6 text-center">
                 <p className="max-w-[28rem] text-[0.98rem] leading-7 text-[var(--muted)]">
-                  Відгуки скоро з’являться.
+                  {ui.empty}
                 </p>
               </div>
             )}
@@ -592,7 +652,7 @@ export function ReviewsSection({
                     ? "border-[rgba(230,213,170,0.18)] bg-[rgba(12,16,13,0.56)] text-[var(--soft-gold)] hover:border-[rgba(230,213,170,0.3)]"
                     : "cursor-not-allowed border-[rgba(230,213,170,0.08)] bg-[rgba(12,16,13,0.24)] text-[rgba(183,178,168,0.42)]"
                 )}
-                aria-label="Попередні відгуки"
+                aria-label={ui.prevReviews}
               >
                 <ArrowIcon className="h-4 w-4 rotate-180" />
               </button>
@@ -606,7 +666,7 @@ export function ReviewsSection({
                     ? "border-[rgba(230,213,170,0.18)] bg-[rgba(12,16,13,0.56)] text-[var(--soft-gold)] hover:border-[rgba(230,213,170,0.3)]"
                     : "cursor-not-allowed border-[rgba(230,213,170,0.08)] bg-[rgba(12,16,13,0.24)] text-[rgba(183,178,168,0.42)]"
                 )}
-                aria-label="Наступні відгуки"
+                aria-label={ui.nextReviews}
               >
                 <ArrowIcon className="h-4 w-4" />
               </button>
@@ -622,8 +682,8 @@ export function ReviewsSection({
                 />
               </div>
               <div className="mt-2 flex items-center justify-between gap-3 text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-[rgba(216,185,130,0.72)]">
-                <span>Гортайте відгуки</span>
-                <span>{reviewsCount} відгуків</span>
+                <span>{ui.scrollHint}</span>
+                <span>{reviewsCount} {ui.reviewsCountSuffix}</span>
               </div>
             </div>
           </div>
@@ -641,23 +701,23 @@ export function ReviewsSection({
               type="button"
               onClick={closeReviewForm}
               className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full border border-[rgba(230,213,170,0.14)] bg-[rgba(12,16,13,0.56)] text-[var(--soft-gold)] transition hover:border-[rgba(230,213,170,0.28)]"
-              aria-label="Закрити форму відгуку"
+              aria-label={ui.closeReviewForm}
             >
               <CloseIcon className="h-4 w-4" />
             </button>
 
             {!isSubmitted ? (
               <>
-                <p className="eyebrow-lux">ЗАЛИШИТИ ВІДГУК</p>
+                <p className="eyebrow-lux">{ui.formEyebrow}</p>
                 <h3 className="section-title-lux mt-4 pr-10 text-[2rem] font-medium leading-[1.04] tracking-[-0.04em] text-[var(--text)] sm:text-[2.35rem]">
-                  Поділіться враженням після поїздки
+                  {ui.formTitle}
                 </h3>
                 <form onSubmit={handleSubmit} className="mt-6 space-y-5">
                   <TextField
-                    label="Ім’я"
+                    label={ui.nameLabel}
                     name="reviewer-name"
                     autoComplete="name"
-                    placeholder="Ваше ім’я"
+                    placeholder={ui.namePlaceholder}
                     value={formState.name}
                     error={formErrors.name}
                     onChange={event =>
@@ -675,7 +735,7 @@ export function ReviewsSection({
 
                   <div className="field-group">
                     <div className="flex items-center justify-between gap-3">
-                      <span className="field-label mb-0">Оцінка</span>
+                      <span className="field-label mb-0">{ui.ratingField}</span>
                       <span className="text-sm text-[var(--muted)]">
                         {hoveredRating ?? formState.rating} / 5
                       </span>
@@ -707,7 +767,7 @@ export function ReviewsSection({
                                 ? "border-[rgba(230,213,170,0.34)] bg-[rgba(216,185,130,0.12)] text-[var(--champagne)]"
                                 : "border-[rgba(230,213,170,0.12)] bg-[rgba(12,16,13,0.56)] text-[rgba(247,243,234,0.45)]"
                             )}
-                            aria-label={`Оцінка ${value} з 5`}
+                            aria-label={`${ui.ratingAriaPrefix} ${value} з 5`}
                           >
                             <StarIcon className="h-5 w-5" />
                           </button>
@@ -720,9 +780,9 @@ export function ReviewsSection({
                   </div>
 
                   <TextAreaField
-                    label="Відгук"
+                    label={ui.reviewLabel}
                     name="review-text"
-                    placeholder="Напишіть коротко про поїздку"
+                    placeholder={ui.reviewPlaceholder}
                     value={formState.review}
                     error={formErrors.review}
                     onChange={event =>
@@ -748,19 +808,18 @@ export function ReviewsSection({
                     disabled={isSubmitting}
                     className="button-gold inline-flex h-12 w-full items-center justify-center rounded-full px-5 text-[0.76rem] font-bold uppercase tracking-[0.14em]"
                   >
-                    {isSubmitting ? "НАДСИЛАЄМО..." : "НАДІСЛАТИ ВІДГУК"}
+                    {isSubmitting ? ui.submitSending : ui.submitReview}
                   </button>
                 </form>
               </>
             ) : (
               <div className="py-6 pr-8">
-                <p className="eyebrow-lux">ДЯКУЄМО</p>
+                <p className="eyebrow-lux">{ui.thanksEyebrow}</p>
                 <h3 className="section-title-lux mt-4 text-[2rem] font-medium leading-[1.04] tracking-[-0.04em] text-[var(--text)] sm:text-[2.25rem]">
-                  Відгук отримано
+                  {ui.thanksTitle}
                 </h3>
                 <p className="mt-4 max-w-[28rem] text-[1rem] leading-7 text-[var(--muted)]">
-                  Дякуємо за відгук. Після перевірки він може бути опублікований
-                  на сайті.
+                  {ui.thanksBody}
                 </p>
                 <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                   <button
@@ -771,14 +830,14 @@ export function ReviewsSection({
                     }}
                     className="button-gold inline-flex h-12 items-center justify-center rounded-full px-5 text-[0.74rem] font-bold uppercase tracking-[0.14em]"
                   >
-                    Закрити
+                    {ui.close}
                   </button>
                   <button
                     type="button"
                     onClick={resetFormState}
                     className="button-outline inline-flex h-12 items-center justify-center rounded-full px-5 text-[0.74rem] font-bold uppercase tracking-[0.14em]"
                   >
-                    Додати ще один
+                    {ui.addAnother}
                   </button>
                 </div>
               </div>
@@ -798,11 +857,11 @@ export function ReviewsSection({
               type="button"
               onClick={closeMediaPreview}
               className="absolute right-4 top-4 inline-flex h-10 w-10 items-center justify-center rounded-full border border-[rgba(230,213,170,0.14)] bg-[rgba(12,16,13,0.56)] text-[var(--soft-gold)] transition hover:border-[rgba(230,213,170,0.28)]"
-              aria-label="Закрити перегляд"
+              aria-label={ui.closePreview}
             >
               <CloseIcon className="h-4 w-4" />
             </button>
-            <p className="eyebrow-lux">МЕДІА ВІДГУК</p>
+            <p className="eyebrow-lux">{ui.mediaEyebrow}</p>
             <h3 className="section-title-lux mt-4 pr-10 text-[2rem] font-medium leading-[1.04] tracking-[-0.04em] text-[var(--text)] sm:text-[2.3rem]">
               {selectedMediaMeta.title}
             </h3>
@@ -839,7 +898,7 @@ export function ReviewsSection({
                 onClick={closeMediaPreview}
                 className="button-outline inline-flex h-11 items-center justify-center rounded-full px-5 text-[0.74rem] font-bold uppercase tracking-[0.12em]"
               >
-                Закрити
+                {ui.close}
               </button>
             </div>
           </div>
@@ -851,7 +910,8 @@ export function ReviewsSection({
 
 function mapSupabaseReviewsToViewModel(
   reviews: DynamicRouteReview[] | undefined,
-  routeLabel?: string
+  routeLabel?: string,
+  language: "ua" | "ru" = "ua"
 ): ReviewItem[] {
   if (!reviews || reviews.length === 0) {
     return [];
@@ -861,7 +921,7 @@ function mapSupabaseReviewsToViewModel(
     .filter((review) => review.name && review.text)
     .map((review) => ({
       id: review.id,
-      name: review.name || "Клієнт",
+      name: review.name || (language === "ru" ? "Клиент" : "Клієнт"),
       route:
         review.route_from_city && review.route_to_city
           ? `${review.route_from_city} — ${review.route_to_city}`

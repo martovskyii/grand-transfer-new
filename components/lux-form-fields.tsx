@@ -30,22 +30,32 @@ type PhoneFieldProps = SharedFieldProps & {
   inputClassName?: string;
 };
 
+type DateFieldProps = SharedFieldProps &
+  InputHTMLAttributes<HTMLInputElement> & {
+    placeholderText?: string;
+    locale?: string;
+  };
+
 function cx(...classNames: Array<string | undefined | false>) {
   return classNames.filter(Boolean).join(" ");
 }
 
-function formatDateDisplay(value: InputHTMLAttributes<HTMLInputElement>["value"]) {
+function formatDateDisplay(
+  value: InputHTMLAttributes<HTMLInputElement>["value"],
+  placeholderText = "Оберіть дату",
+  locale = "uk-UA"
+) {
   if (typeof value !== "string" || !value) {
-    return "Оберіть дату";
+    return placeholderText;
   }
 
   const parsedDate = new Date(`${value}T00:00:00`);
 
   if (Number.isNaN(parsedDate.getTime())) {
-    return "Оберіть дату";
+    return placeholderText;
   }
 
-  return new Intl.DateTimeFormat("uk-UA", {
+  return new Intl.DateTimeFormat(locale, {
     day: "2-digit",
     month: "2-digit",
     year: "numeric"
@@ -133,9 +143,11 @@ export function DateField({
   wrapperClassName,
   fieldClassName,
   className,
+  placeholderText = "Оберіть дату",
+  locale = "uk-UA",
   ...props
-}: TextFieldProps) {
-  const displayValue = formatDateDisplay(props.value);
+}: DateFieldProps) {
+  const displayValue = formatDateDisplay(props.value, placeholderText, locale);
 
   return (
     <label className={cx("field-group", wrapperClassName, className)}>
@@ -150,7 +162,7 @@ export function DateField({
         <span
           className={cx(
             "date-display-lux",
-            displayValue === "Оберіть дату" && "is-placeholder"
+            displayValue === placeholderText && "is-placeholder"
           )}
         >
           {displayValue}
