@@ -10,7 +10,7 @@ async function getHomepageRoutes(): Promise<HomepageRoute[]> {
 
   const { data, error } = await supabase
     .from("routes")
-    .select("slug, from_city, to_city, price_from")
+    .select("slug, from_city, to_city, price_from, duration")
     .eq("is_active", true)
     .eq("lang", "ua")
     .order("from_city", { ascending: true })

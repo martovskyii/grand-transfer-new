@@ -27,6 +27,7 @@ export type DynamicRelatedRoute = {
   from_city: string | null;
   to_city: string | null;
   price_from: number | null;
+  duration: string | null;
 };
 
 export type RouteLanguage = "ua" | "ru";
@@ -276,7 +277,7 @@ export async function getRelatedRoutesForRoute(
   if (currentFromCity) {
     const { data } = await supabase
       .from("routes")
-      .select("slug, from_city, to_city, price_from")
+      .select("slug, from_city, to_city, price_from, duration")
       .eq("is_active", true)
       .eq("lang", lang)
       .neq("slug", currentSlug)
@@ -294,7 +295,7 @@ export async function getRelatedRoutesForRoute(
   if (currentToCity && relatedRoutes.size < 5) {
     const { data } = await supabase
       .from("routes")
-      .select("slug, from_city, to_city, price_from")
+      .select("slug, from_city, to_city, price_from, duration")
       .eq("is_active", true)
       .eq("lang", lang)
       .neq("slug", currentSlug)

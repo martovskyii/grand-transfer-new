@@ -72,6 +72,7 @@ export type HomepageRoute = {
   from_city: string | null;
   to_city: string | null;
   price_from: number | null;
+  duration: string | null;
 };
 
 type RouteGroupItem = {
@@ -249,6 +250,25 @@ const passengerOptions = [
 
 const carClasses = ["Комфорт", "Бізнес", "Преміум", "Мінівен"];
 
+const popularHomepageRouteSlugs = new Set([
+  "odesa-kyshyniv",
+  "odessa-kishinev",
+  "kyiv-kyshyniv",
+  "kiev-kishinev",
+  "dnipro-kyshyniv",
+  "dnepr-kishinev",
+  "lviv-kyshyniv",
+  "lvov-kishinev",
+  "kharkiv-kyshyniv",
+  "kharkov-kishinev",
+  "kyiv-warsaw",
+  "kiev-varshava",
+  "lviv-warsaw",
+  "lvov-varshava",
+  "odesa-iasi",
+  "odessa-yassy"
+]);
+
 type HomePageClientProps = {
   initialHomepageRoutes: HomepageRoute[];
   currentLanguage?: "ua" | "ru";
@@ -345,6 +365,8 @@ export default function HomePageClient({
     reviewSeoIntro: isRu
       ? "Популярные запросы клиентов в Google:"
       : "Популярні запити клієнтів у Google:",
+    mapHighlightRoute: isRu ? "Одесса → Кишинёв" : "Одеса → Кишинів",
+    mapHighlightLabel: isRu ? "Ключевой маршрут" : "Ключовий маршрут",
     blogEyebrow: isRu ? "БЛОГ" : "БЛОГ",
     blogTitle: isRu ? "Полезный блог" : "Корисний блог",
     blogText: isRu
@@ -359,6 +381,14 @@ export default function HomePageClient({
     footerDescription: isRu
       ? "Премиальные международные трансферы между Украиной, Молдовой и Польшей для частных, бизнес- и VIP-клиентов."
       : "Преміальні міжнародні трансфери між Україною, Молдовою та Польщею для приватних, бізнес- та VIP-клієнтів.",
+    footerCtaTitle: isRu ? "Нужен трансфер сегодня?" : "Потрібен трансфер сьогодні?",
+    footerCtaText: isRu
+      ? "Напишите нам в Telegram или позвоните — подберём авто под ваш маршрут и время выезда."
+      : "Напишіть нам у Telegram або зателефонуйте — підберемо авто під ваш маршрут і час виїзду.",
+    footerServiceTitle: isRu
+      ? "VIP трансферы Украина — Молдова — Польша"
+      : "VIP трансфери Україна — Молдова — Польща",
+    footerServiceTags: "Airport transfer · Business transfer · Private transfer",
     footerCompany: isRu ? "Компания" : "Компанія",
     footerContacts: isRu ? "Контакты" : "Контакти",
     footerLanguages: isRu ? "Языки" : "Мови",
@@ -380,7 +410,8 @@ export default function HomePageClient({
     successNote: isRu
       ? "Если вопрос срочный — нажмите «Позвонить сейчас»."
       : "Якщо питання термінове — натисніть “Подзвонити зараз”.",
-    successCallButton: isRu ? "Позвонить сейчас" : "Подзвонити зараз"
+    successCallButton: isRu ? "Позвонить сейчас" : "Подзвонити зараз",
+    popularBadge: isRu ? "Популярный" : "Популярний"
   };
   const navItems: NavItem[] = [
     { label: ui.navHome, href: homeHref },
@@ -496,7 +527,7 @@ export default function HomePageClient({
 
       const { data, error } = await supabase
         .from("routes")
-        .select("slug, from_city, to_city, price_from")
+        .select("slug, from_city, to_city, price_from, duration")
         .eq("is_active", true)
         .eq("lang", routeLanguage)
         .order("from_city", { ascending: true })
@@ -683,6 +714,10 @@ export default function HomePageClient({
     faqItemsLocalized.slice(faqMidpointLocalized)
   ];
 
+  function isPopularHomepageRoute(slug: string | null) {
+    return typeof slug === "string" && popularHomepageRouteSlugs.has(slug);
+  }
+
   function handleHomeFaqToggle(index: number, question: string) {
     setOpenFaqIndex((current) => {
       if (current === index) {
@@ -859,7 +894,9 @@ export default function HomePageClient({
             <div className="routes-wide-panel relative flex min-h-[760px] flex-col overflow-hidden rounded-[32px] px-5 py-8 sm:px-7 md:px-10 md:py-12 lg:min-h-[560px] lg:px-14 lg:py-16 xl:min-h-[580px] xl:px-[3.5rem]">
               <Image
                 src={mapsNewImage}
-                alt="Карта напрямків між Україною, Молдовою та Польщею"
+                alt={isRu
+                  ? "Карта направлений между Украиной, Молдовой и Польшей"
+                  : "Карта напрямків між Україною, Молдовою та Польщею"}
                 fill
                 className="object-cover object-[66%_center] md:object-[68%_center] lg:object-[68%_center] xl:object-[72%_center]"
                 sizes="100vw"
@@ -893,6 +930,10 @@ export default function HomePageClient({
                 <p className="mt-4 max-w-[24.5rem] text-[0.95rem] leading-[1.7] text-[var(--muted)]">
                   {ui.mainDirectionsText2}
                 </p>
+                <div className="routes-wide-focus-pill mt-6 inline-flex items-center gap-3 rounded-full px-4 py-2.5">
+                  <span className="routes-wide-focus-label">{ui.mapHighlightLabel}</span>
+                  <span className="routes-wide-focus-route">{ui.mapHighlightRoute}</span>
+                </div>
               </div>
 
               <div className="relative z-10 mt-10 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:mt-auto lg:max-w-[58rem] lg:grid-cols-3 lg:gap-4">
@@ -1001,21 +1042,31 @@ export default function HomePageClient({
                       route.price_from != null
                         ? `${ui.fromPrefix} €${route.price_from}`
                         : ui.onRequest;
+                    const routeDuration = route.duration?.trim() || null;
+                    const isPopular = isPopularHomepageRoute(route.slug);
 
                     if (!route.slug) {
                       return (
                         <div
                           key={routeLabel}
-                          className={`all-route-chip flex items-center justify-between gap-3 opacity-70 ${
+                          className={`all-route-chip all-route-card opacity-70 ${
                             highlightedRouteLabels.includes(routeLabel)
                               ? "is-highlighted"
                               : ""
                           }`}
                         >
-                          <span className="min-w-0">{routeLabel}</span>
-                          <span className="shrink-0 text-[0.75rem] font-bold uppercase tracking-[0.14em] text-[var(--champagne)]">
-                            {routePrice}
-                          </span>
+                          <div className="all-route-card-top">
+                            <span className="all-route-card-title">{routeLabel}</span>
+                            {isPopular ? (
+                              <span className="all-route-badge">{ui.popularBadge}</span>
+                            ) : null}
+                          </div>
+                          <div className="all-route-card-meta">
+                            <span className="all-route-card-price">{routePrice}</span>
+                            {routeDuration ? (
+                              <span className="all-route-card-duration">{routeDuration}</span>
+                            ) : null}
+                          </div>
                         </div>
                       );
                     }
@@ -1031,16 +1082,24 @@ export default function HomePageClient({
                             pageType: "home"
                           })
                         }
-                        className={`all-route-chip flex items-center justify-between gap-3 ${
+                        className={`all-route-chip all-route-card ${
                           highlightedRouteLabels.includes(routeLabel)
                             ? "is-highlighted"
                             : ""
                         }`}
                       >
-                        <span className="min-w-0">{routeLabel}</span>
-                        <span className="shrink-0 text-[0.75rem] font-bold uppercase tracking-[0.14em] text-[var(--champagne)]">
-                          {routePrice}
-                        </span>
+                        <div className="all-route-card-top">
+                          <span className="all-route-card-title">{routeLabel}</span>
+                          {isPopular ? (
+                            <span className="all-route-badge">{ui.popularBadge}</span>
+                          ) : null}
+                        </div>
+                        <div className="all-route-card-meta">
+                          <span className="all-route-card-price">{routePrice}</span>
+                          {routeDuration ? (
+                            <span className="all-route-card-duration">{routeDuration}</span>
+                          ) : null}
+                        </div>
                       </a>
                     );
                   })
@@ -1510,6 +1569,66 @@ export default function HomePageClient({
       >
         <div className="mx-auto max-w-[1536px] px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-14">
           <div className="footer-shell rounded-[30px] px-5 py-8 sm:px-7 md:px-10 md:py-12">
+            <div className="footer-cta-shell mb-8 rounded-[24px] px-5 py-5 sm:px-6 md:mb-10 md:px-7">
+              <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+                <div className="max-w-[36rem]">
+                  <p className="text-[0.74rem] font-bold uppercase tracking-[0.22em] text-[var(--champagne)]">
+                    {ui.footerServiceTitle}
+                  </p>
+                  <h3 className="mt-3 text-[1.45rem] font-semibold leading-[1.18] text-[var(--text)] md:text-[1.72rem]">
+                    {ui.footerCtaTitle}
+                  </h3>
+                  <p className="mt-3 text-[0.95rem] leading-[1.75] text-[var(--muted)]">
+                    {ui.footerCtaText}
+                  </p>
+                  <p className="mt-3 text-[0.76rem] uppercase tracking-[0.18em] text-[rgba(183,178,168,0.76)]">
+                    {ui.footerServiceTags}
+                  </p>
+                </div>
+
+                <div className="flex flex-col gap-3 sm:flex-row lg:shrink-0">
+                  <a
+                    href={TELEGRAM_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => {
+                      trackMessengerClick({
+                        messenger: "telegram",
+                        location: "footer",
+                        pageType: "home"
+                      });
+                      trackCtaClick({
+                        ctaType: "telegram",
+                        location: "footer",
+                        pageType: "home"
+                      });
+                    }}
+                    className="button-outline inline-flex h-11 items-center justify-center rounded-full px-5 text-[0.78rem] font-semibold tracking-[0.1em]"
+                  >
+                    {ui.telegramSentence}
+                  </a>
+                  <a
+                    href={`tel:${phoneHref}`}
+                    onClick={() => {
+                      trackPhoneClick({
+                        phone: phoneHref,
+                        location: "footer",
+                        pageType: "home"
+                      });
+                      trackCtaClick({
+                        ctaType: "phone",
+                        location: "footer",
+                        pageType: "home"
+                      });
+                    }}
+                    className="button-gold inline-flex h-11 items-center justify-center rounded-full px-5 text-[0.78rem] font-semibold tracking-[0.1em]"
+                  >
+                    {ui.call}
+                  </a>
+                </div>
+              </div>
+            </div>
+
             <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr_0.8fr_0.6fr] lg:gap-8">
               <div className="max-w-[23rem]">
                 <div className="footer-brand">

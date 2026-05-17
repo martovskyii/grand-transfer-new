@@ -82,7 +82,9 @@ type RouteFaqTemplate = {
 type SimilarRoute = {
   title: string;
   price: string;
+  duration: string | null;
   href: string;
+  isOriginMatch: boolean;
 };
 
 export interface DynamicRouteData {
@@ -369,6 +371,7 @@ export default function RoutePageSupabaseClient({
     relatedSubtitlePrefix: isRu
       ? "Другие популярные направления с подачей из"
       : "Інші популярні напрямки з подачею з",
+    relatedCta: isRu ? "Подробнее" : "Детальніше",
     footerCompany: isRu ? "Компания" : "Компанія",
     footerContacts: isRu ? "Контакты" : "Контакти",
     footerLanguages: isRu ? "Языки" : "Мови",
@@ -704,7 +707,9 @@ export default function RoutePageSupabaseClient({
         route.price_from != null
           ? `${ui.fromPrefix} €${route.price_from}`
           : ui.onRequest,
-      href: `${routeHrefPrefix}/${route.slug}`
+      duration: route.duration ?? null,
+      href: `${routeHrefPrefix}/${route.slug}`,
+      isOriginMatch: Boolean(fromCity && route.from_city === fromCity)
     }));
   const sourceCityLabel = getSourceCityLabel(fromCity, currentLanguage);
 
@@ -1476,8 +1481,8 @@ export default function RoutePageSupabaseClient({
               </div>
 
               <div className="similar-routes-shell mt-8 rounded-[24px] p-4 sm:p-5 md:p-6">
-                <div className="similar-routes-row flex gap-3 overflow-x-auto pb-1 lg:grid lg:grid-cols-5 lg:overflow-visible">
-                  {relatedRouteCards.map(({ title, price, href }) => (
+                <div className="similar-routes-grid grid gap-3 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+                  {relatedRouteCards.map(({ title, price, duration, href, isOriginMatch }) => (
                     <Link
                       key={href}
                       href={href}
@@ -1488,17 +1493,26 @@ export default function RoutePageSupabaseClient({
                           pageType: "route"
                         })
                       }
-                      className="similar-route-card min-w-[248px] lg:min-w-0"
+                      className={`similar-route-card ${isOriginMatch ? "is-origin-match" : ""}`}
                     >
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="min-w-0">
-                          <h2 className="text-[0.96rem] font-semibold leading-[1.32] text-[var(--text)]">
-                            {title}
-                          </h2>
-                          <span className="similar-route-accent mt-3 block" />
+                      <div className="similar-route-card-top">
+                        <h2 className="similar-route-card-title">{title}</h2>
+                        <span className="similar-route-price">{price}</span>
+                      </div>
+
+                      {duration ? (
+                        <div className="similar-route-card-meta">
+                          <span className="similar-route-duration">{duration}</span>
                         </div>
-                        <div className="shrink-0 text-[0.76rem] font-bold uppercase tracking-[0.14em] text-[var(--champagne)]">
-                          {price}
+                      ) : null}
+
+                      <div className="similar-route-card-bottom">
+                        <span className="similar-route-accent" />
+                        <div className="similar-route-cta-wrap">
+                          <span className="similar-route-cta">{ui.relatedCta}</span>
+                          <span className="similar-route-arrow" aria-hidden="true">
+                            →
+                          </span>
                         </div>
                       </div>
                     </Link>
