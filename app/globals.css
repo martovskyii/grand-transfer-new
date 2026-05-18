@@ -402,16 +402,121 @@ input {
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-.hero-chip {
-  background: linear-gradient(180deg, rgba(18, 26, 20, 0.76), rgba(13, 18, 15, 0.76));
-  border: 1px solid rgba(208, 189, 148, 0.17);
+.hero-shell-home {
+  border-color: rgba(230, 213, 170, 0.11);
+  background: linear-gradient(180deg, rgba(9, 12, 10, 0.82), rgba(7, 10, 8, 0.7));
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.035),
-    0 10px 24px rgba(0, 0, 0, 0.12);
+    0 30px 84px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
-.chip-compact {
-  backdrop-filter: blur(14px);
+.hero-shell-home::after {
+  inset: 2px;
+  border-color: rgba(255, 255, 255, 0.018);
+}
+
+.hero-benefits-shell {
+  border: 1px solid rgba(216, 185, 130, 0.12);
+  background:
+    radial-gradient(circle at top right, rgba(216, 185, 130, 0.06), transparent 32%),
+    linear-gradient(180deg, rgba(10, 13, 11, 0.74), rgba(8, 11, 9, 0.68));
+  box-shadow:
+    0 20px 44px rgba(0, 0, 0, 0.18),
+    inset 0 1px 0 rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(16px);
+}
+
+.hero-benefits-grid {
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.hero-benefit-item {
+  display: flex;
+  min-height: 82px;
+  align-items: center;
+  gap: 0.8rem;
+  background: rgba(11, 15, 12, 0.54);
+  padding: 0.95rem 0.95rem 0.9rem;
+  transition:
+    transform 180ms ease,
+    background 180ms ease,
+    background 180ms ease;
+}
+
+.hero-benefits-grid > .hero-benefit-item + .hero-benefit-item {
+  border-top: 1px solid rgba(216, 185, 130, 0.08);
+}
+
+.hero-benefit-item:hover {
+  transform: translateY(-1px);
+  background:
+    radial-gradient(circle at top right, rgba(216, 185, 130, 0.06), transparent 38%),
+    rgba(13, 17, 14, 0.62);
+}
+
+.hero-benefit-icon {
+  display: inline-flex;
+  height: 2.35rem;
+  width: 2.35rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid rgba(216, 185, 130, 0.14);
+  background: rgba(12, 16, 13, 0.58);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.025),
+    0 8px 20px rgba(0, 0, 0, 0.1);
+}
+
+.hero-benefit-title {
+  color: rgba(247, 243, 234, 0.94);
+  font-size: 0.89rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.hero-benefit-description {
+  margin-top: 0.24rem;
+  color: rgba(183, 178, 168, 0.86);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.4;
+  text-transform: uppercase;
+}
+
+@media (min-width: 640px) {
+  .hero-benefits-grid > .hero-benefit-item + .hero-benefit-item {
+    border-top: none;
+  }
+
+  .hero-benefit-item:nth-child(2n) {
+    border-left: 1px solid rgba(216, 185, 130, 0.08);
+  }
+
+  .hero-benefit-item:nth-child(n + 3) {
+    border-top: 1px solid rgba(216, 185, 130, 0.08);
+  }
+}
+
+@media (min-width: 1280px) {
+  .hero-benefit-item {
+    min-height: 74px;
+  }
+
+  .hero-benefit-item:nth-child(n) {
+    border-top: none;
+  }
+
+  .hero-benefit-item:nth-child(2n) {
+    border-left: none;
+  }
+
+  .hero-benefits-grid > .hero-benefit-item + .hero-benefit-item {
+    border-left: 1px solid rgba(216, 185, 130, 0.08);
+  }
 }
 
 .service-section-panel {

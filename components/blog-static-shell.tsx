@@ -17,6 +17,10 @@ type BlogStaticShellProps = {
   subtitle: string;
   children: ReactNode;
   breadcrumbs?: BreadcrumbItem[];
+  currentLanguage?: "ua" | "ru" | "en";
+  languageLinks?: Partial<Record<"ua" | "ru" | "en", string>>;
+  navItems?: Array<{ label: string; href: string }>;
+  footerLinks?: Array<{ label: string; href: string }>;
 };
 
 const blogNavItems = [
@@ -64,10 +68,21 @@ export function BlogStaticShell({
   title,
   subtitle,
   children,
-  breadcrumbs
+  breadcrumbs,
+  currentLanguage = "ua",
+  languageLinks,
+  navItems,
+  footerLinks
 }: BlogStaticShellProps) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
+  const isRu = currentLanguage === "ru";
+  const resolvedNavItems = navItems || blogNavItems;
+  const resolvedFooterLinks = footerLinks || blogFooterLinks;
+  const languageSwitcherLinks = languageLinks || {
+    ua: "/",
+    ru: "/ru"
+  };
 
   useEffect(() => {
     const originalBodyOverflow = document.body.style.overflow;
@@ -113,7 +128,7 @@ export function BlogStaticShell({
               </Link>
 
               <nav className="hidden items-center justify-self-center lg:flex lg:gap-2.5 xl:gap-4">
-                {blogNavItems.map(({ label, href }) => (
+                {resolvedNavItems.map(({ label, href }) => (
                   <Link
                     key={label}
                     href={href}
@@ -134,12 +149,15 @@ export function BlogStaticShell({
                   iconOnly
                   className="hidden lg:inline-flex"
                 />
-                <LanguageSwitcher />
+                <LanguageSwitcher
+                  currentLanguage={currentLanguage}
+                  links={languageSwitcherLinks}
+                />
                 <Link
-                  href="/#booking"
+                  href={isRu ? "/ru#booking" : "/#booking"}
                   className="button-gold inline-flex h-11 items-center justify-center rounded-full px-6 text-[0.75rem] font-bold uppercase tracking-[0.09em] xl:h-12 xl:px-7 xl:text-[0.78rem] xl:tracking-[0.11em]"
                 >
-                  ЗАМОВИТИ
+                  {isRu ? "ЗАКАЗАТЬ" : "ЗАМОВИТИ"}
                 </Link>
               </div>
 
@@ -148,7 +166,7 @@ export function BlogStaticShell({
                   type="button"
                   aria-expanded={menuOpen}
                   aria-controls="blog-mobile-drawer"
-                  aria-label="Відкрити меню"
+                  aria-label={isRu ? "Открыть меню" : "Відкрити меню"}
                   onClick={() => setMenuOpen(true)}
                   className="burger-button inline-flex h-12 w-12 items-center justify-center rounded-full"
                 >
@@ -207,7 +225,7 @@ export function BlogStaticShell({
       >
         <button
           type="button"
-          aria-label="Закрити меню"
+          aria-label={isRu ? "Закрыть меню" : "Закрити меню"}
           onClick={() => setMenuOpen(false)}
           className={`mobile-drawer-overlay ${menuOpen ? "is-open" : ""}`}
         />
@@ -223,11 +241,13 @@ export function BlogStaticShell({
               <div className="luxury-logo-title text-[1rem] leading-none">
                 GRAND TRANSFER
               </div>
-              <div className="luxury-logo-subtitle mt-2">VIP СЕРВІС</div>
+              <div className="luxury-logo-subtitle mt-2">
+                {isRu ? "VIP СЕРВИС" : "VIP СЕРВІС"}
+              </div>
             </div>
             <button
               type="button"
-              aria-label="Закрити меню"
+              aria-label={isRu ? "Закрыть меню" : "Закрити меню"}
               onClick={() => setMenuOpen(false)}
               className="burger-button inline-flex h-11 w-11 items-center justify-center rounded-full"
             >
@@ -236,7 +256,7 @@ export function BlogStaticShell({
           </div>
 
           <nav className="mt-10 flex flex-col gap-5">
-            {blogNavItems.map(({ label, href }) => (
+            {resolvedNavItems.map(({ label, href }) => (
               <Link
                 key={label}
                 href={href}
@@ -250,7 +270,11 @@ export function BlogStaticShell({
             ))}
           </nav>
 
-          <LanguageSwitcher className="mt-8 self-start" />
+          <LanguageSwitcher
+            className="mt-8 self-start"
+            currentLanguage={currentLanguage}
+            links={languageSwitcherLinks}
+          />
 
           <div className="mt-auto space-y-5 pt-10">
             <HeaderPhoneLink
@@ -261,11 +285,11 @@ export function BlogStaticShell({
               className="inline-flex"
             />
             <Link
-              href="/#booking"
+              href={isRu ? "/ru#booking" : "/#booking"}
               onClick={() => setMenuOpen(false)}
               className="button-gold inline-flex h-[52px] w-full items-center justify-center rounded-full px-7 text-[0.76rem] font-bold uppercase tracking-[0.1em]"
             >
-              ЗАМОВИТИ
+              {isRu ? "ЗАКАЗАТЬ" : "ЗАМОВИТИ"}
             </Link>
           </div>
         </aside>
@@ -281,20 +305,23 @@ export function BlogStaticShell({
               <div className="max-w-[23rem]">
                 <div className="footer-brand">
                   <div className="luxury-logo-title">GRAND TRANSFER</div>
-                  <div className="footer-logo-subtitle">VIP СЕРВІС</div>
+                  <div className="footer-logo-subtitle">
+                    {isRu ? "VIP СЕРВИС" : "VIP СЕРВІС"}
+                  </div>
                 </div>
                 <p className="mt-6 text-[0.95rem] leading-[1.8] text-[var(--muted)]">
-                  Преміальні міжнародні трансфери між Україною, Молдовою та
-                  Польщею для приватних, бізнес- та VIP-клієнтів.
+                  {isRu
+                    ? "Премиальные международные трансферы между Украиной, Молдовой и Польшей для частных, бизнес- и VIP-клиентов."
+                    : "Преміальні міжнародні трансфери між Україною, Молдовою та Польщею для приватних, бізнес- та VIP-клієнтів."}
                 </p>
               </div>
 
               <div>
                 <h3 className="text-[0.76rem] font-bold uppercase tracking-[0.22em] text-[var(--champagne)]">
-                  Компанія
+                  {isRu ? "Компания" : "Компанія"}
                 </h3>
                 <div className="mt-5 flex flex-col gap-3 text-[0.95rem] text-[rgba(247,243,234,0.86)]">
-                  {blogFooterLinks.map(({ label, href }) => (
+                  {resolvedFooterLinks.map(({ label, href }) => (
                     <Link
                       key={label}
                       href={href}
@@ -308,30 +335,39 @@ export function BlogStaticShell({
 
               <div>
                 <h3 className="text-[0.76rem] font-bold uppercase tracking-[0.22em] text-[var(--champagne)]">
-                  Контакти
+                  {isRu ? "Контакты" : "Контакти"}
                 </h3>
                 <FooterContactLinks pageType="about" />
               </div>
 
               <div>
                 <h3 className="text-[0.76rem] font-bold uppercase tracking-[0.22em] text-[var(--champagne)]">
-                  Мови
+                  {isRu ? "Языки" : "Мови"}
                 </h3>
                 <div className="mt-5 flex flex-wrap gap-2.5">
-                  {["UA", "RU", "EN"].map((language) => (
-                    <span
-                      key={language}
-                      className={`language-pill ${language === "UA" ? "is-active" : ""}`}
+                  {[
+                    { key: "ua", label: "UA" },
+                    { key: "ru", label: "RU" },
+                    { key: "en", label: "EN" }
+                  ].map((language) => (
+                    <a
+                      key={language.key}
+                      href={languageSwitcherLinks[language.key as "ua" | "ru" | "en"] || "#"}
+                      className={`language-pill ${
+                        currentLanguage === language.key ? "is-active" : ""
+                      }`}
                     >
-                      {language}
-                    </span>
+                      {language.label}
+                    </a>
                   ))}
                 </div>
               </div>
             </div>
 
             <div className="mt-10 border-t border-[rgba(216,185,130,0.08)] pt-5 text-[0.83rem] text-[rgba(183,178,168,0.78)]">
-              © 2026 Grand Transfer. Усі права захищені.
+              {isRu
+                ? "© 2026 Grand Transfer. Все права защищены."
+                : "© 2026 Grand Transfer. Усі права захищені."}
             </div>
           </div>
         </div>

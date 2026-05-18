@@ -3,11 +3,11 @@ import { BlogStaticShell } from "@/components/blog-static-shell";
 import { supabase } from "@/lib/supabase";
 
 export const metadata: Metadata = {
-  title: "Усі напрямки трансферів | Grand Transfer",
+  title: "Все направления трансферов | Grand Transfer",
   description:
-    "Приватні трансфери між Україною, Молдовою, Польщею, Угорщиною та Румунією з подачею під ваш графік.",
+    "Частные трансферы между Украиной, Молдовой, Польшей, Венгрией и Румынией с подачей под ваш график.",
   alternates: {
-    canonical: "/routes"
+    canonical: "/ru/routes"
   }
 };
 
@@ -26,19 +26,38 @@ async function getDirectoryRoutes(): Promise<RouteDirectoryItem[]> {
     .from("routes")
     .select("slug, from_city, to_city")
     .eq("is_active", true)
-    .eq("lang", "ua")
+    .eq("lang", "ru")
     .order("from_city", { ascending: true })
     .order("to_city", { ascending: true });
 
   if (error) {
-    console.error("[routes-page] Failed to fetch routes:", error);
+    console.error("[ru-routes-page] Failed to fetch routes:", error);
     return [];
   }
 
   return (data as RouteDirectoryItem[] | null) || [];
 }
 
-export default async function RoutesPage() {
+const ruNavItems = [
+  { label: "ГЛАВНАЯ", href: "/ru" },
+  { label: "НАПРАВЛЕНИЯ", href: "/ru#directions" },
+  { label: "АВТОПАРК", href: "/avtopark" },
+  { label: "КОНТАКТЫ", href: "/kontakty" },
+  { label: "О НАС", href: "/pro-kompaniiu" },
+  { label: "БЛОГ", href: "/blog" }
+];
+
+const ruFooterLinks = [
+  { label: "Главная", href: "/ru" },
+  { label: "Направления", href: "/ru#directions" },
+  { label: "Все направления", href: "/ru/routes" },
+  { label: "Автопарк", href: "/avtopark" },
+  { label: "Контакты", href: "/kontakty" },
+  { label: "О нас", href: "/pro-kompaniiu" },
+  { label: "Блог", href: "/blog" }
+];
+
+export default async function RuRoutesPage() {
   const routes = await getDirectoryRoutes();
   const groupedRoutes = routes.reduce<Map<string, RouteDirectoryItem[]>>((acc, route) => {
     const slug = typeof route.slug === "string" ? route.slug.trim() : "";
@@ -60,23 +79,25 @@ export default async function RoutesPage() {
 
   return (
     <BlogStaticShell
-      eyebrow="НАПРЯМКИ"
-      title="Усі напрямки трансферів"
-      subtitle="Приватні трансфери між Україною, Молдовою, Польщею, Угорщиною та Румунією з індивідуальною подачею авто, без попутників і з маршрутом під ваш графік."
-      currentLanguage="ua"
+      eyebrow="НАПРАВЛЕНИЯ"
+      title="Все направления трансферов"
+      subtitle="Частные трансферы между Украиной, Молдовой, Польшей, Венгрией и Румынией с индивидуальной подачей авто, без попутчиков и с маршрутом под ваш график."
+      currentLanguage="ru"
       languageLinks={{ ua: "/routes", ru: "/ru/routes" }}
+      navItems={ruNavItems}
+      footerLinks={ruFooterLinks}
       breadcrumbs={[
-        { label: "Головна", href: "/" },
-        { label: "Усі напрямки" }
+        { label: "Главная", href: "/ru" },
+        { label: "Все направления" }
       ]}
     >
       <section className="relative z-10 mt-10 md:mt-12 xl:mt-14">
         <div className="panel-soft rounded-[30px] px-5 py-6 sm:px-7 md:px-9 md:py-8">
           <p className="max-w-[64rem] text-[0.97rem] leading-[1.85] text-[var(--muted)]">
-            На цій сторінці зібрані актуальні напрямки Grand Transfer для
-            приватних поїздок між Україною, Молдовою, Польщею, Угорщиною та
-            Румунією. Оберіть місто подачі та перейдіть до маршруту, щоб
-            переглянути деталі, орієнтовну вартість і доступні класи авто.
+            На этой странице собраны актуальные направления Grand Transfer для
+            частных поездок между Украиной, Молдовой, Польшей, Венгрией и
+            Румынией. Выберите город подачи и перейдите к маршруту, чтобы
+            посмотреть детали, ориентировочную стоимость и доступные классы авто.
           </p>
         </div>
       </section>
@@ -94,7 +115,7 @@ export default async function RoutesPage() {
                   {items.map((route) => (
                     <li key={route.slug}>
                       <a
-                        href={`/${route.slug}`}
+                        href={`/ru/${route.slug}`}
                         className="group flex items-center justify-between gap-3 rounded-[18px] border border-[var(--line)] bg-[rgba(255,255,255,0.02)] px-4 py-3 text-[0.93rem] text-[rgba(247,243,234,0.9)] transition hover:border-[rgba(230,213,195,0.28)] hover:bg-[rgba(255,255,255,0.04)] hover:text-[var(--soft-gold)]"
                       >
                         <span>
@@ -112,7 +133,7 @@ export default async function RoutesPage() {
           </div>
         ) : (
           <div className="panel-soft rounded-[28px] px-5 py-6 text-[0.96rem] leading-[1.8] text-[var(--muted)] sm:px-7 md:px-9 md:py-8">
-            Напрямки скоро з’являться.
+            Направления скоро появятся.
           </div>
         )}
       </section>

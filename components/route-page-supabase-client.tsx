@@ -420,7 +420,7 @@ export default function RoutePageSupabaseClient({
   const footerLinks = [
     { label: ui.footerHome, href: homeHref },
     { label: ui.footerDirections, href: directionsHref },
-    { label: ui.footerAllDirections, href: "/routes" },
+    { label: ui.footerAllDirections, href: isRu ? "/ru/routes" : "/routes" },
     { label: ui.footerFleet, href: "/avtopark" },
     { label: ui.footerContactsLink, href: "/kontakty" },
     { label: ui.footerAbout, href: "/pro-kompaniiu" },

@@ -3,7 +3,6 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import {
-  EMAIL_ADDRESS,
   EMAIL_HREF,
   INSTAGRAM_URL,
   PHONE_DISPLAY,
@@ -157,7 +156,7 @@ export function FooterContactLinks({ pageType }: FooterContactLinksProps) {
         {PHONE_DISPLAY}
       </a>
       <a href={EMAIL_HREF} className="transition hover:text-[var(--soft-gold)]">
-        {EMAIL_ADDRESS}
+        Email
       </a>
       <a
         href={TELEGRAM_URL}

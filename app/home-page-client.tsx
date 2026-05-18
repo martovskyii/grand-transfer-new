@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { ComponentType } from "react";
 import { useEffect, useState } from "react";
-import desktopHero from "../img/desktop.png";
+import desktopHero from "../img/general_screen.png";
 import mobileHero from "../img/mob.png";
 import serviceImage from "../img/3-screen.png";
 import mapsNewImage from "../img/maps_new.png";
@@ -40,8 +40,9 @@ type IconProps = {
   className?: string;
 };
 
-type FeatureChip = {
-  label: string;
+type HeroBenefit = {
+  title: string;
+  description: string;
   Icon: ComponentType<IconProps>;
 };
 
@@ -74,18 +75,6 @@ export type HomepageRoute = {
   price_from: number | null;
   duration: string | null;
 };
-
-type RouteGroupItem = {
-  fromCity: string;
-  toCity: string;
-};
-
-const featureChips: FeatureChip[] = [
-  { label: "Приватний трансфер без попутників", Icon: CarIcon },
-  { label: "Подача 24/7", Icon: ClockIcon },
-  { label: "Допомога на кордоні", Icon: ShieldIcon },
-  { label: "Маршрути від €99", Icon: GemIcon }
-];
 
 const phoneNumber = "+38 063 824 3223";
 const phoneHref = "+380638243223";
@@ -120,33 +109,6 @@ const serviceCards: ServiceCard[] = [
     title: "Сервіс 24/7",
     lines: ["Підтримка та подача", "у будь-який час."],
     Icon: SupportIcon
-  }
-];
-
-const routeGroups: { title: string; routes: RouteGroupItem[] }[] = [
-  {
-    title: "Україна → Молдова",
-    routes: [
-      { fromCity: "Одеса", toCity: "Кишинів" },
-      { fromCity: "Київ", toCity: "Кишинів" },
-      { fromCity: "Дніпро", toCity: "Кишинів" }
-    ]
-  },
-  {
-    title: "Україна → Польща",
-    routes: [
-      { fromCity: "Київ", toCity: "Варшава" },
-      { fromCity: "Львів", toCity: "Варшава" },
-      { fromCity: "Дніпро", toCity: "Варшава" }
-    ]
-  },
-  {
-    title: "Україна → Румунія",
-    routes: [
-      { fromCity: "Одеса", toCity: "Бухарест" },
-      { fromCity: "Київ", toCity: "Бухарест" },
-      { fromCity: "Одеса", toCity: "Ясси" }
-    ]
   }
 ];
 
@@ -271,7 +233,7 @@ const popularHomepageRouteSlugs = new Set([
 
 type HomePageClientProps = {
   initialHomepageRoutes: HomepageRoute[];
-  currentLanguage?: "ua" | "ru";
+  currentLanguage?: "ua" | "ru" | "en";
   routeLanguage?: "ua" | "ru";
   routeHrefPrefix?: "" | "/ru";
 };
@@ -283,6 +245,7 @@ export default function HomePageClient({
   routeHrefPrefix = ""
 }: HomePageClientProps) {
   const isRu = currentLanguage === "ru";
+  const isEn = currentLanguage === "en";
   const homeHref = currentLanguage === "ru" ? "/ru" : "/";
   const directionsHref = currentLanguage === "ru" ? "/ru#directions" : "/#directions";
   const ui = {
@@ -295,27 +258,39 @@ export default function HomePageClient({
     order: isRu ? "ЗАКАЗАТЬ" : "ЗАМОВИТИ",
     openMenu: isRu ? "Открыть меню" : "Відкрити меню",
     closeMenu: isRu ? "Закрыть меню" : "Закрити меню",
-    heroTitle: isRu
+    heroTitle: isEn
+      ? "VIP transfers Ukraine — Moldova — Poland"
+      : isRu
       ? "VIP трансферы Украина — Молдова — Польша"
       : "VIP трансфери Україна — Молдова — Польща",
-    heroSubtitle: isRu
+    heroSubtitle: isEn
+      ? "Private trips Odesa, Kyiv, Dnipro, Kharkiv, Lviv — Chisinau without shared rides"
+      : isRu
       ? "Частные поездки Одесса, Киев, Днепр, Харьков, Львов — Кишинёв без попутчиков"
       : "Приватні поїздки Одеса, Київ, Дніпро, Харків, Львів — Кишинів без попутників",
-    heroDescription: isRu
+    heroDescription: isEn
+      ? "Premium vehicles, border assistance, 24/7 pickup"
+      : isRu
       ? "Премиальные авто, помощь на границе, подача 24/7"
       : "Преміальні авто, допомога на кордоні, подача 24/7",
-    heroOrder: isRu ? "ЗАКАЗАТЬ ТРАНСФЕР" : "ЗАМОВИТИ ТРАНСФЕР",
-    telegram: isRu ? "НАПИСАТЬ В TELEGRAM" : "НАПИСАТИ В TELEGRAM",
-    mainDirectionsEyebrow: isRu ? "ОСНОВНЫЕ НАПРАВЛЕНИЯ" : "ОСНОВНІ НАПРЯМКИ",
-    mainDirectionsTitle: isRu
+    heroOrder: isEn ? "ORDER TRANSFER" : isRu ? "ЗАКАЗАТЬ ТРАНСФЕР" : "ЗАМОВИТИ ТРАНСФЕР",
+    telegram: isEn ? "WRITE IN TELEGRAM" : isRu ? "НАПИСАТЬ В TELEGRAM" : "НАПИСАТИ В TELEGRAM",
+    mainDirectionsEyebrow: isEn ? "MAIN ROUTES" : isRu ? "ОСНОВНЫЕ НАПРАВЛЕНИЯ" : "ОСНОВНІ НАПРЯМКИ",
+    mainDirectionsTitle: isEn
+      ? "Routes between Ukraine, Moldova and Poland"
+      : isRu
       ? "Маршруты между Украиной, Молдовой и Польшей"
       : "Маршрути між Україною, Молдовою та Польщею",
-    mainDirectionsText: isRu
-      ? "Работаем с частными трансферами из Одессы, Киева, Днепра, Харькова и Львова в Кишинёв, Варшаву, Бухарест и другие города."
-      : "Працюємо з приватними трансферами з Одеси, Києва, Дніпра, Харкова та Львова до Кишинева, Варшави, Бухареста та інших міст.",
-    mainDirectionsText2: isRu
-      ? "Каждый маршрут доступен с частным водителем, без попутчиков и с подачей под ваш график."
-      : "Кожен маршрут доступний з приватним водієм, без попутників та з подачею під ваш графік.",
+    mainDirectionsText: isEn
+      ? "Comfortable direct trips in premium vehicles across the most popular routes."
+      : isRu
+      ? "Комфортные поездки без пересадок на премиальных автомобилях по самым популярным направлениям."
+      : "Комфортні поїздки без пересадок на преміальних автомобілях по найпопулярніших напрямках.",
+    mainDirectionsCta: isEn
+      ? "View all routes"
+      : isRu
+      ? "Посмотреть все направления"
+      : "Переглянути всі напрямки",
     allDirectionsEyebrow: isRu ? "ВСЕ НАПРАВЛЕНИЯ" : "ВСІ НАПРЯМКИ",
     chooseRoute: isRu ? "Выберите маршрут" : "Обрати маршрут",
     chooseCity: isRu
@@ -365,8 +340,6 @@ export default function HomePageClient({
     reviewSeoIntro: isRu
       ? "Популярные запросы клиентов в Google:"
       : "Популярні запити клієнтів у Google:",
-    mapHighlightRoute: isRu ? "Одесса → Кишинёв" : "Одеса → Кишинів",
-    mapHighlightLabel: isRu ? "Ключевой маршрут" : "Ключовий маршрут",
     blogEyebrow: isRu ? "БЛОГ" : "БЛОГ",
     blogTitle: isRu ? "Полезный блог" : "Корисний блог",
     blogText: isRu
@@ -413,6 +386,26 @@ export default function HomePageClient({
     successCallButton: isRu ? "Позвонить сейчас" : "Подзвонити зараз",
     popularBadge: isRu ? "Популярный" : "Популярний"
   };
+  const heroBenefits: HeroBenefit[] = isEn
+    ? [
+        { title: "Vehicle on demand", description: "24/7", Icon: CarIcon },
+        { title: "No prepayment", description: "Pay after the ride", Icon: CardShieldIcon },
+        { title: "Airport waiting", description: "Included", Icon: AirportWaitIcon },
+        { title: "Flight tracking", description: "Complimentary", Icon: RadarIcon }
+      ]
+    : isRu
+      ? [
+          { title: "Подача авто", description: "24/7", Icon: CarIcon },
+          { title: "Без предоплаты", description: "Оплата после поездки", Icon: CardShieldIcon },
+          { title: "Ожидание в аэропорту", description: "Включено", Icon: AirportWaitIcon },
+          { title: "Отслеживание рейса", description: "Бесплатно", Icon: RadarIcon }
+        ]
+      : [
+          { title: "Подача авто", description: "24/7", Icon: CarIcon },
+          { title: "Без передоплати", description: "Оплата після поїздки", Icon: CardShieldIcon },
+          { title: "Очікування в аеропорту", description: "Включено", Icon: AirportWaitIcon },
+          { title: "Відстеження рейсу", description: "Безкоштовно", Icon: RadarIcon }
+        ];
   const navItems: NavItem[] = [
     { label: ui.navHome, href: homeHref },
     { label: ui.navDirections, href: directionsHref },
@@ -424,12 +417,13 @@ export default function HomePageClient({
   const footerLinks = [
     { label: ui.footerHome, href: homeHref },
     { label: ui.footerDirections, href: directionsHref },
-    { label: ui.footerAllDirections, href: "/routes" },
+    { label: ui.footerAllDirections, href: isRu ? "/ru/routes" : "/routes" },
     { label: ui.footerFleet, href: "/avtopark" },
     { label: ui.footerContactsLink, href: "/kontakty" },
     { label: ui.footerAbout, href: "/pro-kompaniiu" },
     { label: ui.navBlog, href: "/blog" }
   ];
+  const mainRoutesHref = isRu ? "/ru/routes" : "/routes";
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const preferredRouteCityOrderLocalized = isRu
@@ -584,18 +578,7 @@ export default function HomePageClient({
     }
   }, [activeRouteCity, routeCities, defaultPrimaryCity]);
 
-  const routeLookup = new Map<string, HomepageRoute>();
   const buildRouteHref = (slug: string) => `${routeHrefPrefix}/${slug}`;
-  const normalizeRouteKeyPart = (value: string) => value.trim().toLowerCase().replace(/ё/g, "е");
-
-  homepageRoutes.forEach((route) => {
-    if (route.slug && route.from_city && route.to_city) {
-      routeLookup.set(
-        `${normalizeRouteKeyPart(route.from_city)}__${normalizeRouteKeyPart(route.to_city)}`,
-        route
-      );
-    }
-  });
   const visibleRouteLimit = 10;
   const activeRoutes = homepageRoutes.filter(
     (route) => route.from_city === activeRouteCity && route.to_city
@@ -607,42 +590,6 @@ export default function HomePageClient({
   const highlightedRouteLabels = activeRoutes
     .slice(0, Math.min(3, activeRoutes.length))
     .map((route) => `${route.from_city} → ${route.to_city}`);
-  const featureChipsLocalized = isRu
-    ? [
-        { label: "Частный трансфер без попутчиков", Icon: CarIcon },
-        { label: "Подача 24/7", Icon: ClockIcon },
-        { label: "Помощь на границе", Icon: ShieldIcon },
-        { label: "Маршруты от €99", Icon: GemIcon }
-      ]
-    : featureChips;
-  const routeGroupsLocalized = isRu
-    ? [
-        {
-          title: "Украина → Молдова",
-          routes: [
-            { fromCity: "Одесса", toCity: "Кишинёв" },
-            { fromCity: "Киев", toCity: "Кишинёв" },
-            { fromCity: "Днепр", toCity: "Кишинёв" }
-          ]
-        },
-        {
-          title: "Украина → Польша",
-          routes: [
-            { fromCity: "Киев", toCity: "Варшава" },
-            { fromCity: "Львов", toCity: "Варшава" },
-            { fromCity: "Днепр", toCity: "Варшава" }
-          ]
-        },
-        {
-          title: "Украина → Румыния",
-          routes: [
-            { fromCity: "Одесса", toCity: "Бухарест" },
-            { fromCity: "Киев", toCity: "Бухарест" },
-            { fromCity: "Одесса", toCity: "Яссы" }
-          ]
-        }
-      ]
-    : routeGroups;
   const serviceCardsLocalized = isRu
     ? [
         { title: "VIP комфорт", lines: ["Премиальные авто", "и тишина в дороге."], Icon: SeatIcon },
@@ -798,15 +745,15 @@ export default function HomePageClient({
             </div>
           </header>
 
-          <section className="relative z-10 mt-6 md:mt-7">
-            <div className="hero-shell panel-soft relative overflow-hidden rounded-[32px]">
+          <section className="relative z-10 mt-3 md:mt-4">
+            <div className="hero-shell hero-shell-home relative overflow-hidden rounded-[28px] md:rounded-[30px]">
               <div className="absolute inset-0">
                 <Image
                   src={desktopHero}
                   alt=""
                   priority
                   fill
-                  className="hidden object-cover object-right md:block"
+                  className="hidden object-cover object-[82%_center] md:block lg:object-[76%_center] xl:object-[70%_center]"
                   sizes="100vw"
                 />
                 <Image
@@ -817,23 +764,23 @@ export default function HomePageClient({
                   className="object-cover object-bottom md:hidden"
                   sizes="100vw"
                 />
-                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,7,6,0.22)_0%,rgba(5,7,6,0.5)_100%)] md:bg-[linear-gradient(92deg,rgba(4,6,5,0.98)_0%,rgba(4,6,5,0.88)_32%,rgba(4,6,5,0.58)_60%,rgba(4,6,5,0.16)_100%)]" />
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(29,42,31,0.32),transparent_34%),linear-gradient(180deg,rgba(6,8,7,0.12)_0%,rgba(6,8,7,0.56)_100%)] md:bg-[radial-gradient(circle_at_14%_20%,rgba(29,42,31,0.32),transparent_34%),linear-gradient(180deg,rgba(6,8,7,0.06)_0%,rgba(6,8,7,0.34)_100%)]" />
+                <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,7,6,0.2)_0%,rgba(5,7,6,0.48)_100%)] md:bg-[linear-gradient(92deg,rgba(4,6,5,0.95)_0%,rgba(4,6,5,0.84)_28%,rgba(4,6,5,0.46)_58%,rgba(4,6,5,0.05)_100%)]" />
+                <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(29,42,31,0.28),transparent_34%),linear-gradient(180deg,rgba(6,8,7,0.1)_0%,rgba(6,8,7,0.52)_100%)] md:bg-[radial-gradient(circle_at_16%_18%,rgba(29,42,31,0.26),transparent_34%),radial-gradient(circle_at_82%_44%,rgba(216,185,130,0.16),transparent_24%),linear-gradient(180deg,rgba(6,8,7,0.03)_0%,rgba(6,8,7,0.28)_100%)]" />
               </div>
 
-              <div className="relative z-10 flex min-h-[640px] flex-col justify-center px-5 py-10 sm:px-6 sm:py-12 md:min-h-[620px] md:px-[4.5rem] md:py-[4.2rem] lg:min-h-[640px] lg:px-[5rem] lg:py-[4.5rem] xl:min-h-[660px] xl:px-[5.5rem]">
-                <div className="max-w-[56rem] md:mt-3 lg:mt-4">
-                  <h1 className="headline-lux mt-2 max-w-[56rem] text-[clamp(2.375rem,11vw,3rem)] font-medium leading-[1.05] tracking-[-0.035em] text-[var(--text)] md:text-[clamp(3.25rem,5vw,4.75rem)] md:leading-[1.02]">
+              <div className="relative z-10 flex min-h-[560px] flex-col justify-center px-5 py-8 sm:px-6 sm:py-10 md:min-h-[540px] md:px-[3.8rem] md:py-[3.3rem] lg:min-h-[560px] lg:px-[4.3rem] lg:py-[3.55rem] xl:min-h-[590px] xl:px-[4.8rem] xl:py-[3.8rem]">
+                <div className="max-w-[50rem]">
+                  <h1 className="headline-lux mt-1.5 max-w-[46rem] text-[clamp(2.2rem,10vw,2.9rem)] font-medium leading-[1.01] tracking-[-0.038em] text-[var(--text)] md:text-[clamp(2.85rem,4.15vw,4.15rem)] md:leading-[0.99]">
                     {ui.heroTitle}
                   </h1>
-                  <p className="mt-5 max-w-[36rem] text-[1rem] leading-[1.9] text-[var(--muted)] md:text-[1.08rem]">
+                  <p className="mt-4 max-w-[32rem] text-[0.98rem] leading-[1.8] text-[var(--muted)] md:text-[1.03rem]">
                     {ui.heroSubtitle}
                   </p>
-                  <p className="mt-4 max-w-[34rem] text-[0.86rem] font-semibold uppercase tracking-[0.22em] text-[var(--champagne)] md:text-[0.9rem]">
+                  <p className="mt-3.5 max-w-[30rem] text-[0.82rem] font-semibold uppercase tracking-[0.2em] text-[var(--champagne)] md:text-[0.86rem]">
                     {ui.heroDescription}
                   </p>
 
-                  <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap md:gap-3.5">
+                  <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:flex-wrap md:gap-3">
                     <a
                       href="#booking-form"
                       onClick={() =>
@@ -869,29 +816,35 @@ export default function HomePageClient({
                       {ui.telegram}
                     </a>
                   </div>
-
-                  <div className="mt-7 flex flex-wrap gap-2.5 lg:flex-nowrap lg:gap-2">
-                    {featureChipsLocalized.map(({ label, Icon }) => (
-                      <div
-                        key={label}
-                        className="hero-chip chip-compact inline-flex h-10 shrink-0 items-center gap-2 rounded-full px-3.5 text-[0.68rem] font-semibold uppercase tracking-[0.16em] text-[rgba(247,243,234,0.9)] lg:px-3 xl:px-3.5"
-                      >
-                        <Icon className="h-[13px] w-[13px] text-[rgba(208,184,136,0.82)]" />
-                        <span className="whitespace-nowrap">{label}</span>
-                      </div>
-                    ))}
-                  </div>
                 </div>
 
               </div>
             </div>
           </section>
 
+          <section className="relative z-20 -mt-4 md:-mt-5 xl:-mt-6">
+            <div className="hero-benefits-shell rounded-[24px] px-3 py-2.5 sm:px-4 sm:py-3 md:px-5 md:py-3.5">
+              <div className="hero-benefits-grid grid sm:grid-cols-2 xl:grid-cols-4">
+                {heroBenefits.map(({ title, description, Icon }) => (
+                  <article key={`${title}-${description}`} className="hero-benefit-item">
+                    <span className="hero-benefit-icon">
+                      <Icon className="h-[16px] w-[16px] text-[var(--champagne)]" />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="hero-benefit-title">{title}</p>
+                      <p className="hero-benefit-description">{description}</p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </section>
+
           <section
             id="routes-network-wide"
-            className="relative z-10 mt-10 md:mt-12 xl:mt-14"
+            className="relative z-10 mt-7 md:mt-9 xl:mt-11"
           >
-            <div className="routes-wide-panel relative flex min-h-[760px] flex-col overflow-hidden rounded-[32px] px-5 py-8 sm:px-7 md:px-10 md:py-12 lg:min-h-[560px] lg:px-14 lg:py-16 xl:min-h-[580px] xl:px-[3.5rem]">
+            <div className="routes-wide-panel relative flex min-h-[520px] flex-col overflow-hidden rounded-[32px] px-5 py-8 sm:px-7 md:px-10 md:py-10 lg:min-h-[480px] lg:px-14 lg:py-12 xl:min-h-[500px] xl:px-[3.5rem]">
               <Image
                 src={mapsNewImage}
                 alt={isRu
@@ -905,88 +858,32 @@ export default function HomePageClient({
               <div className="routes-wide-overlay-secondary absolute inset-0" />
               <div className="routes-wide-overlay-vignette absolute inset-0" />
 
-              <div id="popular-routes" className="relative z-10 max-w-[27.5rem]">
+              <div id="popular-routes" className="relative z-10 flex max-w-[30rem] flex-1 flex-col justify-center">
                 <p className="mb-6 text-[0.75rem] font-bold uppercase tracking-[0.26em] text-[var(--champagne)]">
                   {ui.mainDirectionsEyebrow}
                 </p>
                 <h2 className="section-title-lux text-[2.45rem] font-medium leading-[1.05] tracking-[-0.04em] text-[var(--text)] sm:text-[2.95rem] lg:text-[3.15rem] xl:text-[3.45rem]">
-                  {isRu ? (
-                    <>
-                      Маршруты между Украиной,
-                      <br />
-                      Молдовой и <span className="text-[var(--champagne)]">Польшей</span>
-                    </>
-                  ) : (
-                    <>
-                      Маршрути між Україною,
-                      <br />
-                      Молдовою та <span className="text-[var(--champagne)]">Польщею</span>
-                    </>
-                  )}
+                  {ui.mainDirectionsTitle}
                 </h2>
-                <p className="mt-6 max-w-[24.5rem] text-[1rem] leading-[1.7] text-[var(--muted)]">
+                <p className="mt-6 max-w-[25rem] text-[1rem] leading-[1.75] text-[var(--muted)]">
                   {ui.mainDirectionsText}
                 </p>
-                <p className="mt-4 max-w-[24.5rem] text-[0.95rem] leading-[1.7] text-[var(--muted)]">
-                  {ui.mainDirectionsText2}
-                </p>
-                <div className="routes-wide-focus-pill mt-6 inline-flex items-center gap-3 rounded-full px-4 py-2.5">
-                  <span className="routes-wide-focus-label">{ui.mapHighlightLabel}</span>
-                  <span className="routes-wide-focus-route">{ui.mapHighlightRoute}</span>
+                <div className="mt-8">
+                  <Link
+                    href={mainRoutesHref}
+                    onClick={() =>
+                      trackCtaClick({
+                        ctaType: "route_link",
+                        location: "main_directions",
+                        pageType: "home",
+                        target: mainRoutesHref
+                      })
+                    }
+                    className="button-gold inline-flex h-12 items-center justify-center rounded-full px-6 text-[0.76rem] font-bold uppercase tracking-[0.1em] md:h-13 md:px-7 md:text-[0.78rem]"
+                  >
+                    {ui.mainDirectionsCta}
+                  </Link>
                 </div>
-              </div>
-
-              <div className="relative z-10 mt-10 grid grid-cols-1 gap-3 sm:grid-cols-2 lg:mt-auto lg:max-w-[58rem] lg:grid-cols-3 lg:gap-4">
-                {routeGroupsLocalized.map(({ title, routes }) => (
-                  <article key={title} className="routes-wide-stat">
-                    <div className="routes-wide-stat-icon">
-                      <MapPinStrokeIcon className="h-[18px] w-[18px] text-[var(--champagne)]" />
-                    </div>
-                    <div className="mt-4 text-[0.72rem] font-bold uppercase tracking-[0.18em] text-[var(--champagne)]">
-                      {title}
-                    </div>
-                    <div className="mt-3 grid gap-2 text-[0.92rem] leading-[1.65] text-[var(--text)]">
-                      {routes.map(({ fromCity, toCity }) => {
-                        const routeKey = `${normalizeRouteKeyPart(fromCity)}__${normalizeRouteKeyPart(toCity)}`;
-                        const routeMatch = routeLookup.get(routeKey);
-                        const label = `${fromCity} — ${toCity}`;
-
-                        if (!routeMatch?.slug) {
-                          return (
-                            <div
-                              key={label}
-                              className="inline-flex items-center justify-between gap-3 rounded-[14px] border border-[rgba(216,185,130,0.08)] bg-[rgba(10,13,11,0.14)] px-3 py-2 text-left text-[rgba(247,243,234,0.6)]"
-                            >
-                              <span>{label}</span>
-                              <ArrowUpRightIcon className="h-4 w-4 shrink-0 text-[rgba(216,185,130,0.34)]" />
-                            </div>
-                          );
-                        }
-
-                        const href = buildRouteHref(routeMatch.slug);
-
-                        return (
-                          <Link
-                            key={label}
-                            href={href}
-                            onClick={() =>
-                              trackCtaClick({
-                                ctaType: "route_link",
-                                location: "main_directions",
-                                pageType: "home",
-                                target: href
-                              })
-                            }
-                            className="group inline-flex items-center justify-between gap-3 rounded-[14px] border border-[rgba(216,185,130,0.08)] bg-[rgba(10,13,11,0.2)] px-3 py-2 text-left transition duration-200 hover:border-[rgba(216,185,130,0.2)] hover:bg-[rgba(216,185,130,0.05)] hover:text-[var(--soft-gold)]"
-                          >
-                            <span>{label}</span>
-                            <ArrowUpRightIcon className="h-4 w-4 shrink-0 text-[rgba(216,185,130,0.72)] transition duration-200 group-hover:translate-x-[1px] group-hover:-translate-y-[1px] group-hover:text-[var(--soft-gold)]" />
-                          </Link>
-                        );
-                      })}
-                    </div>
-                  </article>
-                ))}
               </div>
             </div>
           </section>
@@ -1425,7 +1322,7 @@ export default function HomePageClient({
           <ReviewsSection
             location="homepage"
             className="mt-12 md:mt-16 xl:mt-20"
-            language={currentLanguage}
+            language={isRu ? "ru" : "ua"}
           />
           <div className="mt-5 rounded-[24px] border border-[rgba(216,185,130,0.1)] bg-[rgba(10,13,11,0.34)] px-5 py-5 sm:px-6">
             <p className="text-[0.72rem] font-bold uppercase tracking-[0.2em] text-[var(--champagne)]">
@@ -2039,6 +1936,70 @@ function ShieldCheckStrokeIcon({ className = "h-4 w-4" }: IconProps) {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
+    </svg>
+  );
+}
+
+function CardShieldIcon({ className = "h-4 w-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+      <rect
+        x="3.5"
+        y="6"
+        width="17"
+        height="11.5"
+        rx="2.2"
+        stroke="currentColor"
+        strokeWidth="1.35"
+      />
+      <path
+        d="M3.8 9.6h16.4M8 14.15h3.3"
+        stroke="currentColor"
+        strokeWidth="1.35"
+        strokeLinecap="round"
+      />
+      <path
+        d="M17.05 17.9c1.9-.42 3.25-2.2 3.25-4.18V11.9l-3.25-1.3-3.25 1.3v1.82c0 1.98 1.36 3.76 3.25 4.18Z"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function AirportWaitIcon({ className = "h-4 w-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+      <path
+        d="M4 18.5h16M7.4 15.1h9.2M12 6.1v9M9.1 8.8 12 6.1l2.9 2.7"
+        stroke="currentColor"
+        strokeWidth="1.35"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M6.1 12.3h2.25m7.3 0h2.35"
+        stroke="currentColor"
+        strokeWidth="1.35"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function RadarIcon({ className = "h-4 w-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+      <circle cx="12" cy="12" r="7.5" stroke="currentColor" strokeWidth="1.35" />
+      <circle cx="12" cy="12" r="3.3" stroke="currentColor" strokeWidth="1.2" />
+      <path
+        d="M12 12 17.2 8.8M12 4.5v1.7M19.5 12h-1.7M12 17.8v1.7M6.2 12H4.5"
+        stroke="currentColor"
+        strokeWidth="1.35"
+        strokeLinecap="round"
+      />
+      <circle cx="17.2" cy="8.8" r="1" fill="currentColor" />
     </svg>
   );
 }
