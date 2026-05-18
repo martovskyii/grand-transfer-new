@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
-import { HeaderPhoneLink, FooterContactLinks, LanguageSwitcher } from "./site-ui";
+import { HeaderPhoneLink, LanguageSwitcher, SiteFooter } from "./site-ui";
 
 type BreadcrumbItem = {
   label: string;
@@ -20,7 +20,6 @@ type BlogStaticShellProps = {
   currentLanguage?: "ua" | "ru" | "en";
   languageLinks?: Partial<Record<"ua" | "ru" | "en", string>>;
   navItems?: Array<{ label: string; href: string }>;
-  footerLinks?: Array<{ label: string; href: string }>;
 };
 
 const blogNavItems = [
@@ -30,16 +29,6 @@ const blogNavItems = [
   { label: "КОНТАКТИ", href: "/kontakty" },
   { label: "ПРО НАС", href: "/pro-kompaniiu" },
   { label: "БЛОГ", href: "/blog" }
-];
-
-const blogFooterLinks = [
-  { label: "Головна", href: "/" },
-  { label: "Напрямки", href: "/#directions" },
-  { label: "Усі напрямки", href: "/routes" },
-  { label: "Автопарк", href: "/avtopark" },
-  { label: "Контакти", href: "/kontakty" },
-  { label: "Про нас", href: "/pro-kompaniiu" },
-  { label: "Блог", href: "/blog" }
 ];
 
 const phoneNumber = "+38 063 824 3223";
@@ -71,14 +60,12 @@ export function BlogStaticShell({
   breadcrumbs,
   currentLanguage = "ua",
   languageLinks,
-  navItems,
-  footerLinks
+  navItems
 }: BlogStaticShellProps) {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const isRu = currentLanguage === "ru";
   const resolvedNavItems = navItems || blogNavItems;
-  const resolvedFooterLinks = footerLinks || blogFooterLinks;
   const languageSwitcherLinks = languageLinks || {
     ua: "/",
     ru: "/ru"
@@ -295,83 +282,7 @@ export function BlogStaticShell({
         </aside>
       </div>
 
-      <footer
-        id="contacts"
-        className="relative border-t border-[rgba(216,185,130,0.08)] pb-10 pt-14 md:pb-12 md:pt-16"
-      >
-        <div className="mx-auto max-w-[1536px] px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-14">
-          <div className="footer-shell rounded-[30px] px-5 py-8 sm:px-7 md:px-10 md:py-12">
-            <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr_0.8fr_0.6fr] lg:gap-8">
-              <div className="max-w-[23rem]">
-                <div className="footer-brand">
-                  <div className="luxury-logo-title">GRAND TRANSFER</div>
-                  <div className="footer-logo-subtitle">
-                    {isRu ? "VIP СЕРВИС" : "VIP СЕРВІС"}
-                  </div>
-                </div>
-                <p className="mt-6 text-[0.95rem] leading-[1.8] text-[var(--muted)]">
-                  {isRu
-                    ? "Премиальные международные трансферы между Украиной, Молдовой и Польшей для частных, бизнес- и VIP-клиентов."
-                    : "Преміальні міжнародні трансфери між Україною, Молдовою та Польщею для приватних, бізнес- та VIP-клієнтів."}
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-[0.76rem] font-bold uppercase tracking-[0.22em] text-[var(--champagne)]">
-                  {isRu ? "Компания" : "Компанія"}
-                </h3>
-                <div className="mt-5 flex flex-col gap-3 text-[0.95rem] text-[rgba(247,243,234,0.86)]">
-                  {resolvedFooterLinks.map(({ label, href }) => (
-                    <Link
-                      key={label}
-                      href={href}
-                      className="transition hover:text-[var(--soft-gold)]"
-                    >
-                      {label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-[0.76rem] font-bold uppercase tracking-[0.22em] text-[var(--champagne)]">
-                  {isRu ? "Контакты" : "Контакти"}
-                </h3>
-                <FooterContactLinks pageType="about" />
-              </div>
-
-              <div>
-                <h3 className="text-[0.76rem] font-bold uppercase tracking-[0.22em] text-[var(--champagne)]">
-                  {isRu ? "Языки" : "Мови"}
-                </h3>
-                <div className="mt-5 flex flex-wrap gap-2.5">
-                  {[
-                    { key: "ua", label: "UA" },
-                    { key: "ru", label: "RU" },
-                    { key: "en", label: "EN" }
-                  ].map((language) => (
-                    <a
-                      key={language.key}
-                      href={languageSwitcherLinks[language.key as "ua" | "ru" | "en"] || "#"}
-                      className={`language-pill ${
-                        currentLanguage === language.key ? "is-active" : ""
-                      }`}
-                    >
-                      {language.label}
-                    </a>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-10 border-t border-[rgba(216,185,130,0.08)] pt-5 text-[0.83rem] text-[rgba(183,178,168,0.78)]">
-              {isRu
-                ? "© 2026 Grand Transfer. Все права защищены."
-                : "© 2026 Grand Transfer. Усі права захищені."}
-            </div>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter pageType="about" currentLanguage={currentLanguage} />
     </>
   );
 }

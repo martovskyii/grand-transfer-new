@@ -13,9 +13,9 @@ import {
 } from "../../components/lux-form-fields";
 import {
   FloatingContactWidget,
-  FooterContactLinks,
   HeaderPhoneLink,
   LanguageSwitcher,
+  SiteFooter,
   SuccessPopup
 } from "../../components/site-ui";
 import {
@@ -27,6 +27,7 @@ import {
   TELEGRAM_URL,
   TIKTOK_URL,
   VIBER_URL,
+  WHATSAPP_URL,
   YOUTUBE_URL
 } from "../../lib/contact-links";
 import {
@@ -62,7 +63,15 @@ type ContactMethod = {
   actionLabel: string;
   href: string;
   Icon: ComponentType<IconProps>;
-  kind: "phone" | "telegram" | "viber" | "email" | "instagram" | "tiktok" | "youtube";
+  kind:
+    | "phone"
+    | "telegram"
+    | "whatsapp"
+    | "viber"
+    | "email"
+    | "instagram"
+    | "tiktok"
+    | "youtube";
 };
 
 type ContactFaqItem = {
@@ -91,16 +100,6 @@ const navItems: NavItem[] = [
 ];
 
 const mobileNavItems: NavItem[] = navItems;
-
-const footerLinks = [
-  { label: "Головна", href: "/" },
-  { label: "Напрямки", href: "/#directions" },
-  { label: "Усі напрямки", href: "/routes" },
-  { label: "Автопарк", href: "/avtopark" },
-  { label: "Контакти", href: "/kontakty" },
-  { label: "Про нас", href: "/pro-kompaniiu" },
-  { label: "Блог", href: "/blog" }
-];
 
 const phoneNumber = PHONE_DISPLAY;
 const phoneHref = PHONE_HREF;
@@ -143,6 +142,14 @@ const contactMethods: ContactMethod[] = [
     href: VIBER_URL,
     Icon: WhatsAppIcon,
     kind: "viber"
+  },
+  {
+    title: "WhatsApp",
+    value: phoneNumber,
+    actionLabel: "Написати",
+    href: WHATSAPP_URL,
+    Icon: WhatsAppIcon,
+    kind: "whatsapp"
   },
   {
     title: "Email",
@@ -338,6 +345,15 @@ export default function KontaktyPage() {
     if (method.kind === "telegram") {
       trackMessengerClick({
         messenger: "telegram",
+        location: "contacts_page",
+        pageType: "contacts"
+      });
+      return;
+    }
+
+    if (method.kind === "whatsapp") {
+      trackMessengerClick({
+        messenger: "whatsapp",
         location: "contacts_page",
         pageType: "contacts"
       });
@@ -574,8 +590,24 @@ export default function KontaktyPage() {
                     onClick={() =>
                       handleMethodClick({ title, value, actionLabel, href, Icon, kind })
                     }
-                    target={kind === "telegram" || kind === "instagram" || kind === "tiktok" || kind === "youtube" ? "_blank" : undefined}
-                    rel={kind === "telegram" || kind === "instagram" || kind === "tiktok" || kind === "youtube" ? "noopener noreferrer" : undefined}
+                    target={
+                      kind === "telegram" ||
+                      kind === "whatsapp" ||
+                      kind === "instagram" ||
+                      kind === "tiktok" ||
+                      kind === "youtube"
+                        ? "_blank"
+                        : undefined
+                    }
+                    rel={
+                      kind === "telegram" ||
+                      kind === "whatsapp" ||
+                      kind === "instagram" ||
+                      kind === "tiktok" ||
+                      kind === "youtube"
+                        ? "noopener noreferrer"
+                        : undefined
+                    }
                     className="contacts-method-button mt-5"
                   >
                     {actionLabel}
@@ -760,71 +792,7 @@ export default function KontaktyPage() {
         </div>
       </main>
 
-      <footer
-        id="contacts"
-        className="relative border-t border-[rgba(216,185,130,0.08)] pb-10 pt-14 md:pb-12 md:pt-16"
-      >
-        <div className="mx-auto max-w-[1536px] px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-14">
-          <div className="footer-shell rounded-[30px] px-5 py-8 sm:px-7 md:px-10 md:py-12">
-            <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr_0.8fr_0.6fr] lg:gap-8">
-              <div className="max-w-[23rem]">
-                <div className="footer-brand">
-                  <div className="luxury-logo-title">GRAND TRANSFER</div>
-                  <div className="footer-logo-subtitle">VIP СЕРВІС</div>
-                </div>
-                <p className="mt-6 text-[0.95rem] leading-[1.8] text-[var(--muted)]">
-                  Преміальні міжнародні трансфери між Україною, Молдовою та
-                  Польщею для приватних, бізнес- та VIP-клієнтів.
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-[0.76rem] font-bold uppercase tracking-[0.22em] text-[var(--champagne)]">
-                  Компанія
-                </h3>
-                <div className="mt-5 flex flex-col gap-3 text-[0.95rem] text-[rgba(247,243,234,0.86)]">
-                  {footerLinks.map(({ label, href }) => (
-                    <Link
-                      key={label}
-                      href={href}
-                      className="transition hover:text-[var(--soft-gold)]"
-                    >
-                      {label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-[0.76rem] font-bold uppercase tracking-[0.22em] text-[var(--champagne)]">
-                  Контакти
-                </h3>
-                <FooterContactLinks pageType="contacts" />
-              </div>
-
-              <div>
-                <h3 className="text-[0.76rem] font-bold uppercase tracking-[0.22em] text-[var(--champagne)]">
-                  Мови
-                </h3>
-                <div className="mt-5 flex flex-wrap gap-2.5">
-                  {["UA", "RU", "EN"].map((language) => (
-                    <span
-                      key={language}
-                      className={`language-pill ${language === "UA" ? "is-active" : ""}`}
-                    >
-                      {language}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-10 border-t border-[rgba(216,185,130,0.08)] pt-5 text-[0.83rem] text-[rgba(183,178,168,0.78)]">
-              © 2026 Grand Transfer. Усі права захищені.
-            </div>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter pageType="contacts" currentLanguage="ua" />
 
       <div
         className={`fixed inset-0 z-50 lg:hidden ${

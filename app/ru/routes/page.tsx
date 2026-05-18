@@ -47,16 +47,6 @@ const ruNavItems = [
   { label: "БЛОГ", href: "/blog" }
 ];
 
-const ruFooterLinks = [
-  { label: "Главная", href: "/ru" },
-  { label: "Направления", href: "/ru#directions" },
-  { label: "Все направления", href: "/ru/routes" },
-  { label: "Автопарк", href: "/avtopark" },
-  { label: "Контакты", href: "/kontakty" },
-  { label: "О нас", href: "/pro-kompaniiu" },
-  { label: "Блог", href: "/blog" }
-];
-
 export default async function RuRoutesPage() {
   const routes = await getDirectoryRoutes();
   const groupedRoutes = routes.reduce<Map<string, RouteDirectoryItem[]>>((acc, route) => {
@@ -85,7 +75,6 @@ export default async function RuRoutesPage() {
       currentLanguage="ru"
       languageLinks={{ ua: "/routes", ru: "/ru/routes" }}
       navItems={ruNavItems}
-      footerLinks={ruFooterLinks}
       breadcrumbs={[
         { label: "Главная", href: "/ru" },
         { label: "Все направления" }

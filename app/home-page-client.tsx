@@ -17,9 +17,9 @@ import {
 } from "../components/lux-form-fields";
 import {
   FloatingContactWidget,
-  FooterContactLinks,
   HeaderPhoneLink,
   LanguageSwitcher,
+  SiteFooter,
   SuccessPopup
 } from "../components/site-ui";
 import { ReviewsSection } from "../components/reviews-section";
@@ -412,15 +412,6 @@ export default function HomePageClient({
     { label: ui.navFleet, href: "/avtopark" },
     { label: ui.navContacts, href: "/kontakty" },
     { label: ui.navAbout, href: "/pro-kompaniiu" },
-    { label: ui.navBlog, href: "/blog" }
-  ];
-  const footerLinks = [
-    { label: ui.footerHome, href: homeHref },
-    { label: ui.footerDirections, href: directionsHref },
-    { label: ui.footerAllDirections, href: isRu ? "/ru/routes" : "/routes" },
-    { label: ui.footerFleet, href: "/avtopark" },
-    { label: ui.footerContactsLink, href: "/kontakty" },
-    { label: ui.footerAbout, href: "/pro-kompaniiu" },
     { label: ui.navBlog, href: "/blog" }
   ];
   const mainRoutesHref = isRu ? "/ru/routes" : "/routes";
@@ -1460,125 +1451,7 @@ export default function HomePageClient({
         </div>
       </main>
 
-      <footer
-        id="contacts"
-        className="relative border-t border-[rgba(216,185,130,0.08)] pb-10 pt-14 md:pb-12 md:pt-16"
-      >
-        <div className="mx-auto max-w-[1536px] px-4 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-14">
-          <div className="footer-shell rounded-[30px] px-5 py-8 sm:px-7 md:px-10 md:py-12">
-            <div className="footer-cta-shell mb-8 rounded-[24px] px-5 py-5 sm:px-6 md:mb-10 md:px-7">
-              <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-                <div className="max-w-[36rem]">
-                  <p className="text-[0.74rem] font-bold uppercase tracking-[0.22em] text-[var(--champagne)]">
-                    {ui.footerServiceTitle}
-                  </p>
-                  <h3 className="mt-3 text-[1.45rem] font-semibold leading-[1.18] text-[var(--text)] md:text-[1.72rem]">
-                    {ui.footerCtaTitle}
-                  </h3>
-                  <p className="mt-3 text-[0.95rem] leading-[1.75] text-[var(--muted)]">
-                    {ui.footerCtaText}
-                  </p>
-                  <p className="mt-3 text-[0.76rem] uppercase tracking-[0.18em] text-[rgba(183,178,168,0.76)]">
-                    {ui.footerServiceTags}
-                  </p>
-                </div>
-
-                <div className="flex flex-col gap-3 sm:flex-row lg:shrink-0">
-                  <a
-                    href={TELEGRAM_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => {
-                      trackMessengerClick({
-                        messenger: "telegram",
-                        location: "footer",
-                        pageType: "home"
-                      });
-                      trackCtaClick({
-                        ctaType: "telegram",
-                        location: "footer",
-                        pageType: "home"
-                      });
-                    }}
-                    className="button-outline inline-flex h-11 items-center justify-center rounded-full px-5 text-[0.78rem] font-semibold tracking-[0.1em]"
-                  >
-                    {ui.telegramSentence}
-                  </a>
-                  <a
-                    href={`tel:${phoneHref}`}
-                    onClick={() => {
-                      trackPhoneClick({
-                        phone: phoneHref,
-                        location: "footer",
-                        pageType: "home"
-                      });
-                      trackCtaClick({
-                        ctaType: "phone",
-                        location: "footer",
-                        pageType: "home"
-                      });
-                    }}
-                    className="button-gold inline-flex h-11 items-center justify-center rounded-full px-5 text-[0.78rem] font-semibold tracking-[0.1em]"
-                  >
-                    {ui.call}
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div className="grid gap-10 lg:grid-cols-[1.2fr_0.8fr_0.8fr_0.6fr] lg:gap-8">
-              <div className="max-w-[23rem]">
-                <div className="footer-brand">
-                  <div className="luxury-logo-title">GRAND TRANSFER</div>
-                  <div className="footer-logo-subtitle">{isRu ? "VIP СЕРВИС" : "VIP СЕРВІС"}</div>
-                </div>
-                <p className="mt-6 text-[0.95rem] leading-[1.8] text-[var(--muted)]">
-                  {ui.footerDescription}
-                </p>
-              </div>
-
-              <div>
-                <h3 className="text-[0.76rem] font-bold uppercase tracking-[0.22em] text-[var(--champagne)]">
-                  {ui.footerCompany}
-                </h3>
-                <div className="mt-5 flex flex-col gap-3 text-[0.95rem] text-[rgba(247,243,234,0.86)]">
-                  {footerLinks.map(({ label, href }) => (
-                    <Link
-                      key={label}
-                      href={href}
-                      className="transition hover:text-[var(--soft-gold)]"
-                    >
-                      {label}
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
-              <div>
-                <h3 className="text-[0.76rem] font-bold uppercase tracking-[0.22em] text-[var(--champagne)]">
-                  {ui.footerContacts}
-                </h3>
-                <FooterContactLinks pageType="home" />
-              </div>
-
-              <div>
-                <h3 className="text-[0.76rem] font-bold uppercase tracking-[0.22em] text-[var(--champagne)]">
-                  {ui.footerLanguages}
-                </h3>
-                <LanguageSwitcher
-                  className="mt-5"
-                  currentLanguage={currentLanguage}
-                  links={{ ua: "/", ru: "/ru" }}
-                />
-              </div>
-            </div>
-
-            <div className="mt-10 border-t border-[rgba(216,185,130,0.08)] pt-5 text-[0.83rem] text-[rgba(183,178,168,0.78)]">
-              {ui.footerCopyright}
-            </div>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter pageType="home" currentLanguage={currentLanguage} />
 
       <div
         className={`fixed inset-0 z-50 lg:hidden ${
