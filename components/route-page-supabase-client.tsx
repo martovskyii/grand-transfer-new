@@ -184,34 +184,34 @@ const carClassCardTemplates: Omit<CarClassCardData, "price">[] = [
     title: "Комфорт",
     description: "Зручний салон для індивідуальних поїздок.",
     image: comfortCarImage,
-    models: ["VW Passat B8 R-Line", "Toyota Camry 55", "Hyundai Sonata", "Kia Optima", "Ford Fusion"],
+    models: ["VW Passat B8", "Toyota Camry 55", "Hyundai Sonata", "Kia Optima", "Ford Fusion та ін."],
     seats: "3",
     luggage: "2–3",
     climate: "Клімат-контроль"
   },
   {
     title: "Бізнес",
-    description: "Підвищений рівень тиші та простору.",
+    description: "Комфортні автомобілі бізнес-класу для далеких поїздок.",
     image: businessCarImage,
-    models: ["Toyota Avalon 2020", "Toyota Camry 70", "Skoda Superb", "Lexus ES"],
+    models: ["Toyota Avalon", "Toyota Camry 70", "Skoda Superb", "Lexus ES та ін."],
     seats: "3",
     luggage: "2–3",
     climate: "Клімат-контроль"
   },
   {
     title: "Преміум",
-    description: "Представницький клас і максимальний комфорт.",
+    description: "Преміальні автомобілі для максимально комфортних поїздок.",
     image: premiumCarImage,
-    models: ["S-class", "Audi A8", "BMW 7-series", "Lexus LS"],
+    models: ["Mercedes S-Class", "Audi A8", "BMW 7 Series", "Lexus LS та ін."],
     seats: "3",
     luggage: "3–4",
     climate: "Клімат-контроль"
   },
   {
     title: "Мінівен",
-    description: "Для кількох пасажирів і багажу.",
+    description: "Оптимальний вибір для групових поїздок.",
     image: minivanCarImage,
-    models: ["Mercedes Vito", "VW Caravelle", "Opel Vivaro", "Hyundai H-1"],
+    models: ["Mercedes Vito", "VW Caravelle", "Opel Vivaro", "Hyundai H-1 та ін."],
     seats: "7",
     luggage: "6–8",
     climate: "Клімат-контроль"
@@ -542,14 +542,14 @@ export default function RoutePageSupabaseClient({
         : card.title === "Бізнес"
           ? isRu
             ? "Повышенный уровень тишины и пространства."
-            : "Підвищений рівень тиші та простору."
+            : "Комфортні автомобілі бізнес-класу для далеких поїздок."
           : card.title === "Преміум"
             ? isRu
               ? "Представительский класс и максимальный комфорт."
-              : "Представницький клас і максимальний комфорт."
+              : "Преміальні автомобілі для максимально комфортних поїздок."
             : isRu
               ? "Для нескольких пассажиров и багажа."
-              : "Для кількох пасажирів і багажу.",
+              : "Оптимальний вибір для групових поїздок.",
     climate: isRu ? "Климат-контроль" : "Клімат-контроль",
     price:
       card.title === "Комфорт"
