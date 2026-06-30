@@ -231,6 +231,28 @@ const popularHomepageRouteSlugs = new Set([
   "odessa-yassy"
 ]);
 
+// Business-priority order for homepage route cards, by destination city.
+// Each tier lists the city name across UA / RU / EN spellings.
+const routeDestinationPriorityTiers: string[][] = [
+  ["кишинів", "кишинёв", "кишинев", "chisinau", "kishinev", "kyshyniv"],
+  ["варшава", "warsaw", "warszawa", "varshava"],
+  ["київ", "киев", "kyiv", "kiev"]
+];
+
+function getRouteDestinationPriority(toCity: string | null) {
+  const normalized = (toCity || "").trim().toLowerCase();
+
+  if (!normalized) {
+    return routeDestinationPriorityTiers.length;
+  }
+
+  const tierIndex = routeDestinationPriorityTiers.findIndex((tier) =>
+    tier.includes(normalized)
+  );
+
+  return tierIndex === -1 ? routeDestinationPriorityTiers.length : tierIndex;
+}
+
 type HomePageClientProps = {
   initialHomepageRoutes: HomepageRoute[];
   currentLanguage?: "ua" | "ru" | "en";
@@ -291,23 +313,30 @@ export default function HomePageClient({
       : isRu
       ? "Посмотреть все направления"
       : "Переглянути всі напрямки",
-    allDirectionsEyebrow: isRu ? "ВСЕ НАПРАВЛЕНИЯ" : "ВСІ НАПРЯМКИ",
-    chooseRoute: isRu ? "Выберите маршрут" : "Обрати маршрут",
-    chooseCity: isRu
-      ? "Выберите город подачи, чтобы посмотреть доступные маршруты."
-      : "Оберіть місто подачі, щоб переглянути доступні маршрути.",
-    clickRouteHint: isRu
-      ? "Нажмите на маршрут, чтобы посмотреть детали"
-      : "Натисніть на маршрут, щоб переглянути деталі",
-    routesFromCity: isRu ? "Маршруты из города" : "Маршрути з міста",
-    loadingRoutes: isRu ? "Загружаем маршруты..." : "Завантажуємо маршрути...",
-    noRoutes: isRu
+    allDirectionsEyebrow: isEn ? "ALL ROUTES" : isRu ? "ВСЕ НАПРАВЛЕНИЯ" : "ВСІ НАПРЯМКИ",
+    chooseRoute: isEn ? "Choose a route" : isRu ? "Выберите маршрут" : "Оберіть маршрут",
+    chooseCity: isEn
+      ? "Choose a pickup city and view available routes."
+      : isRu
+      ? "Выберите город подачи и посмотрите доступные маршруты."
+      : "Виберіть місто подачі та перегляньте доступні маршрути.",
+    routesFromCity: isEn ? "Routes from" : isRu ? "Маршруты из города" : "Маршрути з міста",
+    loadingRoutes: isEn ? "Loading routes..." : isRu ? "Загружаем маршруты..." : "Завантажуємо маршрути...",
+    noRoutes: isEn
+      ? "Routes for this city will appear soon."
+      : isRu
       ? "Маршруты для этого города скоро появятся."
       : "Маршрути для цього міста скоро з’являться.",
-    showAllRoutes: isRu ? "Показать все направления" : "Показати всі напрямки",
-    collapse: isRu ? "Свернуть" : "Згорнути",
-    fromPrefix: isRu ? "от" : "від",
-    onRequest: isRu ? "по запросу" : "за запитом",
+    showAllRoutes: isEn ? "Show all routes" : isRu ? "Показать все направления" : "Показати всі напрямки",
+    showAllRoutesText: isEn
+      ? "More routes across Ukraine and Europe"
+      : isRu
+      ? "Больше маршрутов по Украине и Европе"
+      : "Більше маршрутів по Україні та Європі",
+    showMore: isEn ? "Show more" : isRu ? "Показать больше" : "Показати більше",
+    collapse: isEn ? "Collapse" : isRu ? "Свернуть" : "Згорнути",
+    fromPrefix: isEn ? "from" : isRu ? "от" : "від",
+    onRequest: isEn ? "on request" : isRu ? "по запросу" : "за запитом",
     serviceEyebrow: isRu ? "ЧАСТНЫЙ VIP ТРАНСФЕР" : "ПРИВАТНИЙ VIP ТРАНСФЕР",
     serviceTitle: isRu ? "Премиальный сервис\nна каждом этапе" : "Преміальний сервіс\nна кожному етапі",
     serviceText: isRu
@@ -384,7 +413,7 @@ export default function HomePageClient({
       ? "Если вопрос срочный — нажмите «Позвонить сейчас»."
       : "Якщо питання термінове — натисніть “Подзвонити зараз”.",
     successCallButton: isRu ? "Позвонить сейчас" : "Подзвонити зараз",
-    popularBadge: isRu ? "Популярный" : "Популярний"
+    popularBadge: isEn ? "TOP" : isRu ? "ТОП" : "ТОП"
   };
   const heroBenefits: HeroBenefit[] = isEn
     ? [
@@ -415,6 +444,28 @@ export default function HomePageClient({
     { label: ui.navBlog, href: "/blog" }
   ];
   const mainRoutesHref = isRu ? "/ru/routes" : "/routes";
+  const primaryRouteCityLabels = isEn
+    ? ["Odesa", "Kyiv", "Chisinau", "Dnipro", "Krakow", "Lviv", "Warsaw", "Iasi"]
+    : isRu
+      ? ["Одесса", "Киев", "Кишинёв", "Кишинев", "Днепр", "Краков", "Львов", "Варшава", "Яссы"]
+      : ["Одеса", "Київ", "Кишинів", "Дніпро", "Краків", "Львів", "Варшава", "Ясси"];
+  const allRoutesTrustItems: HeroBenefit[] = isEn
+    ? [
+        { title: "Comfort cars", description: "Premium class", Icon: CarIcon },
+        { title: "Experienced drivers", description: "Professional service", Icon: ConciergeIcon },
+        { title: "Safe and reliable", description: "Your safety is our priority", Icon: ShieldIcon }
+      ]
+    : isRu
+      ? [
+          { title: "Комфортные авто", description: "Премиум класса", Icon: CarIcon },
+          { title: "Опытные водители", description: "Профессиональный сервис", Icon: ConciergeIcon },
+          { title: "Безопасно и надежно", description: "Ваша безопасность — наш приоритет", Icon: ShieldIcon }
+        ]
+      : [
+          { title: "Комфортні авто", description: "Преміум класу", Icon: CarIcon },
+          { title: "Досвідчені водії", description: "Професійний сервіс", Icon: ConciergeIcon },
+          { title: "Безпечно та надійно", description: "Ваша безпека — наш пріоритет", Icon: ShieldIcon }
+        ];
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const preferredRouteCityOrderLocalized = isRu
@@ -453,7 +504,8 @@ export default function HomePageClient({
     ? defaultPrimaryCity
     : initialHomepageRoutes.find((route) => route.from_city)?.from_city || defaultPrimaryCity;
   const [activeRouteCity, setActiveRouteCity] = useState<string>(defaultRouteCity);
-  const [showAllRoutes, setShowAllRoutes] = useState(false);
+  const [showMoreRoutesFromCity, setShowMoreRoutesFromCity] = useState(false);
+  const [isMobileViewport, setIsMobileViewport] = useState(false);
   const [homepageRoutes, setHomepageRoutes] = useState<HomepageRoute[]>(initialHomepageRoutes);
   const [routesLoaded, setRoutesLoaded] = useState(initialHomepageRoutes.length > 0);
   const homeFinalForm = useTransferForm({
@@ -494,10 +546,6 @@ export default function HomePageClient({
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
-
-  useEffect(() => {
-    setShowAllRoutes(false);
-  }, [activeRouteCity]);
 
   useEffect(() => {
     let isMounted = true;
@@ -569,17 +617,56 @@ export default function HomePageClient({
     }
   }, [activeRouteCity, routeCities, defaultPrimaryCity]);
 
+  useEffect(() => {
+    if (typeof window === "undefined" || !window.matchMedia) {
+      return;
+    }
+
+    const mediaQuery = window.matchMedia("(max-width: 767px)");
+    const updateViewport = () => setIsMobileViewport(mediaQuery.matches);
+
+    updateViewport();
+    mediaQuery.addEventListener("change", updateViewport);
+
+    return () => mediaQuery.removeEventListener("change", updateViewport);
+  }, []);
+
+  // Issue #5: collapse the per-city route list whenever the active city changes.
+  useEffect(() => {
+    setShowMoreRoutesFromCity(false);
+  }, [activeRouteCity]);
+
   const buildRouteHref = (slug: string) => `${routeHrefPrefix}/${slug}`;
-  const visibleRouteLimit = 10;
+  const primaryRouteCities = primaryRouteCityLabels.filter((city) => routeCities.includes(city));
+  const orderedRouteCities = [
+    ...primaryRouteCities,
+    ...routeCities.filter((city) => !primaryRouteCities.includes(city))
+  ];
   const activeRoutes = homepageRoutes.filter(
     (route) => route.from_city === activeRouteCity && route.to_city
   );
-  const visibleRoutes = showAllRoutes
-    ? activeRoutes
-    : activeRoutes.slice(0, visibleRouteLimit);
-  const hasMoreRoutes = activeRoutes.length > visibleRouteLimit;
-  const highlightedRouteLabels = activeRoutes
-    .slice(0, Math.min(3, activeRoutes.length))
+  // Issue #2: prioritise destinations Chisinau → Warsaw → Kyiv, then alphabetical.
+  const sortedActiveRoutes = [...activeRoutes].sort((left, right) => {
+    const leftPriority = getRouteDestinationPriority(left.to_city);
+    const rightPriority = getRouteDestinationPriority(right.to_city);
+
+    if (leftPriority !== rightPriority) {
+      return leftPriority - rightPriority;
+    }
+
+    return (left.to_city || "").localeCompare(
+      right.to_city || "",
+      isRu ? "ru" : "uk"
+    );
+  });
+  // Issue #3: show 9 cards on desktop / 5 on mobile, expandable to every route.
+  const initialRouteLimit = isMobileViewport ? 5 : 9;
+  const hasMoreRoutes = sortedActiveRoutes.length > initialRouteLimit;
+  const visibleRoutes = showMoreRoutesFromCity
+    ? sortedActiveRoutes
+    : sortedActiveRoutes.slice(0, initialRouteLimit);
+  const highlightedRouteLabels = sortedActiveRoutes
+    .slice(0, Math.min(3, sortedActiveRoutes.length))
     .map((route) => `${route.from_city} → ${route.to_city}`);
   const serviceCardsLocalized = isRu
     ? [
@@ -883,126 +970,194 @@ export default function HomePageClient({
             id="directions"
             className="relative z-10 mt-24 md:mt-28 xl:mt-32"
           >
-            <div className="all-routes-shell rounded-[30px] px-5 py-6 sm:px-7 md:px-9 md:py-8 lg:px-12 lg:py-10">
-              <div className="max-w-[44rem]">
-                <p className="eyebrow-lux">{ui.allDirectionsEyebrow}</p>
-                <h2 className="section-title-lux mt-4 text-[2.05rem] font-medium leading-[1.06] tracking-[-0.04em] text-[var(--text)] md:text-[2.55rem] lg:text-[2.9rem]">
-                  {ui.chooseRoute}
-                </h2>
-                <p className="mt-4 max-w-[42rem] text-[0.97rem] leading-[1.8] text-[var(--muted)]">
-                  {ui.chooseCity}
-                </p>
+            <div className="all-routes-shell rounded-[30px] px-4 py-5 sm:px-6 md:px-8 md:py-8 lg:px-10 lg:py-10 xl:px-12">
+              <div className="all-routes-hero">
+                <div className="all-routes-copy">
+                  <p className="all-routes-eyebrow">
+                    <PlaneMiniIcon className="h-[15px] w-[15px]" />
+                    <span>{ui.allDirectionsEyebrow}</span>
+                  </p>
+                  <h2 className="all-routes-title">
+                    {ui.chooseRoute}
+                  </h2>
+                  <p className="all-routes-subtitle">
+                    {ui.chooseCity}
+                  </p>
+                </div>
+
+                <div className="all-routes-visual" aria-hidden="true">
+                  <Image
+                    src={desktopHero}
+                    alt=""
+                    fill
+                    className="object-cover object-[70%_center]"
+                    sizes="(max-width: 767px) 100vw, 44vw"
+                  />
+                  <div className="all-routes-visual-overlay" />
+                  <div className="all-routes-map-line all-routes-map-line-one" />
+                  <div className="all-routes-map-line all-routes-map-line-two" />
+                  <span className="all-routes-location-pin">
+                    <MapPinStrokeIcon className="h-[24px] w-[24px]" />
+                  </span>
+                </div>
               </div>
 
-              <div className="routes-tabs-row mt-7 flex gap-2.5 overflow-x-auto pb-1">
-                {routeCities.map((city) => (
+              <div className="routes-tabs-row all-routes-tabs mt-7">
+                {orderedRouteCities.map((city) => (
                   <button
                     key={city}
                     type="button"
                     onClick={() => setActiveRouteCity(city)}
                     className={`routes-tab ${activeRouteCity === city ? "is-active" : ""}`}
                   >
-                    {city}
+                    <MapPinStrokeIcon className="routes-tab-icon" />
+                    <span>{city}</span>
                   </button>
                 ))}
               </div>
 
-              <p className="mt-5 text-[0.82rem] leading-[1.7] text-[rgba(183,178,168,0.72)]">
-                {ui.clickRouteHint}
-              </p>
+              <div className="all-routes-list-shell mt-8">
+                <div className="all-routes-list-header">
+                  <div className="all-routes-list-title-wrap">
+                    <span className="all-routes-list-icon">
+                      <RouteStrokeIcon className="h-[22px] w-[22px]" />
+                    </span>
+                    <h3 className="all-routes-list-title">
+                      {ui.routesFromCity} {activeRouteCity}
+                    </h3>
+                  </div>
+                </div>
 
-              <div className="mt-7 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-                <p className="md:col-span-2 xl:col-span-3 text-[0.76rem] font-bold uppercase tracking-[0.18em] text-[var(--champagne)]">
-                  {ui.routesFromCity} {activeRouteCity}:
-                </p>
                 {!routesLoaded ? (
-                  <p className="md:col-span-2 xl:col-span-3 text-[0.94rem] leading-[1.7] text-[rgba(183,178,168,0.72)]">
+                  <p className="all-routes-state-text">
                     {ui.loadingRoutes}
                   </p>
                 ) : visibleRoutes.length === 0 ? (
-                  <p className="md:col-span-2 xl:col-span-3 text-[0.94rem] leading-[1.7] text-[rgba(183,178,168,0.72)]">
+                  <p className="all-routes-state-text">
                     {ui.noRoutes}
                   </p>
                 ) : (
-                  visibleRoutes.map((route) => {
-                    const routeLabel = `${route.from_city} → ${route.to_city}`;
-                    const routePrice =
-                      route.price_from != null
-                        ? `${ui.fromPrefix} €${route.price_from}`
-                        : ui.onRequest;
-                    const routeDuration = route.duration?.trim() || null;
-                    const isPopular = isPopularHomepageRoute(route.slug);
+                  <div className="all-routes-cards-grid">
+                    {visibleRoutes.map((route) => {
+                      const routeLabel = `${route.from_city} → ${route.to_city}`;
+                      const routePriceValue =
+                        route.price_from != null ? `€${route.price_from}` : ui.onRequest;
+                      const routeDuration = route.duration?.trim() || null;
+                      const isPopular = isPopularHomepageRoute(route.slug);
+                      const cardClassName = `all-route-card all-route-card-item ${
+                        highlightedRouteLabels.includes(routeLabel) ? "is-highlighted" : ""
+                      }`;
 
-                    if (!route.slug) {
-                      return (
-                        <div
-                          key={routeLabel}
-                          className={`all-route-chip all-route-card opacity-70 ${
-                            highlightedRouteLabels.includes(routeLabel)
-                              ? "is-highlighted"
-                              : ""
-                          }`}
-                        >
-                          <div className="all-route-card-top">
-                            <span className="all-route-card-title">{routeLabel}</span>
-                            {isPopular ? (
-                              <span className="all-route-badge">{ui.popularBadge}</span>
-                            ) : null}
-                          </div>
-                          <div className="all-route-card-meta">
-                            <span className="all-route-card-price">{routePrice}</span>
-                            {routeDuration ? (
-                              <span className="all-route-card-duration">{routeDuration}</span>
-                            ) : null}
-                          </div>
-                        </div>
-                      );
-                    }
-
-                    return (
-                      <a
-                        key={route.slug}
-                        href={buildRouteHref(route.slug)}
-                        onClick={() =>
-                          trackRouteClick({
-                            route: formatRouteId(routeLabel),
-                            sourceBlock: "all_routes",
-                            pageType: "home"
-                          })
-                        }
-                        className={`all-route-chip all-route-card ${
-                          highlightedRouteLabels.includes(routeLabel)
-                            ? "is-highlighted"
-                            : ""
-                        }`}
-                      >
-                        <div className="all-route-card-top">
-                          <span className="all-route-card-title">{routeLabel}</span>
+                      const cardContent = (
+                        <>
                           {isPopular ? (
                             <span className="all-route-badge">{ui.popularBadge}</span>
                           ) : null}
-                        </div>
-                        <div className="all-route-card-meta">
-                          <span className="all-route-card-price">{routePrice}</span>
-                          {routeDuration ? (
-                            <span className="all-route-card-duration">{routeDuration}</span>
-                          ) : null}
-                        </div>
-                      </a>
-                    );
-                  })
+                          <span className="all-route-card-icon">
+                            <MapPinStrokeIcon className="h-[23px] w-[23px]" />
+                          </span>
+                          <span className="all-route-card-main">
+                            <span className="all-route-card-title">{routeLabel}</span>
+                            {routeDuration ? (
+                              <span className="all-route-card-duration">
+                                <ClockIcon className="h-[13px] w-[13px]" />
+                                <span>{routeDuration}</span>
+                              </span>
+                            ) : null}
+                          </span>
+                          <span className="all-route-card-price-wrap">
+                            {route.price_from != null ? (
+                              <span className="all-route-card-price-prefix">{ui.fromPrefix}</span>
+                            ) : null}
+                            <span className="all-route-card-price">{routePriceValue}</span>
+                          </span>
+                          <span className="all-route-card-arrow" aria-hidden="true">
+                            <ArrowUpRightIcon className="h-[18px] w-[18px]" />
+                          </span>
+                        </>
+                      );
+
+                      if (!route.slug) {
+                        return (
+                          <div key={routeLabel} className={`${cardClassName} opacity-70`}>
+                            {cardContent}
+                          </div>
+                        );
+                      }
+
+                      return (
+                        <a
+                          key={route.slug}
+                          href={buildRouteHref(route.slug)}
+                          aria-label={routeLabel}
+                          onClick={() =>
+                            trackRouteClick({
+                              route: formatRouteId(routeLabel),
+                              sourceBlock: "all_routes",
+                              pageType: "home"
+                            })
+                          }
+                          className={cardClassName}
+                        >
+                          {cardContent}
+                        </a>
+                      );
+                    })}
+
+                    {hasMoreRoutes ? (
+                      <button
+                        type="button"
+                        onClick={() => setShowMoreRoutesFromCity((current) => !current)}
+                        className="all-routes-showmore"
+                        aria-expanded={showMoreRoutesFromCity}
+                      >
+                        <span className="all-routes-showmore-label">
+                          {showMoreRoutesFromCity ? ui.collapse : ui.showMore}
+                        </span>
+                        <span className="all-routes-showmore-icon" aria-hidden="true">
+                          <ChevronDownIcon className="h-[16px] w-[16px]" />
+                        </span>
+                      </button>
+                    ) : null}
+
+                    <Link
+                      href={mainRoutesHref}
+                      onClick={() =>
+                        trackCtaClick({
+                          ctaType: "route_link",
+                          location: "all_routes",
+                          pageType: "home",
+                          target: mainRoutesHref
+                        })
+                      }
+                      className="all-routes-cta-card"
+                    >
+                      <span className="all-routes-cta-icon">
+                        <GlobeIcon className="h-[28px] w-[28px]" />
+                      </span>
+                      <span className="all-routes-cta-copy">
+                        <span className="all-routes-cta-title">{ui.showAllRoutes}</span>
+                        <span className="all-routes-cta-text">{ui.showAllRoutesText}</span>
+                      </span>
+                      <span className="all-routes-cta-arrow" aria-hidden="true">
+                        <ArrowUpRightIcon className="h-[22px] w-[22px]" />
+                      </span>
+                    </Link>
+                  </div>
                 )}
               </div>
 
-              {hasMoreRoutes ? (
-                <button
-                  type="button"
-                  onClick={() => setShowAllRoutes((current) => !current)}
-                  className="button-outline mt-7 inline-flex h-11 items-center justify-center rounded-full px-5 text-[0.78rem] font-semibold tracking-[0.1em]"
-                >
-                  {showAllRoutes ? ui.collapse : ui.showAllRoutes}
-                </button>
-              ) : null}
+              <div className="all-routes-trust-strip mt-7">
+                {allRoutesTrustItems.map(({ title, description, Icon }) => (
+                  <div key={title} className="all-routes-trust-item">
+                    <Icon className="all-routes-trust-icon" />
+                    <span>
+                      <strong>{title}</strong>
+                      <span>{description}</span>
+                    </span>
+                  </div>
+                ))}
+              </div>
             </div>
           </section>
 
@@ -1557,6 +1712,40 @@ export default function HomePageClient({
   );
 }
 
+function PlaneMiniIcon({ className = "h-4 w-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+      <path
+        d="m3.8 13.1 16.4-8.2-4.8 15.2-3.3-6.1-6.4 2.9-1.9-3.8Z"
+        stroke="currentColor"
+        strokeWidth="1.45"
+        strokeLinejoin="round"
+      />
+      <path
+        d="m12.1 14 8.1-9.1"
+        stroke="currentColor"
+        strokeWidth="1.45"
+        strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function GlobeIcon({ className = "h-4 w-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+      <circle cx="12" cy="12" r="8.2" stroke="currentColor" strokeWidth="1.35" />
+      <path
+        d="M4 12h16M12 3.8c2.1 2.1 3.1 4.8 3.1 8.2s-1 6.1-3.1 8.2c-2.1-2.1-3.1-4.8-3.1-8.2S9.9 5.9 12 3.8Z"
+        stroke="currentColor"
+        strokeWidth="1.35"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
 function TelegramIcon({ className = "h-4 w-4" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
@@ -1786,6 +1975,20 @@ function ArrowUpRightIcon({ className = "h-4 w-4" }: IconProps) {
         d="M8 16 16 8M10 8h6v6"
         stroke="currentColor"
         strokeWidth="1.45"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
+}
+
+function ChevronDownIcon({ className = "h-4 w-4" }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+      <path
+        d="m6 9.5 6 6 6-6"
+        stroke="currentColor"
+        strokeWidth="1.6"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

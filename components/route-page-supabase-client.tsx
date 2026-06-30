@@ -7,8 +7,8 @@ import { useEffect, useState } from "react";
 import routeHeroDesktop from "../img/main-2-screen-desk.png";
 import routeHeroMobile from "../img/main-2-screen-mob.png";
 import airportImage from "../img/airport.png";
-import comfortCarImage from "../img/class-1.png";
-import businessCarImage from "../img/class-2.png";
+import comfortCarImage from "../img/comfort.png";
+import businessCarImage from "../img/business.png";
 import premiumCarImage from "../img/class-3.png";
 import minivanCarImage from "../img/class-4.png";
 import routeInfoFallbackImage from "../img/route-map-fallback-2.png";
@@ -184,7 +184,7 @@ const carClassCardTemplates: Omit<CarClassCardData, "price">[] = [
     title: "Комфорт",
     description: "Зручний салон для індивідуальних поїздок.",
     image: comfortCarImage,
-    models: ["VW Passat", "Skoda Octavia", "Sonata", "Kia Optima"],
+    models: ["VW Passat B8 R-Line", "Toyota Camry 55", "Hyundai Sonata", "Kia Optima", "Ford Fusion"],
     seats: "3",
     luggage: "2–3",
     climate: "Клімат-контроль"
@@ -193,7 +193,7 @@ const carClassCardTemplates: Omit<CarClassCardData, "price">[] = [
     title: "Бізнес",
     description: "Підвищений рівень тиші та простору.",
     image: businessCarImage,
-    models: ["Toyota Camry", "Nissan Teana", "Skoda Superb", "VW Passat B8"],
+    models: ["Toyota Avalon 2020", "Toyota Camry 70", "Skoda Superb", "Lexus ES"],
     seats: "3",
     luggage: "2–3",
     climate: "Клімат-контроль"
@@ -372,6 +372,7 @@ export default function RoutePageSupabaseClient({
       ? "Другие популярные направления с подачей из"
       : "Інші популярні напрямки з подачею з",
     relatedCta: isRu ? "Подробнее" : "Детальніше",
+    allRoutes: isRu ? "Все маршруты" : "Всі маршрути",
     footerCompany: isRu ? "Компания" : "Компанія",
     footerContacts: isRu ? "Контакты" : "Контакти",
     footerLanguages: isRu ? "Языки" : "Мови",
@@ -407,7 +408,9 @@ export default function RoutePageSupabaseClient({
     chooseDate: isRu ? "Выберите дату" : "Оберіть дату",
     onRequest: isRu ? "по запросу" : "за запитом",
     passengersShort: "пас.",
-    luggageShort: isRu ? "багаж" : "багаж"
+    luggageShort: isRu ? "багаж" : "багаж",
+    climateShort: isRu ? "Климат" : "Клімат",
+    carCardCta: isRu ? "Выбрать" : "Обрати"
   };
   const navItems = [
     { label: ui.navHome, href: homeHref },
@@ -693,7 +696,7 @@ export default function RoutePageSupabaseClient({
   const relatedRouteCards: SimilarRoute[] = relatedRoutes
     .filter((route) => route.slug && route.from_city && route.to_city)
     .map((route) => ({
-      title: `${route.from_city} → ${route.to_city}`,
+      title: `${route.from_city} — ${route.to_city}`,
       price:
         route.price_from != null
           ? `${ui.fromPrefix} €${route.price_from}`
@@ -1001,7 +1004,7 @@ export default function RoutePageSupabaseClient({
           <section className="relative z-10 mt-12 md:mt-16 xl:mt-20">
             <div className="route-pricing-shell rounded-[28px] px-5 py-7 sm:px-7 md:px-9 lg:px-10 lg:py-9">
               <div className="grid gap-7 lg:grid-cols-[minmax(0,0.4fr)_minmax(0,0.6fr)] lg:items-stretch lg:gap-8 xl:gap-10">
-                <div className="flex flex-col lg:min-h-full">
+                <div className="route-pricing-aside flex flex-col lg:min-h-full">
                   <p className="eyebrow-lux">{ui.pricingEyebrow}</p>
 
                   <div className="mt-3.5 flex flex-col gap-5 lg:mt-4 lg:min-h-0 lg:flex-1 lg:justify-between">
@@ -1094,10 +1097,21 @@ export default function RoutePageSupabaseClient({
                               src={card.image}
                               alt={card.title}
                               className="route-inline-class-image-el"
+                              // Source car photos come in two framings: wide (car fills the
+                              // frame) and tall/portrait (car sits high with whitespace padding).
+                              // Flag tall sources so CSS can normalize them to the same rendered
+                              // car size and baseline as the wide ones.
+                              data-car-frame={
+                                card.image.height > card.image.width ? "tall" : "wide"
+                              }
                               sizes="(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 18vw"
                             />
                           </button>
                         </div>
+
+                        <p className="route-inline-class-models-mobile">
+                          {card.models.slice(0, 2).join(" / ")}
+                        </p>
 
                         <div className="route-inline-class-specs">
                           <span className="route-inline-class-chip">
@@ -1110,13 +1124,33 @@ export default function RoutePageSupabaseClient({
                           </span>
                           <span className="route-inline-class-chip route-inline-class-chip--wide">
                             <ClimateMiniIcon className="h-[17px] w-[17px]" />
-                            <span>{card.climate}</span>
+                            <span className="route-inline-class-chip-label-full">{card.climate}</span>
+                            <span className="route-inline-class-chip-label-short">{ui.climateShort}</span>
                           </span>
                         </div>
 
                         <div className="route-inline-class-price">
-                          <span className="route-inline-class-price-prefix">{ui.fromPrefix}</span>
-                          <span className="route-inline-class-price-value">{card.price}</span>
+                          <div className="route-inline-class-price-main">
+                            <span className="route-inline-class-price-prefix">{ui.fromPrefix}</span>
+                            <span className="route-inline-class-price-value">{card.price}</span>
+                          </div>
+                          <a
+                            href="#route-booking-final"
+                            onClick={() =>
+                              trackCtaClick({
+                                ctaType: "order",
+                                location: "car_class_card",
+                                pageType: "route",
+                                target: "route-booking-final"
+                              })
+                            }
+                            className="route-inline-class-select"
+                          >
+                            <span>{ui.carCardCta}</span>
+                            <span aria-hidden="true" className="route-inline-class-select-arrow">
+                              ↗
+                            </span>
+                          </a>
                         </div>
                       </article>
                     ))}
@@ -1145,116 +1179,6 @@ export default function RoutePageSupabaseClient({
                     </p>
                   </article>
                 ))}
-              </div>
-            </div>
-          </section>
-
-          <section className="relative z-10 mt-12 md:mt-16">
-            <div
-              className="route-info-shell relative overflow-hidden rounded-[30px] px-5 py-8 sm:px-7 md:px-8 lg:min-h-[450px] lg:px-12 lg:py-12"
-              style={{
-                backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${routeInfoBackground})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat"
-              }}
-            >
-
-              <div className="route-info-content relative z-10 max-w-[29rem] lg:max-w-[30rem]">
-                <p className="eyebrow-lux">{ui.routeInfoEyebrow}</p>
-                <p className="mt-4 max-w-[28rem] text-[0.92rem] leading-[1.72] text-[var(--muted)]">
-                  {isRu
-                    ? `Маршрут ${routeLabel} подходит для частных клиентов, бизнес-поездок и трансферов в аэропорт Кишинёва. При необходимости доступен индивидуальный водитель ${fromCity} ${toCity} с подачей авто под ваш график.`
-                    : `Маршрут ${routeLabel} підходить для приватних клієнтів, бізнес-поїздок та трансферів в аеропорт Кишинева. За потреби доступний індивідуальний водій ${fromCity} ${toCity} з подачею авто під ваш графік.`}
-                </p>
-                <div className="mt-6 space-y-5">
-                  {routeDetailsLocalized.map(({ title, description, Icon }) => (
-                    <div key={title} className="route-info-item">
-                      <div className="route-info-item-icon">
-                        <Icon className="h-[18px] w-[18px] text-[var(--champagne)]" />
-                      </div>
-                      <div>
-                        <h3 className="text-[0.98rem] font-semibold leading-[1.3] text-[var(--text)]">
-                          {title}
-                        </h3>
-                        <p className="mt-2 text-[0.9rem] leading-[1.72] text-[var(--muted)]">
-                          {description}
-                        </p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-                <p className="mt-6 max-w-[29rem] text-[0.9rem] leading-[1.72] text-[var(--muted)]">
-                  {isRu
-                    ? `Маршрут ${routeLabel} проходит через пограничные пункты с учётом трафика и времени прохождения границы. Водитель подбирает оптимальный путь для быстрой и комфортной поездки.`
-                    : `Маршрут ${routeLabel} проходить через прикордонні пункти з урахуванням трафіку та часу проходження кордону. Водій підбирає оптимальний шлях для швидкої та комфортної поїздки.`}
-                </p>
-                <p className="mt-4 text-[0.84rem] leading-[1.7] text-[rgba(183,178,168,0.84)]">
-                  {ui.seeAlso}{" "}
-                  <Link
-                    href={additionalRouteLinks[0].href}
-                    className="text-[var(--soft-gold)] transition hover:text-[var(--champagne)]"
-                  >
-                    {additionalRouteLinks[0].label}
-                  </Link>
-                  {isRu ? " и " : " та "}
-                  <Link
-                    href={additionalRouteLinks[1].href}
-                    className="text-[var(--soft-gold)] transition hover:text-[var(--champagne)]"
-                  >
-                    {additionalRouteLinks[1].label}
-                  </Link>
-                  .
-                </p>
-              </div>
-            </div>
-          </section>
-
-          <section className="relative z-10 mt-12 md:mt-16">
-            <div className="route-benefits-strip rounded-[24px] px-4 py-3.5 sm:px-5 md:px-6 md:py-4 lg:px-7 lg:py-[1.125rem]">
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:gap-0">
-                {benefitItemsLocalized.map(({ title, description, Icon }) => (
-                  <article key={title} className="route-benefit-item">
-                    <div className="route-benefit-icon">
-                      <Icon className="h-[18px] w-[18px] text-[var(--champagne)]" />
-                    </div>
-                    <div className="mt-4">
-                      <h3 className="text-[0.94rem] font-semibold leading-[1.3] text-[var(--text)]">
-                        {title}
-                      </h3>
-                      <p className="mt-2 text-[0.84rem] leading-[1.6] text-[var(--muted)]">
-                        {description}
-                      </p>
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          <section className="relative z-10 mt-12 md:mt-16">
-            <div className="route-airport-shell route-airport-panel relative min-h-[300px] overflow-hidden rounded-[28px] px-5 py-8 sm:px-7 md:px-9 lg:px-11 lg:py-10">
-              <Image
-                src={airportImage}
-                alt={isRu ? "Трансфер в аэропорт Кишинёва" : "Трансфер в аеропорт Кишинева"}
-                fill
-                className="object-cover object-[72%_center] md:object-[70%_center] lg:object-right"
-                sizes="100vw"
-              />
-              <div className="route-airport-overlay absolute inset-0" />
-
-              <div className="relative z-10 max-w-[28.75rem]">
-                <p className="eyebrow-lux">{ui.airportEyebrow}</p>
-                <div className="mt-6 space-y-3.5">
-                  {airportFeaturesLocalized.map((feature) => (
-                    <div key={feature} className="route-factor-item">
-                      <span className="route-factor-dot" aria-hidden="true" />
-                      <span className="text-[0.98rem] leading-[1.7] text-[var(--muted)]">
-                        {feature}
-                      </span>
-                    </div>
-                  ))}
-                </div>
               </div>
             </div>
           </section>
@@ -1449,6 +1373,116 @@ export default function RoutePageSupabaseClient({
           </section>
 
           <section className="relative z-10 mt-12 md:mt-16">
+            <div
+              className="route-info-shell relative overflow-hidden rounded-[30px] px-5 py-8 sm:px-7 md:px-8 lg:min-h-[450px] lg:px-12 lg:py-12"
+              style={{
+                backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${routeInfoBackground})`,
+                backgroundSize: "cover",
+                backgroundPosition: "center",
+                backgroundRepeat: "no-repeat"
+              }}
+            >
+
+              <div className="route-info-content relative z-10 max-w-[29rem] lg:max-w-[30rem]">
+                <p className="eyebrow-lux">{ui.routeInfoEyebrow}</p>
+                <p className="mt-4 max-w-[28rem] text-[0.92rem] leading-[1.72] text-[var(--muted)]">
+                  {isRu
+                    ? `Маршрут ${routeLabel} подходит для частных клиентов, бизнес-поездок и трансферов в аэропорт Кишинёва. При необходимости доступен индивидуальный водитель ${fromCity} ${toCity} с подачей авто под ваш график.`
+                    : `Маршрут ${routeLabel} підходить для приватних клієнтів, бізнес-поїздок та трансферів в аеропорт Кишинева. За потреби доступний індивідуальний водій ${fromCity} ${toCity} з подачею авто під ваш графік.`}
+                </p>
+                <div className="mt-6 space-y-5">
+                  {routeDetailsLocalized.map(({ title, description, Icon }) => (
+                    <div key={title} className="route-info-item">
+                      <div className="route-info-item-icon">
+                        <Icon className="h-[18px] w-[18px] text-[var(--champagne)]" />
+                      </div>
+                      <div>
+                        <h3 className="text-[0.98rem] font-semibold leading-[1.3] text-[var(--text)]">
+                          {title}
+                        </h3>
+                        <p className="mt-2 text-[0.9rem] leading-[1.72] text-[var(--muted)]">
+                          {description}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <p className="mt-6 max-w-[29rem] text-[0.9rem] leading-[1.72] text-[var(--muted)]">
+                  {isRu
+                    ? `Маршрут ${routeLabel} проходит через пограничные пункты с учётом трафика и времени прохождения границы. Водитель подбирает оптимальный путь для быстрой и комфортной поездки.`
+                    : `Маршрут ${routeLabel} проходить через прикордонні пункти з урахуванням трафіку та часу проходження кордону. Водій підбирає оптимальний шлях для швидкої та комфортної поїздки.`}
+                </p>
+                <p className="mt-4 text-[0.84rem] leading-[1.7] text-[rgba(183,178,168,0.84)]">
+                  {ui.seeAlso}{" "}
+                  <Link
+                    href={additionalRouteLinks[0].href}
+                    className="text-[var(--soft-gold)] transition hover:text-[var(--champagne)]"
+                  >
+                    {additionalRouteLinks[0].label}
+                  </Link>
+                  {isRu ? " и " : " та "}
+                  <Link
+                    href={additionalRouteLinks[1].href}
+                    className="text-[var(--soft-gold)] transition hover:text-[var(--champagne)]"
+                  >
+                    {additionalRouteLinks[1].label}
+                  </Link>
+                  .
+                </p>
+              </div>
+            </div>
+          </section>
+
+          <section className="relative z-10 mt-12 md:mt-16">
+            <div className="route-benefits-strip rounded-[24px] px-4 py-3.5 sm:px-5 md:px-6 md:py-4 lg:px-7 lg:py-[1.125rem]">
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5 lg:gap-0">
+                {benefitItemsLocalized.map(({ title, description, Icon }) => (
+                  <article key={title} className="route-benefit-item">
+                    <div className="route-benefit-icon">
+                      <Icon className="h-[18px] w-[18px] text-[var(--champagne)]" />
+                    </div>
+                    <div className="mt-4">
+                      <h3 className="text-[0.94rem] font-semibold leading-[1.3] text-[var(--text)]">
+                        {title}
+                      </h3>
+                      <p className="mt-2 text-[0.84rem] leading-[1.6] text-[var(--muted)]">
+                        {description}
+                      </p>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section className="relative z-10 mt-12 md:mt-16">
+            <div className="route-airport-shell route-airport-panel relative min-h-[300px] overflow-hidden rounded-[28px] px-5 py-8 sm:px-7 md:px-9 lg:px-11 lg:py-10">
+              <Image
+                src={airportImage}
+                alt={isRu ? "Трансфер в аэропорт Кишинёва" : "Трансфер в аеропорт Кишинева"}
+                fill
+                className="object-cover object-[72%_center] md:object-[70%_center] lg:object-right"
+                sizes="100vw"
+              />
+              <div className="route-airport-overlay absolute inset-0" />
+
+              <div className="relative z-10 max-w-[28.75rem]">
+                <p className="eyebrow-lux">{ui.airportEyebrow}</p>
+                <div className="mt-6 space-y-3.5">
+                  {airportFeaturesLocalized.map((feature) => (
+                    <div key={feature} className="route-factor-item">
+                      <span className="route-factor-dot" aria-hidden="true" />
+                      <span className="text-[0.98rem] leading-[1.7] text-[var(--muted)]">
+                        {feature}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section className="relative z-10 mt-12 md:mt-16">
             <div className="panel-soft rounded-[28px] px-5 py-6 sm:px-7 md:px-9 md:py-8 lg:px-12">
               <p className="eyebrow-lux">{`${ui.seoEyebrowPrefix} ${routeLabel.toUpperCase()}`}</p>
               <div className="mt-5 max-w-[58rem] space-y-4 text-[0.96rem] leading-[1.85] text-[var(--muted)]">
@@ -1461,7 +1495,7 @@ export default function RoutePageSupabaseClient({
 
           {relatedRouteCards.length > 0 ? (
             <section className="relative z-10 mt-12 md:mt-16">
-              <div className="max-w-[34rem]">
+              <div className="similar-routes-head max-w-[34rem]">
                 <p className="eyebrow-lux">{ui.relatedEyebrow}</p>
                 <h2 className="section-title-lux mt-4 text-[2rem] font-medium leading-[1.08] tracking-[-0.04em] text-[var(--text)] md:text-[2.35rem]">
                   {`${ui.relatedTitlePrefix} ${sourceCityLabel}`}
@@ -1510,6 +1544,20 @@ export default function RoutePageSupabaseClient({
                   ))}
                 </div>
               </div>
+
+              <Link
+                href={`${routeHrefPrefix}/routes`}
+                onClick={() =>
+                  trackRouteClick({
+                    route: "all_routes",
+                    sourceBlock: "similar_routes",
+                    pageType: "route"
+                  })
+                }
+                className="similar-routes-all button-outline mt-4 flex h-14 w-full items-center justify-center rounded-[18px] px-7 text-[0.92rem] font-semibold tracking-[0.04em]"
+              >
+                {ui.allRoutes}
+              </Link>
             </section>
           ) : null}
 
