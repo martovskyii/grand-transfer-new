@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import { HeaderPhoneLink, LanguageSwitcher, SiteFooter } from "./site-ui";
+import { JsonLd } from "./json-ld";
+import { buildBreadcrumbSchema } from "../lib/structured-data";
 
 type BreadcrumbItem = {
   label: string;
@@ -70,6 +72,11 @@ export function BlogStaticShell({
     ua: "/",
     ru: "/ru"
   };
+  const breadcrumbSchema = breadcrumbs?.length
+    ? buildBreadcrumbSchema(
+        breadcrumbs.map((item) => ({ name: item.label, path: item.href }))
+      )
+    : null;
 
   useEffect(() => {
     const originalBodyOverflow = document.body.style.overflow;
@@ -101,6 +108,7 @@ export function BlogStaticShell({
 
   return (
     <>
+      {breadcrumbSchema ? <JsonLd data={breadcrumbSchema} /> : null}
       <main className="relative overflow-hidden pb-14 md:pb-24">
         <div className="pointer-events-none absolute inset-x-0 top-[-8rem] h-[26rem] bg-[radial-gradient(circle_at_top,rgba(216,185,130,0.18),transparent_42%)]" />
         <div className="pointer-events-none absolute left-[-12rem] top-[22rem] h-[30rem] w-[30rem] rounded-full bg-[radial-gradient(circle,rgba(29,42,31,0.42),transparent_65%)] blur-3xl" />

@@ -35,6 +35,8 @@ import {
 import { supabase } from "../lib/supabase";
 import { useTransferForm } from "../lib/use-transfer-form";
 import { TELEGRAM_URL } from "../lib/contact-links";
+import { JsonLd } from "../components/json-ld";
+import { buildFaqSchema, buildHowToSchema } from "../lib/structured-data";
 
 type IconProps = {
   className?: string;
@@ -738,6 +740,16 @@ export default function HomePageClient({
     faqItemsLocalized.slice(0, faqMidpointLocalized),
     faqItemsLocalized.slice(faqMidpointLocalized)
   ];
+  const homeStructuredData = [
+    buildFaqSchema(faqItemsLocalized),
+    buildHowToSchema(
+      ui.howTitle,
+      processStepsLocalized.map((step) => ({
+        name: step.title,
+        text: step.description
+      }))
+    )
+  ];
 
   function isPopularHomepageRoute(slug: string | null) {
     return typeof slug === "string" && popularHomepageRouteSlugs.has(slug);
@@ -756,6 +768,7 @@ export default function HomePageClient({
 
   return (
     <>
+      <JsonLd data={homeStructuredData} />
       <main className="relative overflow-hidden pb-14 md:pb-24">
         <div className="pointer-events-none absolute inset-x-0 top-[-8rem] h-[26rem] bg-[radial-gradient(circle_at_top,rgba(216,185,130,0.18),transparent_42%)]" />
         <div className="pointer-events-none absolute left-[-12rem] top-[22rem] h-[30rem] w-[30rem] rounded-full bg-[radial-gradient(circle,rgba(29,42,31,0.42),transparent_65%)] blur-3xl" />
@@ -828,7 +841,7 @@ export default function HomePageClient({
               <div className="absolute inset-0">
                 <Image
                   src={desktopHero}
-                  alt=""
+                  alt="Автомобіль Grand Transfer для міжнародного VIP трансферу"
                   priority
                   fill
                   className="hidden object-cover object-[82%_center] md:block lg:object-[76%_center] xl:object-[70%_center]"
@@ -836,7 +849,7 @@ export default function HomePageClient({
                 />
                 <Image
                   src={mobileHero}
-                  alt=""
+                  alt="Автомобіль Grand Transfer для міжнародного VIP трансферу"
                   priority
                   fill
                   className="object-cover object-bottom md:hidden"

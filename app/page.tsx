@@ -1,7 +1,16 @@
+import type { Metadata } from "next";
 import HomePageClient, { type HomepageRoute } from "./home-page-client";
 import { supabase } from "../lib/supabase";
+import { buildPageMetadata } from "../lib/seo";
 
 export const dynamic = "force-dynamic";
+
+export const metadata: Metadata = buildPageMetadata({
+  title: "VIP трансфери Україна — Молдова — Польща | Grand Transfer",
+  description:
+    "Приватні VIP трансфери з України до Молдови, Польщі та Європи. Комфортні авто, досвідчені водії, допомога на кордоні та бронювання 24/7.",
+  path: "/"
+});
 
 async function getHomepageRoutes(): Promise<HomepageRoute[]> {
   if (!supabase) {

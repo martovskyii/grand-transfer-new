@@ -21,6 +21,12 @@ import {
 } from "./lux-form-fields";
 import type { CarClassCardData } from "./car-classes-grid";
 import { ReviewsSection } from "./reviews-section";
+import { JsonLd } from "./json-ld";
+import {
+  buildBreadcrumbSchema,
+  buildFaqSchema,
+  buildRouteProductSchema
+} from "../lib/structured-data";
 import { TELEGRAM_URL } from "../lib/contact-links";
 import {
   FloatingContactWidget,
@@ -667,6 +673,25 @@ export default function RoutePageSupabaseClient({
     routeFaqItems.slice(0, routeFaqSplitIndex),
     routeFaqItems.slice(routeFaqSplitIndex)
   ];
+  const routeCanonicalPath = `${routeHrefPrefix}/${routeData.slug}`;
+  const heroImageAlt = isRu
+    ? `Автомобиль Grand Transfer для трансфера ${routeLabel}`
+    : `Автомобіль Grand Transfer для трансферу ${routeLabel}`;
+  const routeStructuredData = [
+    buildBreadcrumbSchema([
+      { name: ui.breadcrumbHome, path: homeHref },
+      { name: ui.breadcrumbDirections, path: directionsHref },
+      { name: routeLabel }
+    ]),
+    buildFaqSchema(routeFaqItems),
+    buildRouteProductSchema({
+      name: routeH1 || routeLabel,
+      description: routeData.seo_description || routeData.description || undefined,
+      url: routeCanonicalPath,
+      price: priceFrom,
+      reviews: routeReviews
+    })
+  ];
   const passengerOptionsLocalized = isRu
     ? [
         { value: "1 пасажир", label: "1 пассажир" },
@@ -759,6 +784,7 @@ export default function RoutePageSupabaseClient({
 
   return (
     <>
+      <JsonLd data={routeStructuredData} />
       <main className="relative overflow-hidden pb-14 md:pb-24">
         <div className="pointer-events-none absolute inset-x-0 top-[-8rem] h-[26rem] bg-[radial-gradient(circle_at_top,rgba(216,185,130,0.16),transparent_42%)]" />
         <div className="pointer-events-none absolute left-[-12rem] top-[20rem] h-[28rem] w-[28rem] rounded-full bg-[radial-gradient(circle,rgba(29,42,31,0.36),transparent_65%)] blur-3xl" />
@@ -835,7 +861,7 @@ export default function RoutePageSupabaseClient({
               <div className="absolute inset-0">
                 <Image
                   src={routeHeroDesktop}
-                  alt=""
+                  alt={heroImageAlt}
                   priority
                   fill
                   className="hidden object-cover object-[68%_center] md:block"
@@ -843,7 +869,7 @@ export default function RoutePageSupabaseClient({
                 />
                 <Image
                   src={routeHeroMobile}
-                  alt=""
+                  alt={heroImageAlt}
                   priority
                   fill
                   className="object-cover object-bottom md:hidden"

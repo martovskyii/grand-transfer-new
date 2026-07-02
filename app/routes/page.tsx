@@ -1,15 +1,14 @@
 import type { Metadata } from "next";
 import { BlogStaticShell } from "@/components/blog-static-shell";
 import { supabase } from "@/lib/supabase";
+import { buildPageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Усі напрямки трансферів | Grand Transfer",
   description:
     "Приватні трансфери між Україною, Молдовою, Польщею, Угорщиною та Румунією з подачею під ваш графік.",
-  alternates: {
-    canonical: "/routes"
-  }
-};
+  path: "/routes"
+});
 
 type RouteDirectoryItem = {
   slug: string | null;

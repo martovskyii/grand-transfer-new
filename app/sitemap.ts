@@ -68,7 +68,7 @@ async function fetchPriorityRoutes(): Promise<SitemapRouteRecord[]> {
 
   const { data, error } = await supabase
     .from("routes")
-    .select("slug, lang, updated_at, created_at")
+    .select("slug, lang, created_at")
     .eq("is_active", true)
     .in("lang", ["ua", "ru"])
     .eq("sitemap_priority", true)
@@ -96,7 +96,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/blog/odesa-kyshyniv-transfer",
     "/kontakty",
     "/pro-kompaniiu",
-    "/routes"
+    "/routes",
+    "/ru/routes"
   ] as const;
 
   for (const path of staticPaths) {

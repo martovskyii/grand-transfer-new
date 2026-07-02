@@ -3,15 +3,14 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import desktopHero from "../../img/desktop.png";
 import { BlogStaticShell } from "../../components/blog-static-shell";
+import { buildPageMetadata } from "../../lib/seo";
 
-export const metadata: Metadata = {
-  title: "Блог про трансфери та поїздки",
+export const metadata: Metadata = buildPageMetadata({
+  title: "Блог про трансфери та поїздки | Grand Transfer",
   description:
     "Корисна інформація про маршрути, кордон та поїздки між Україною та Європою.",
-  alternates: {
-    canonical: "/blog"
-  }
-};
+  path: "/blog"
+});
 
 export default function BlogPage() {
   return (

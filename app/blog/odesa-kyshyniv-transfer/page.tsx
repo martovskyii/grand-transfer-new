@@ -3,20 +3,38 @@ import Image from "next/image";
 import Link from "next/link";
 import routeHeroDesktop from "../../../img/main-2-screen-desk.png";
 import { BlogStaticShell } from "../../../components/blog-static-shell";
+import { JsonLd } from "../../../components/json-ld";
 import { PHONE_TEL_HREF, TELEGRAM_URL } from "../../../lib/contact-links";
+import { buildPageMetadata } from "../../../lib/seo";
+import { buildArticleSchema } from "../../../lib/structured-data";
 
-export const metadata: Metadata = {
-  title: "Трансфер Одеса — Кишинів: ціна, маршрут і час у дорозі",
-  description:
-    "Як замовити приватний трансфер Одеса — Кишинів, скільки коштує поїздка, скільки часу займає дорога та як проходить маршрут до Молдови.",
-  alternates: {
-    canonical: "/blog/odesa-kyshyniv-transfer"
-  }
-};
+const ARTICLE_PATH = "/blog/odesa-kyshyniv-transfer";
+const ARTICLE_TITLE = "Трансфер Одеса — Кишинів: ціна, маршрут і час у дорозі";
+const ARTICLE_DESCRIPTION =
+  "Як замовити приватний трансфер Одеса — Кишинів, скільки коштує поїздка, скільки часу займає дорога та як проходить маршрут до Молдови.";
+
+// TODO(seo): add real datePublished / dateModified once editorial dates exist.
+// They are intentionally omitted below rather than invented.
+const articleSchema = buildArticleSchema({
+  headline: ARTICLE_TITLE,
+  description: ARTICLE_DESCRIPTION,
+  url: ARTICLE_PATH,
+  image: routeHeroDesktop.src
+});
+
+export const metadata: Metadata = buildPageMetadata({
+  title: ARTICLE_TITLE,
+  description: ARTICLE_DESCRIPTION,
+  path: ARTICLE_PATH,
+  image: routeHeroDesktop.src,
+  ogType: "article"
+});
 
 export default function OdesaKyshynivTransferArticlePage() {
   return (
-    <BlogStaticShell
+    <>
+      <JsonLd data={articleSchema} />
+      <BlogStaticShell
       eyebrow="БЛОГ"
       title="Трансфер Одеса — Кишинів: як швидко та комфортно дістатися"
       subtitle="Корисна інформація про маршрут, час у дорозі, проходження кордону та переваги приватної поїздки."
@@ -130,5 +148,6 @@ export default function OdesaKyshynivTransferArticlePage() {
         </div>
       </section>
     </BlogStaticShell>
+    </>
   );
 }

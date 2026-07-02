@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { DynamicRouteData } from "@/components/route-page-supabase-client";
 import { supabase } from "@/lib/supabase";
+import { DEFAULT_OG_IMAGE, SITE_NAME, absoluteUrl } from "@/lib/seo";
 
 export interface DynamicRoutePageProps {
   params: Promise<{
@@ -196,15 +197,34 @@ export function buildRouteMetadata(
   const canonicalPath =
     alternatesData?.canonicalPath || resolveRouteCanonicalPath(route, lang);
 
+  const title = route.seo_title || route.h1 || SITE_NAME;
+  const description = route.seo_description || route.description || undefined;
+  const canonicalUrl = canonicalPath ? absoluteUrl(canonicalPath) : undefined;
+
   return {
-    title: route.seo_title || route.h1 || "Grand Transfer",
-    description: route.seo_description || route.description || undefined,
+    title,
+    description,
     alternates: canonicalPath
       ? {
           canonical: canonicalPath,
           languages: alternatesData?.metadataLanguages
         }
-      : undefined
+      : undefined,
+    openGraph: {
+      title,
+      description,
+      url: canonicalUrl,
+      type: "website",
+      siteName: SITE_NAME,
+      locale: lang === "ru" ? "ru_RU" : "uk_UA",
+      images: [DEFAULT_OG_IMAGE]
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [DEFAULT_OG_IMAGE.url]
+    }
   };
 }
 

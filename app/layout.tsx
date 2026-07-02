@@ -2,23 +2,38 @@ import type { Metadata } from "next";
 import Script from "next/script";
 import type { ReactNode } from "react";
 import favicon from "../img/favicon.png";
+import { JsonLd } from "../components/json-ld";
+import { buildOrganizationSchema } from "../lib/structured-data";
+import {
+  DEFAULT_DESCRIPTION,
+  DEFAULT_OG_IMAGE,
+  SITE_NAME,
+  SITE_URL
+} from "../lib/seo";
 import "./globals.css";
 
-const defaultSiteUrl = "https://www.grand-transfer.com";
 const gtmId = "GTM-T6LRC7TX";
-const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL || defaultSiteUrl).replace(
-  /\/+$/,
-  ""
-);
+const siteUrl = SITE_URL;
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: "Grand Transfer",
-  description: "VIP трансфери між Україною та Молдовою.",
+  title: `${SITE_NAME} — VIP трансфери між Україною та Європою`,
+  description: DEFAULT_DESCRIPTION,
   icons: {
     icon: favicon.src,
     shortcut: favicon.src,
     apple: favicon.src
+  },
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    locale: "uk_UA",
+    url: siteUrl,
+    images: [DEFAULT_OG_IMAGE]
+  },
+  twitter: {
+    card: "summary_large_image",
+    images: [DEFAULT_OG_IMAGE.url]
   }
 };
 
@@ -30,6 +45,7 @@ export default function RootLayout({
   return (
     <html lang="uk">
       <body>
+        <JsonLd data={buildOrganizationSchema()} />
         <noscript>
           <iframe
             src={`https://www.googletagmanager.com/ns.html?id=${gtmId}`}

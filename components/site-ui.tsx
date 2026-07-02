@@ -83,8 +83,9 @@ export function LanguageSwitcher({
     <div className={cx("language-switcher", className)} aria-label="Мови">
       {[
         { key: "ua" as const, label: "UA" },
-        { key: "ru" as const, label: "RU" },
-        { key: "en" as const, label: "EN" }
+        { key: "ru" as const, label: "RU" }
+        // EN intentionally omitted: English pages are not implemented, so the
+        // non-functional option was removed to avoid dead UI / crawl confusion.
       ].map(({ key, label }) => {
         const href = links?.[key];
         const isActive = currentLanguage === key;

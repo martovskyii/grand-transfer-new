@@ -1,16 +1,16 @@
 import type { Metadata } from "next";
 import HomePageClient, { type HomepageRoute } from "../home-page-client";
 import { supabase } from "../../lib/supabase";
+import { buildPageMetadata } from "../../lib/seo";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = buildPageMetadata({
   title: "Grand Transfer | VIP трансферы Украина — Молдова — Польша",
   description: "Частные VIP трансферы между Украиной, Молдовой и Польшей.",
-  alternates: {
-    canonical: "/ru"
-  }
-};
+  path: "/ru",
+  locale: "ru_RU"
+});
 
 async function getHomepageRoutes(): Promise<HomepageRoute[]> {
   if (!supabase) {
