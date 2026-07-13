@@ -28,14 +28,16 @@ type TransferFormValues = {
 };
 
 type TransferFormErrors = Partial<
-  Record<"fullName" | "phone" | "fromCity" | "toCity" | "travelDate", string>
+  Record<"fullName" | "phone" | "fromCity" | "toCity" | "travelDate" | "carClass", string>
 >;
 
 type UseTransferFormOptions = {
   formName: TransferFormName;
   pageType: PageType;
   route: string | null;
+  requireName?: boolean;
   requireDate?: boolean;
+  requireCarClass?: boolean;
   initialValues?: Partial<TransferFormValues>;
   language?: "ua" | "ru";
 };
@@ -66,7 +68,8 @@ const errorFieldMap: Record<keyof TransferFormErrors, string> = {
   phone: "phone",
   fromCity: "from",
   toCity: "to",
-  travelDate: "date"
+  travelDate: "date",
+  carClass: "car_class"
 };
 
 function toLocalDateString(date: Date) {
@@ -165,7 +168,9 @@ export function useTransferForm({
   formName,
   pageType,
   route,
+  requireName = false,
   requireDate = false,
+  requireCarClass = false,
   initialValues,
   language = "ua"
 }: UseTransferFormOptions) {
@@ -208,6 +213,7 @@ export function useTransferForm({
     if (field === "fromCity") clearFieldError("fromCity");
     if (field === "toCity") clearFieldError("toCity");
     if (field === "travelDate") clearFieldError("travelDate");
+    if (field === "carClass") clearFieldError("carClass");
   }
 
   function handleTextChange(field: keyof TransferFormValues) {
@@ -234,6 +240,10 @@ export function useTransferForm({
     const normalizedPhone = normalizePhoneNumber(values.phoneNumber);
     const digitsLength = phoneDigitsLength(normalizedPhone);
 
+    if (requireName && !values.fullName.trim()) {
+      nextErrors.fullName = isRu ? "Укажите имя." : "Вкажіть ім’я.";
+    }
+
     if (digitsLength === 0) {
       nextErrors.phone = isRu
         ? "Укажите номер телефона."
@@ -242,6 +252,18 @@ export function useTransferForm({
       nextErrors.phone = isRu
         ? "Введите корректный номер телефона."
         : "Введіть коректний номер телефону";
+    }
+
+    if (requireDate && !values.travelDate) {
+      nextErrors.travelDate = isRu
+        ? "Выберите дату поездки."
+        : "Оберіть дату поїздки.";
+    }
+
+    if (requireCarClass && !values.carClass) {
+      nextErrors.carClass = isRu
+        ? "Выберите класс авто."
+        : "Оберіть клас авто.";
     }
 
     setErrors(nextErrors);

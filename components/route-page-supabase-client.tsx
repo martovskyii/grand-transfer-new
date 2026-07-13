@@ -661,7 +661,9 @@ export default function RoutePageSupabaseClient({
     pageType: "route",
     route: routeSlug,
     language: isRu ? "ru" : "ua",
+    requireName: true,
     requireDate: true,
+    requireCarClass: true,
     initialValues: {
       carClass: "Комфорт",
       fromCity,
@@ -1293,6 +1295,7 @@ export default function RoutePageSupabaseClient({
                 >
                   <TextField
                     label={ui.name}
+                    required
                     name="full_name"
                     value={routeFinalForm.values.fullName}
                     onChange={routeFinalForm.handleTextChange("fullName")}
@@ -1303,6 +1306,7 @@ export default function RoutePageSupabaseClient({
                   />
                   <PhoneField
                     label={ui.phone}
+                    required
                     phoneValue={routeFinalForm.phoneDisplayValue}
                     phonePlaceholder={ui.yourPhone}
                     phoneMaxLength={routeFinalForm.phoneMaxLength}
@@ -1330,6 +1334,7 @@ export default function RoutePageSupabaseClient({
                   />
                   <DateField
                     label={ui.date}
+                    required
                     name="travel_date"
                     value={routeFinalForm.values.travelDate}
                     onChange={routeFinalForm.handleTextChange("travelDate")}
@@ -1355,9 +1360,11 @@ export default function RoutePageSupabaseClient({
                   </SelectField>
                   <SelectField
                     label={ui.carClass}
+                    required
                     name="car_class"
                     value={routeFinalForm.values.carClass}
                     onChange={routeFinalForm.handleTextChange("carClass")}
+                    error={routeFinalForm.errors.carClass}
                     wrapperClassName="md:col-span-2"
                     fieldClassName="h-14 rounded-[15px] px-4 pr-10 text-[0.95rem]"
                   >

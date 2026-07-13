@@ -3376,6 +3376,11 @@ input {
   text-transform: uppercase;
 }
 
+.field-required {
+  margin-left: 0.28rem;
+  color: var(--champagne);
+}
+
 .field-error {
   display: block;
   margin-top: 6px;

@@ -515,7 +515,9 @@ export default function HomePageClient({
     pageType: "home",
     route: null,
     language: isRu ? "ru" : "ua",
+    requireName: true,
     requireDate: true,
+    requireCarClass: true,
     initialValues: {
       carClass: "Комфорт"
     }
@@ -1269,6 +1271,7 @@ export default function HomePageClient({
                 >
                   <TextField
                     label={ui.name}
+                    required
                     name="full_name"
                     value={homeFinalForm.values.fullName}
                     onChange={homeFinalForm.handleTextChange("fullName")}
@@ -1279,6 +1282,7 @@ export default function HomePageClient({
                   />
                   <PhoneField
                     label={ui.phone}
+                    required
                     phoneValue={homeFinalForm.phoneDisplayValue}
                     phonePlaceholder={ui.yourPhone}
                     phoneMaxLength={homeFinalForm.phoneMaxLength}
@@ -1306,6 +1310,7 @@ export default function HomePageClient({
                   />
                   <DateField
                     label={ui.date}
+                    required
                     name="travel_date"
                     value={homeFinalForm.values.travelDate}
                     onChange={homeFinalForm.handleTextChange("travelDate")}
@@ -1331,9 +1336,11 @@ export default function HomePageClient({
                   </SelectField>
                   <SelectField
                     label={ui.carClass}
+                    required
                     name="car_class"
                     value={homeFinalForm.values.carClass}
                     onChange={homeFinalForm.handleTextChange("carClass")}
+                    error={homeFinalForm.errors.carClass}
                     wrapperClassName="md:col-span-2"
                     fieldClassName="h-14 rounded-[15px] px-4 pr-10 text-[0.95rem]"
                   >

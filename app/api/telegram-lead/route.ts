@@ -95,6 +95,25 @@ export async function POST(request: Request) {
     );
   }
 
+  const isBookingForm =
+    payload.form_name === "homepage_booking_form" ||
+    payload.form_name === "route_booking_form";
+
+  if (isBookingForm) {
+    const missingFields = [
+      !payload.name?.trim() ? "name" : null,
+      !payload.date?.trim() ? "date" : null,
+      !payload.car_class?.trim() ? "car_class" : null
+    ].filter(Boolean);
+
+    if (missingFields.length > 0) {
+      return NextResponse.json(
+        { success: false, error: "required_fields_missing", fields: missingFields },
+        { status: 400 }
+      );
+    }
+  }
+
   const telegramResponse = await fetch(
     `https://api.telegram.org/bot${botToken}/sendMessage`,
     {

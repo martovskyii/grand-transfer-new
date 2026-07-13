@@ -28,6 +28,7 @@ type PhoneFieldProps = SharedFieldProps & {
   onPhoneChange: ChangeEventHandler<HTMLInputElement>;
   inputName?: string;
   inputClassName?: string;
+  required?: boolean;
 };
 
 type DateFieldProps = SharedFieldProps &
@@ -70,6 +71,19 @@ function FieldError({ error }: { error?: string }) {
   return <span className="field-error">{error}</span>;
 }
 
+function FieldLabel({ label, required }: { label: string; required?: boolean }) {
+  return (
+    <span className="field-label">
+      {label}
+      {required ? (
+        <span className="field-required" aria-hidden="true">
+          *
+        </span>
+      ) : null}
+    </span>
+  );
+}
+
 export function TextField({
   label,
   error,
@@ -80,7 +94,7 @@ export function TextField({
 }: TextFieldProps) {
   return (
     <label className={cx("field-group", wrapperClassName, className)}>
-      <span className="field-label">{label}</span>
+      <FieldLabel label={label} required={Boolean(props.required)} />
       <input
         {...props}
         className={cx("field-lux", error && "is-invalid", fieldClassName)}
@@ -101,7 +115,7 @@ export function SelectField({
 }: SelectFieldProps) {
   return (
     <label className={cx("field-group", wrapperClassName, className)}>
-      <span className="field-label">{label}</span>
+      <FieldLabel label={label} required={Boolean(props.required)} />
       <select
         {...props}
         className={cx(
@@ -127,7 +141,7 @@ export function TextAreaField({
 }: TextAreaFieldProps) {
   return (
     <label className={cx("field-group", wrapperClassName, className)}>
-      <span className="field-label">{label}</span>
+      <FieldLabel label={label} required={Boolean(props.required)} />
       <textarea
         {...props}
         className={cx("field-lux", error && "is-invalid", fieldClassName)}
@@ -151,7 +165,7 @@ export function DateField({
 
   return (
     <label className={cx("field-group", wrapperClassName, className)}>
-      <span className="field-label">{label}</span>
+      <FieldLabel label={label} required={Boolean(props.required)} />
       <span
         className={cx(
           "field-lux date-shell-lux",
@@ -190,11 +204,12 @@ export function PhoneField({
   phoneMaxLength,
   onPhoneChange,
   inputName = "phone",
-  inputClassName
+  inputClassName,
+  required = false
 }: PhoneFieldProps) {
   return (
     <label className={cx("field-group", wrapperClassName)}>
-      <span className="field-label">{label}</span>
+      <FieldLabel label={label} required={required} />
       <input
         name={inputName}
         type="tel"
@@ -204,6 +219,7 @@ export function PhoneField({
         onChange={onPhoneChange}
         placeholder={phonePlaceholder}
         maxLength={phoneMaxLength}
+        required={required}
         className={cx(
           "field-lux",
           error && "is-invalid",
