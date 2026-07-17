@@ -12,7 +12,10 @@ const reservedStaticSlugs = new Set([
   "avtopark",
   "blog",
   "kontakty",
+  "legal-information",
   "pro-kompaniiu",
+  "privacy-policy",
+  "public-offer",
   "ru",
   "routes",
   "sitemap.xml",
@@ -95,7 +98,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/blog",
     "/blog/odesa-kyshyniv-transfer",
     "/kontakty",
+    "/legal-information",
+    "/privacy-policy",
     "/pro-kompaniiu",
+    "/public-offer",
     "/routes",
     "/ru/routes"
   ] as const;

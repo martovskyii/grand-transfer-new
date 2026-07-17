@@ -17,8 +17,11 @@ const reservedSlugs = new Set([
   "avtopark",
   "blog",
   "kontakty",
+  "legal-information",
   "about",
   "pro-kompaniiu",
+  "privacy-policy",
+  "public-offer",
   "routes",
   "ru"
 ]);

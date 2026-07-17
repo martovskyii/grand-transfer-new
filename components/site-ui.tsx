@@ -332,6 +332,17 @@ export function SiteFooter({
     faq: "FAQ",
     blog: isEn ? "Blog" : isRu ? "Блог" : "Блог",
     contacts: isEn ? "Contacts" : isRu ? "Контакты" : "Контакти",
+    privacy: isEn
+      ? "Privacy Policy"
+      : isRu
+      ? "Политика конфиденциальности"
+      : "Політика конфіденційності",
+    offer: isEn ? "Public Offer" : isRu ? "Публичная оферта" : "Публічна оферта",
+    legal: isEn
+      ? "Legal Information"
+      : isRu
+      ? "Юридическая информация"
+      : "Юридична інформація",
     copyright: isEn
       ? "© 2026 Grand Transfer. All rights reserved."
       : isRu
@@ -369,7 +380,10 @@ export function SiteFooter({
     { label: ui.about, href: aboutHref },
     { label: ui.faq, href: resolvedFaqHref },
     { label: ui.blog, href: blogHref },
-    { label: ui.contacts, href: contactsHref }
+    { label: ui.contacts, href: contactsHref },
+    { label: ui.privacy, href: "/privacy-policy" },
+    { label: ui.offer, href: "/public-offer" },
+    { label: ui.legal, href: "/legal-information" }
   ];
 
   return (
