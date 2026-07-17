@@ -542,16 +542,7 @@ export function FloatingContactWidget({
 }
 
 function PhoneIcon({ className = "h-4 w-4" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-      <path
-        d="M7.5 4.9c.38-.4.94-.55 1.45-.38l2.18.71c.63.2.98.87.8 1.5l-.55 1.92a1.3 1.3 0 0 0 .3 1.23l2.45 2.44c.32.32.78.43 1.21.3l1.93-.54c.63-.18 1.29.16 1.5.79l.7 2.19c.18.51.03 1.07-.37 1.45l-1.09 1.04c-.83.8-2.07 1.1-3.19.76-2.03-.6-4.22-2.03-6.22-4.03-2-2-3.42-4.18-4.03-6.22-.33-1.12-.03-2.36.77-3.18L7.5 4.9Z"
-        stroke="currentColor"
-        strokeWidth="1.45"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
+  return <i className={`bi bi-telephone ${className}`} aria-hidden="true" />;
 }
 
 function MailIcon({ className = "h-4 w-4" }: { className?: string }) {

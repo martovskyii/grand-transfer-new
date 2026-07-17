@@ -913,17 +913,7 @@ function FlashIcon({ className = "h-4 w-4" }: IconProps) {
 }
 
 function PhoneIcon({ className = "h-4 w-4" }: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-      <path
-        d="M7.3 4.7h2.1l1.1 4-1.4 1.4a13.2 13.2 0 0 0 4.8 4.8l1.4-1.4 4 1.1v2.1a1.8 1.8 0 0 1-1.8 1.8A14.8 14.8 0 0 1 5.5 6.5 1.8 1.8 0 0 1 7.3 4.7Z"
-        stroke="currentColor"
-        strokeWidth="1.45"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
+  return <i className={`bi bi-telephone ${className}`} aria-hidden="true" />;
 }
 
 function MailIcon({ className = "h-4 w-4" }: IconProps) {

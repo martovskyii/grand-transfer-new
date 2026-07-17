@@ -296,6 +296,32 @@ input {
   gap: 0.65rem;
 }
 
+.bi.bi-telephone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.header-phone-link .bi-telephone,
+.footer-contact-link .bi-telephone {
+  font-size: 1rem;
+}
+
+.floating-contact-trigger .bi-telephone {
+  font-size: 1.5rem;
+}
+
+.contacts-method-icon .bi-telephone {
+  font-size: 1.875rem;
+}
+
+@media (min-width: 640px) {
+  .floating-contact-trigger .bi-telephone {
+    font-size: 1.625rem;
+  }
+}
+
 .eyebrow-lux {
   color: var(--champagne);
   font-size: 0.72rem;

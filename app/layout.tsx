@@ -10,6 +10,7 @@ import {
   SITE_NAME,
   SITE_URL
 } from "../lib/seo";
+import "bootstrap-icons/font/bootstrap-icons.css";
 import "./globals.css";
 
 const gtmId = "GTM-T6LRC7TX";
