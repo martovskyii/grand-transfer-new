@@ -78,30 +78,13 @@ export function trackMessengerClick({
   location,
   pageType
 }: {
-  messenger: "telegram" | "whatsapp";
+  messenger: "telegram" | "whatsapp" | "viber";
   location: string;
   pageType: PageType;
 }) {
   pushDataLayer({
     event: "messenger_click",
     messenger,
-    location,
-    page_type: pageType
-  });
-}
-
-export function trackSocialClick({
-  channel,
-  location,
-  pageType
-}: {
-  channel: "instagram" | "tiktok" | "youtube";
-  location: string;
-  pageType: PageType;
-}) {
-  pushDataLayer({
-    event: "social_click",
-    channel,
     location,
     page_type: pageType
   });
@@ -169,7 +152,7 @@ export function trackContactOptionClick({
   channel,
   pageType
 }: {
-  channel: "instagram" | "telegram" | "whatsapp" | "phone";
+  channel: "telegram" | "whatsapp" | "viber" | "phone";
   pageType: PageType;
 }) {
   pushDataLayer({

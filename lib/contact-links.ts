@@ -7,7 +7,4 @@ export const EMAIL_HREF = `mailto:${EMAIL_ADDRESS}`;
 
 export const TELEGRAM_URL = "https://t.me/grand_transfer_com";
 export const WHATSAPP_URL = "https://wa.me/380638243223";
-export const INSTAGRAM_URL = "https://www.instagram.com/grand_transfer_com/";
-export const TIKTOK_URL = "https://www.tiktok.com/@grand_transfer.com";
-export const YOUTUBE_URL = "https://www.youtube.com/@grand-transfer";
 export const VIBER_URL = "viber://chat?number=%2B380638243223";

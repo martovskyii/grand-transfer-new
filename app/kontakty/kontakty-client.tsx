@@ -2,6 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faViber } from "@fortawesome/free-brands-svg-icons";
 import type { ChangeEvent, ComponentType, FormEvent } from "react";
 import { useEffect, useState } from "react";
 import contactsHeroImage from "../../img/contacts.png";
@@ -23,14 +25,11 @@ import { buildFaqSchema } from "../../lib/structured-data";
 import {
   EMAIL_HREF,
   EMAIL_ADDRESS,
-  INSTAGRAM_URL,
   PHONE_DISPLAY,
   PHONE_HREF,
   TELEGRAM_URL,
-  TIKTOK_URL,
   VIBER_URL,
   WHATSAPP_URL,
-  YOUTUBE_URL
 } from "../../lib/contact-links";
 import {
   trackCtaClick,
@@ -39,8 +38,7 @@ import {
   trackFormSubmit,
   trackFormSuccessPopupShow,
   trackMessengerClick,
-  trackPhoneClick,
-  trackSocialClick
+  trackPhoneClick
 } from "../../lib/tracking";
 
 type IconProps = {
@@ -70,10 +68,7 @@ type ContactMethod = {
     | "telegram"
     | "whatsapp"
     | "viber"
-    | "email"
-    | "instagram"
-    | "tiktok"
-    | "youtube";
+    | "email";
 };
 
 type ContactFaqItem = {
@@ -142,7 +137,7 @@ const contactMethods: ContactMethod[] = [
     value: phoneNumber,
     actionLabel: "Відкрити",
     href: VIBER_URL,
-    Icon: WhatsAppIcon,
+    Icon: ViberIcon,
     kind: "viber"
   },
   {
@@ -160,30 +155,6 @@ const contactMethods: ContactMethod[] = [
     href: EMAIL_HREF,
     Icon: MailIcon,
     kind: "email"
-  },
-  {
-    title: "Instagram",
-    value: "@grand_transfer_com",
-    actionLabel: "Перейти",
-    href: INSTAGRAM_URL,
-    Icon: InstagramIcon,
-    kind: "instagram"
-  },
-  {
-    title: "TikTok",
-    value: "@grand_transfer.com",
-    actionLabel: "Перейти",
-    href: TIKTOK_URL,
-    Icon: TikTokIcon,
-    kind: "tiktok"
-  },
-  {
-    title: "YouTube",
-    value: "@grand-transfer",
-    actionLabel: "Перейти",
-    href: YOUTUBE_URL,
-    Icon: YouTubeIcon,
-    kind: "youtube"
   }
 ];
 
@@ -362,9 +333,9 @@ export default function KontaktyPage() {
       return;
     }
 
-    if (method.kind === "instagram" || method.kind === "tiktok" || method.kind === "youtube") {
-      trackSocialClick({
-        channel: method.kind,
+    if (method.kind === "viber") {
+      trackMessengerClick({
+        messenger: "viber",
         location: "contacts_page",
         pageType: "contacts"
       });
@@ -463,7 +434,7 @@ export default function KontaktyPage() {
 
         <div className="mx-auto max-w-[1536px] px-4 pt-4 sm:px-6 md:px-8 md:pt-5 lg:px-10 xl:px-12 2xl:px-14">
           <header className="header-shell relative z-30 rounded-[24px] px-[18px] py-3 sm:px-5 md:rounded-[30px] md:px-7 lg:px-[34px]">
-            <div className="flex min-h-[72px] items-center justify-between gap-3 md:min-h-[74px] lg:grid lg:min-h-[88px] lg:grid-cols-[190px_1fr_300px] lg:justify-normal lg:gap-4 xl:grid-cols-[202px_1fr_310px]">
+            <div className="flex min-h-[72px] items-center justify-between gap-3 md:min-h-[74px] lg:grid lg:min-h-[88px] lg:grid-cols-[190px_minmax(0,1fr)_300px] lg:justify-normal lg:gap-4 xl:grid-cols-[202px_minmax(0,1fr)_470px]">
               <Link href="/" className="header-brand block">
                 <div className="luxury-logo-title">GRAND TRANSFER</div>
                 <div className="luxury-logo-subtitle">VIP СЕРВІС</div>
@@ -595,19 +566,13 @@ export default function KontaktyPage() {
                     }
                     target={
                       kind === "telegram" ||
-                      kind === "whatsapp" ||
-                      kind === "instagram" ||
-                      kind === "tiktok" ||
-                      kind === "youtube"
+                      kind === "whatsapp"
                         ? "_blank"
                         : undefined
                     }
                     rel={
                       kind === "telegram" ||
-                      kind === "whatsapp" ||
-                      kind === "instagram" ||
-                      kind === "tiktok" ||
-                      kind === "youtube"
+                      kind === "whatsapp"
                         ? "noopener noreferrer"
                         : undefined
                     }
@@ -1005,72 +970,16 @@ function TelegramIcon({ className = "h-4 w-4" }: IconProps) {
 
 function WhatsAppIcon({ className = "h-4 w-4" }: IconProps) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+    <svg viewBox="0 0 16 16" fill="currentColor" className={className} aria-hidden="true">
       <path
-        d="M12 20a7.9 7.9 0 0 0 4-.98l3.1.78-.84-3A8 8 0 1 0 12 20Z"
-        stroke="currentColor"
-        strokeWidth="1.45"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M9.3 8.8c.2-.5.5-.6.8-.6h.7c.2 0 .4.1.5.4l.6 1.5c.1.2 0 .4-.1.6l-.5.7c.5 1 .9 1.5 1.7 2.2.7.7 1.3 1.1 2.2 1.6l.8-.6c.2-.1.4-.1.6 0l1.4.6c.3.1.4.3.4.5v.7c0 .4-.1.6-.5.8-.6.3-1.3.4-2 .2-1.1-.2-2.3-.9-3.7-2.2-1.4-1.3-2.2-2.5-2.5-3.7-.2-.8-.1-1.5.1-2Z"
-        stroke="currentColor"
-        strokeWidth="1.35"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        d="M13.601 2.326A7.84 7.84 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.398.366 2.763 1.061 3.966L0 16l4.204-1.102a7.93 7.93 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326ZM7.994 14.521a6.58 6.58 0 0 1-3.356-.92l-.24-.143-2.494.654.666-2.433-.156-.25a6.57 6.57 0 0 1-1.007-3.505c0-3.626 2.956-6.582 6.591-6.582a6.54 6.54 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.588-6.592 6.588Zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.588-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34a8 8 0 0 0-.38-.007.73.73 0 0 0-.529.247c-.182.198-.692.677-.692 1.654s.71 1.916.81 2.049c.098.133 1.398 2.135 3.383 2.992.473.205.84.327 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232Z"
       />
     </svg>
   );
 }
 
-function InstagramIcon({ className = "h-4 w-4" }: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-      <rect
-        x="4.5"
-        y="4.5"
-        width="15"
-        height="15"
-        rx="4.2"
-        stroke="currentColor"
-        strokeWidth="1.45"
-      />
-      <circle cx="12" cy="12" r="3.5" stroke="currentColor" strokeWidth="1.45" />
-      <circle cx="16.6" cy="7.5" r="0.9" fill="currentColor" />
-    </svg>
-  );
-}
-
-function TikTokIcon({ className = "h-4 w-4" }: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-      <path
-        d="M14.5 5.2c.8 1.8 2 2.9 4 3.4v2.5c-1.5 0-2.8-.4-4-1.2v4.4c0 2.8-2.1 4.8-4.9 4.8A4.8 4.8 0 0 1 4.8 14a4.8 4.8 0 0 1 4.8-4.8c.35 0 .7.04 1 .12v2.8a2.8 2.8 0 0 0-1-.18A1.95 1.95 0 0 0 7.7 14c0 1.1.9 1.95 1.95 1.95S11.6 15.1 11.6 14V4.9h2.9Z"
-        stroke="currentColor"
-        strokeWidth="1.35"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function YouTubeIcon({ className = "h-4 w-4" }: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-      <path
-        d="M19.8 7.5c-.2-.8-.8-1.4-1.6-1.6C16.9 5.5 12 5.5 12 5.5s-4.9 0-6.2.4c-.8.2-1.4.8-1.6 1.6-.4 1.3-.4 4.5-.4 4.5s0 3.2.4 4.5c.2.8.8 1.4 1.6 1.6 1.3.4 6.2.4 6.2.4s4.9 0 6.2-.4c.8-.2 1.4-.8 1.6-1.6.4-1.3.4-4.5.4-4.5s0-3.2-.4-4.5Z"
-        stroke="currentColor"
-        strokeWidth="1.35"
-        strokeLinejoin="round"
-      />
-      <path
-        d="m10.2 9.5 4.4 2.5-4.4 2.5v-5Z"
-        stroke="currentColor"
-        strokeWidth="1.35"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
+function ViberIcon({ className = "h-4 w-4" }: IconProps) {
+  return <FontAwesomeIcon icon={faViber} className={className} aria-hidden="true" />;
 }
 
 function SupportIcon({ className = "h-4 w-4" }: IconProps) {

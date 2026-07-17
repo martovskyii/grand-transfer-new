@@ -2,21 +2,19 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faViber } from "@fortawesome/free-brands-svg-icons";
 import {
-  EMAIL_ADDRESS,
   EMAIL_HREF,
-  INSTAGRAM_URL,
   PHONE_DISPLAY,
   PHONE_TEL_HREF,
   TELEGRAM_URL,
-  TIKTOK_URL,
+  VIBER_URL,
   WHATSAPP_URL,
-  YOUTUBE_URL
 } from "../lib/contact-links";
 import {
   trackMessengerClick,
   trackPhoneClick,
-  trackSocialClick,
   type PageType
 } from "../lib/tracking";
 
@@ -128,26 +126,106 @@ export function HeaderPhoneLink({
   iconOnly = false,
   className
 }: HeaderPhoneLinkProps) {
+  if (iconOnly) {
+    return (
+      <>
+        <a
+          href={WHATSAPP_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label="WhatsApp"
+          onClick={() =>
+            trackMessengerClick({
+              messenger: "whatsapp",
+              location: "header",
+              pageType
+            })
+          }
+          className="header-phone-link is-icon-only hidden xl:inline-flex"
+        >
+          <WhatsAppOutlineIcon className="h-[18px] w-[18px] text-[var(--champagne)]" />
+        </a>
+        <a
+          href={VIBER_URL}
+          aria-label="Viber"
+          onClick={() =>
+            trackMessengerClick({
+              messenger: "viber",
+              location: "header",
+              pageType
+            })
+          }
+          className="header-phone-link is-icon-only hidden xl:inline-flex"
+        >
+          <ViberOutlineIcon className="h-[18px] w-[18px] text-[var(--champagne)]" />
+        </a>
+        <a
+          href={`tel:${phoneHref}`}
+          onClick={() =>
+            trackPhoneClick({
+              phone: phoneHref,
+              location: "header",
+              pageType
+            })
+          }
+          className={cx("header-phone-link is-icon-only", className)}
+        >
+          <PhoneIcon className="h-[16px] w-[16px] text-[var(--champagne)]" />
+        </a>
+      </>
+    );
+  }
+
   return (
-    <a
-      href={`tel:${phoneHref}`}
-      onClick={() =>
-        trackPhoneClick({
-          phone: phoneHref,
-          location: "header",
-          pageType
-        })
-      }
-      className={cx("header-phone-link", iconOnly && "is-icon-only", className)}
-    >
-      <PhoneIcon className="h-[16px] w-[16px] text-[var(--champagne)]" />
-      {!iconOnly ? (
+    <div className={cx("header-contact-links", className)}>
+      <a
+        href={WHATSAPP_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="WhatsApp"
+        onClick={() =>
+          trackMessengerClick({
+            messenger: "whatsapp",
+            location: "header",
+            pageType
+          })
+        }
+        className="header-phone-link is-icon-only"
+      >
+        <WhatsAppOutlineIcon className="h-[18px] w-[18px] text-[var(--champagne)]" />
+      </a>
+      <a
+        href={VIBER_URL}
+        aria-label="Viber"
+        onClick={() =>
+          trackMessengerClick({
+            messenger: "viber",
+            location: "header",
+            pageType
+          })
+        }
+        className="header-phone-link is-icon-only"
+      >
+        <ViberOutlineIcon className="h-[18px] w-[18px] text-[var(--champagne)]" />
+      </a>
+      <a
+        href={`tel:${phoneHref}`}
+        onClick={() =>
+          trackPhoneClick({
+            phone: phoneHref,
+            location: "header",
+            pageType
+          })
+        }
+        className="header-phone-link"
+      >
+        <PhoneIcon className="h-[16px] w-[16px] text-[var(--champagne)]" />
         <>
           <span className="hidden sm:inline">{phoneLabel}</span>
           {compactLabel ? <span className="sm:hidden">{compactLabel}</span> : null}
         </>
-      ) : null}
-    </a>
+      </a>
+    </div>
   );
 }
 
@@ -201,60 +279,23 @@ export function FooterContactLinks({ pageType }: FooterContactLinksProps) {
           <WhatsAppOutlineIcon className="footer-contact-icon" />
           <span>WhatsApp</span>
         </a>
+        <a
+          href={VIBER_URL}
+          onClick={() =>
+            trackMessengerClick({
+              messenger: "viber",
+              location: "footer",
+              pageType
+            })
+          }
+          className="footer-contact-link"
+        >
+          <ViberOutlineIcon className="footer-contact-icon" />
+          <span>Viber</span>
+        </a>
         <a href={EMAIL_HREF} className="footer-contact-link">
           <MailIcon className="footer-contact-icon" />
           <span>Email</span>
-        </a>
-      </div>
-
-      <div className="footer-social-row mt-5">
-        <a
-          href={INSTAGRAM_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Instagram"
-          onClick={() =>
-            trackSocialClick({
-              channel: "instagram",
-              location: "footer",
-              pageType
-            })
-          }
-          className="footer-social-button"
-        >
-          <InstagramOutlineIcon className="footer-social-icon" />
-        </a>
-        <a
-          href={TIKTOK_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="TikTok"
-          onClick={() =>
-            trackSocialClick({
-              channel: "tiktok",
-              location: "footer",
-              pageType
-            })
-          }
-          className="footer-social-button"
-        >
-          <TikTokOutlineIcon className="footer-social-icon" />
-        </a>
-        <a
-          href={YOUTUBE_URL}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="YouTube"
-          onClick={() =>
-            trackSocialClick({
-              channel: "youtube",
-              location: "footer",
-              pageType
-            })
-          }
-          className="footer-social-button"
-        >
-          <YouTubeOutlineIcon className="footer-social-icon" />
         </a>
       </div>
     </div>
@@ -557,70 +598,16 @@ function TelegramOutlineIcon({ className = "h-4 w-4" }: { className?: string }) 
 
 function WhatsAppOutlineIcon({ className = "h-4 w-4" }: { className?: string }) {
   return (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+    <svg viewBox="0 0 16 16" fill="currentColor" className={className} aria-hidden="true">
       <path
-        d="M12 20a7.9 7.9 0 0 0 4-.98l3.1.78-.84-3A8 8 0 1 0 12 20Z"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M9.3 8.8c.2-.5.5-.6.8-.6h.7c.2 0 .4.1.5.4l.6 1.5c.1.2 0 .4-.1.6l-.5.7c.5 1 .9 1.5 1.7 2.2.7.7 1.3 1.1 2.2 1.6l.8-.6c.2-.1.4-.1.6 0l1.4.6c.3.1.4.3.4.5v.7c0 .4-.1.6-.5.8-.6.3-1.3.4-2 .2-1.1-.2-2.3-.9-3.7-2.2-1.4-1.3-2.2-2.5-2.5-3.7-.2-.8-.1-1.5.1-2Z"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
+        d="M13.601 2.326A7.84 7.84 0 0 0 7.994 0C3.627 0 .068 3.558.064 7.926c0 1.398.366 2.763 1.061 3.966L0 16l4.204-1.102a7.93 7.93 0 0 0 3.79.965h.004c4.368 0 7.926-3.558 7.93-7.93A7.9 7.9 0 0 0 13.6 2.326ZM7.994 14.521a6.58 6.58 0 0 1-3.356-.92l-.24-.143-2.494.654.666-2.433-.156-.25a6.57 6.57 0 0 1-1.007-3.505c0-3.626 2.956-6.582 6.591-6.582a6.54 6.54 0 0 1 4.66 1.931 6.56 6.56 0 0 1 1.928 4.66c-.004 3.639-2.961 6.588-6.592 6.588Zm3.615-4.934c-.197-.099-1.17-.578-1.353-.646-.182-.065-.315-.099-.445.099-.133.197-.513.646-.627.775-.114.133-.232.148-.43.05-.197-.1-.836-.308-1.592-.985-.588-.525-.985-1.175-1.103-1.372-.114-.198-.011-.304.088-.403.087-.088.197-.232.296-.346.1-.114.133-.198.198-.33.065-.134.034-.248-.015-.347-.05-.099-.445-1.076-.612-1.47-.16-.389-.323-.335-.445-.34a8 8 0 0 0-.38-.007.73.73 0 0 0-.529.247c-.182.198-.692.677-.692 1.654s.71 1.916.81 2.049c.098.133 1.398 2.135 3.383 2.992.473.205.84.327 1.129.418.475.152.904.129 1.246.08.38-.058 1.171-.48 1.338-.943.164-.464.164-.86.114-.943-.049-.084-.182-.133-.38-.232Z"
       />
     </svg>
   );
 }
 
-function InstagramOutlineIcon({ className = "h-4 w-4" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-      <rect
-        x="4.5"
-        y="4.5"
-        width="15"
-        height="15"
-        rx="4"
-        stroke="currentColor"
-        strokeWidth="1.4"
-      />
-      <circle cx="12" cy="12" r="3.2" stroke="currentColor" strokeWidth="1.4" />
-      <circle cx="17.1" cy="6.9" r="0.9" fill="currentColor" />
-    </svg>
-  );
-}
-
-function TikTokOutlineIcon({ className = "h-4 w-4" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-      <path
-        d="M14.2 5.2c.53 1.4 1.57 2.48 2.97 3.02.77.3 1.6.45 2.43.42v2.7a7.26 7.26 0 0 1-4.02-1.17v4.3a5.08 5.08 0 1 1-5.08-5.08c.37 0 .73.04 1.08.11v2.79a2.44 2.44 0 1 0 1.98 2.39V5.2h2.64Z"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
-}
-
-function YouTubeOutlineIcon({ className = "h-4 w-4" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-      <path
-        d="M20.1 8.4c-.18-.75-.77-1.34-1.52-1.52C17.24 6.5 12 6.5 12 6.5s-5.24 0-6.58.38c-.75.18-1.34.77-1.52 1.52C3.5 9.74 3.5 12 3.5 12s0 2.26.4 3.6c.18.75.77 1.34 1.52 1.52 1.34.38 6.58.38 6.58.38s5.24 0 6.58-.38c.75-.18 1.34-.77 1.52-1.52.4-1.34.4-3.6.4-3.6s0-2.26-.4-3.6Z"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinejoin="round"
-      />
-      <path
-        d="m10.3 14.75 4.1-2.75-4.1-2.75v5.5Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
+function ViberOutlineIcon({ className = "h-4 w-4" }: { className?: string }) {
+  return <FontAwesomeIcon icon={faViber} className={className} aria-hidden="true" />;
 }
 
 function CloseIcon({ className = "h-4 w-4" }: { className?: string }) {

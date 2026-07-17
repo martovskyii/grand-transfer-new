@@ -13,7 +13,7 @@ import {
   LanguageSwitcher,
   SiteFooter
 } from "../../components/site-ui";
-import { trackCtaClick, trackMessengerClick, trackPhoneClick, trackSocialClick } from "../../lib/tracking";
+import { trackCtaClick, trackMessengerClick, trackPhoneClick } from "../../lib/tracking";
 
 type IconProps = {
   className?: string;
@@ -140,7 +140,7 @@ export default function ProKompaniiuPage() {
 
         <div className="mx-auto max-w-[1536px] px-4 pt-4 sm:px-6 md:px-8 md:pt-5 lg:px-10 xl:px-12 2xl:px-14">
           <header className="header-shell relative z-30 rounded-[24px] px-[18px] py-3 sm:px-5 md:rounded-[30px] md:px-7 lg:px-[34px]">
-            <div className="flex min-h-[72px] items-center justify-between gap-3 md:min-h-[74px] lg:grid lg:min-h-[88px] lg:grid-cols-[190px_1fr_300px] lg:justify-normal lg:gap-4 xl:grid-cols-[202px_1fr_310px]">
+            <div className="flex min-h-[72px] items-center justify-between gap-3 md:min-h-[74px] lg:grid lg:min-h-[88px] lg:grid-cols-[190px_minmax(0,1fr)_300px] lg:justify-normal lg:gap-4 xl:grid-cols-[202px_minmax(0,1fr)_470px]">
               <Link href="/" className="header-brand block">
                 <div className="luxury-logo-title">GRAND TRANSFER</div>
                 <div className="luxury-logo-subtitle">VIP СЕРВІС</div>

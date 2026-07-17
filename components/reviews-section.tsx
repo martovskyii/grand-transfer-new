@@ -57,8 +57,8 @@ function getMediaPreviewMeta(language: "ua" | "ru") {
 
   return {
     instagram: {
-      title: isRu ? "Скрин отзыва из Instagram" : "Скрин відгуку з Instagram",
-      Icon: InstagramIcon
+      title: isRu ? "Скрин отзыва клиента" : "Скрин відгуку клієнта",
+      Icon: PhotoIcon
     },
     messenger: {
       title: isRu ? "Скрин переписки с клиентом" : "Скрин переписки з клієнтом",
@@ -993,24 +993,6 @@ function ArrowIcon({ className = "h-4 w-4" }: { className?: string }) {
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-    </svg>
-  );
-}
-
-function InstagramIcon({ className = "h-8 w-8" }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
-      <rect
-        x="4"
-        y="4"
-        width="16"
-        height="16"
-        rx="4"
-        stroke="currentColor"
-        strokeWidth="1.7"
-      />
-      <circle cx="12" cy="12" r="3.3" stroke="currentColor" strokeWidth="1.7" />
-      <circle cx="17.1" cy="6.9" r="1" fill="currentColor" />
     </svg>
   );
 }

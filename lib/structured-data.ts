@@ -1,10 +1,8 @@
 import {
   EMAIL_ADDRESS,
-  INSTAGRAM_URL,
   PHONE_HREF,
   TELEGRAM_URL,
-  TIKTOK_URL,
-  YOUTUBE_URL
+  WHATSAPP_URL
 } from "./contact-links";
 import { LOGO_URL, SITE_NAME, SITE_URL, absoluteUrl } from "./seo";
 
@@ -26,7 +24,7 @@ export function buildOrganizationSchema(): JsonLdObject {
     telephone: `+${PHONE_HREF.replace(/^\+/, "")}`,
     email: EMAIL_ADDRESS,
     priceRange: "€€",
-    sameAs: [INSTAGRAM_URL, TIKTOK_URL, YOUTUBE_URL, TELEGRAM_URL],
+    sameAs: [TELEGRAM_URL, WHATSAPP_URL],
     areaServed: [
       { "@type": "Country", name: "Ukraine" },
       { "@type": "Country", name: "Moldova" },
