@@ -11,6 +11,7 @@ import mapsNewImage from "../img/maps_new.png";
 import {
   DateField,
   PhoneField,
+  PrivacyConsentField,
   SelectField,
   TextAreaField,
   TextField
@@ -513,7 +514,7 @@ export default function HomePageClient({
     formName: "homepage_booking_form",
     pageType: "home",
     route: null,
-    language: isRu ? "ru" : "ua",
+    language: isEn ? "en" : isRu ? "ru" : "ua",
     requireName: true,
     requireDate: true,
     requireCarClass: true,
@@ -1010,9 +1011,6 @@ export default function HomePageClient({
                   <div className="all-routes-visual-overlay" />
                   <div className="all-routes-map-line all-routes-map-line-one" />
                   <div className="all-routes-map-line all-routes-map-line-two" />
-                  <span className="all-routes-location-pin">
-                    <MapPinStrokeIcon className="h-[24px] w-[24px]" />
-                  </span>
                 </div>
               </div>
 
@@ -1357,6 +1355,13 @@ export default function HomePageClient({
                     placeholder={ui.comment}
                     wrapperClassName="md:col-span-2"
                     fieldClassName="min-h-[148px] rounded-[16px] px-4 py-4 text-[0.95rem]"
+                  />
+                  <PrivacyConsentField
+                    checked={homeFinalForm.values.privacyAccepted}
+                    onChange={homeFinalForm.handlePrivacyAcceptedChange}
+                    error={homeFinalForm.errors.privacy}
+                    language={isEn ? "en" : isRu ? "ru" : "ua"}
+                    className="md:col-span-2"
                   />
                                     {homeFinalForm.submitError ? (
                     <p className="field-error md:col-span-2">{homeFinalForm.submitError}</p>

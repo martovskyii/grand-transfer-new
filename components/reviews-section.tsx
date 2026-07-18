@@ -7,7 +7,11 @@ import {
   type FormEvent,
   type MouseEvent
 } from "react";
-import { TextAreaField, TextField } from "./lux-form-fields";
+import {
+  PrivacyConsentField,
+  TextAreaField,
+  TextField
+} from "./lux-form-fields";
 import { pushDataLayer, trackReviewsScroll } from "../lib/tracking";
 import type { DynamicRouteReview } from "../lib/route-page-data";
 import { supabase } from "../lib/supabase";
@@ -38,18 +42,21 @@ type ReviewFormState = {
   name: string;
   rating: number;
   review: string;
+  privacyAccepted: boolean;
 };
 
 type ReviewFormErrors = Partial<{
   name: string;
   rating: string;
   review: string;
+  privacy: string;
 }>;
 
 const reviewFormInitialState: ReviewFormState = {
   name: "",
   rating: 5,
-  review: ""
+  review: "",
+  privacyAccepted: false
 };
 
 function getMediaPreviewMeta(language: "ua" | "ru") {
@@ -152,6 +159,9 @@ export function ReviewsSection({
       name: isRu ? "Укажите имя." : "Вкажіть ім’я.",
       rating: isRu ? "Выберите оценку." : "Оберіть оцінку.",
       review: isRu ? "Напишите короткий отзыв." : "Напишіть короткий відгук.",
+      privacy: isRu
+        ? "Подтвердите согласие на обработку персональных данных."
+        : "Підтвердьте згоду на обробку персональних даних.",
       submit: isRu
         ? "Сейчас не удалось отправить отзыв. Попробуйте позже."
         : "Наразі не вдалося надіслати відгук. Спробуйте пізніше."
@@ -444,6 +454,10 @@ export function ReviewsSection({
 
     if (!trimmedReview) {
       nextErrors.review = ui.errors.review;
+    }
+
+    if (!formState.privacyAccepted) {
+      nextErrors.privacy = ui.errors.privacy;
     }
 
     if (Object.keys(nextErrors).length > 0) {
@@ -797,6 +811,20 @@ export function ReviewsSection({
                     }
                     rows={5}
                     fieldClassName="min-h-[140px] rounded-[18px] px-4 py-4"
+                  />
+
+                  <PrivacyConsentField
+                    checked={formState.privacyAccepted}
+                    onChange={(event) => {
+                      clearFieldError("privacy");
+                      setSubmitError(null);
+                      setFormState((current) => ({
+                        ...current,
+                        privacyAccepted: event.target.checked
+                      }));
+                    }}
+                    error={formErrors.privacy}
+                    language={isRu ? "ru" : "ua"}
                   />
 
                   {submitError ? (

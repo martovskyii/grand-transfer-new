@@ -15,6 +15,7 @@ import routeInfoFallbackImage from "../img/route-map-fallback-2.png";
 import {
   DateField,
   PhoneField,
+  PrivacyConsentField,
   SelectField,
   TextAreaField,
   TextField
@@ -1005,6 +1006,12 @@ export default function RoutePageSupabaseClient({
                       error={routeHeroForm.errors.toCity}
                       fieldClassName="h-14 rounded-[16px] px-4 text-[0.95rem]"
                     />
+                    <PrivacyConsentField
+                      checked={routeHeroForm.values.privacyAccepted}
+                      onChange={routeHeroForm.handlePrivacyAcceptedChange}
+                      error={routeHeroForm.errors.privacy}
+                      language={isRu ? "ru" : "ua"}
+                    />
                     <button
                       type="submit"
                       disabled={routeHeroForm.isSubmitting}
@@ -1381,6 +1388,13 @@ export default function RoutePageSupabaseClient({
                     placeholder={ui.comment}
                     wrapperClassName="md:col-span-2"
                     fieldClassName="min-h-[148px] rounded-[16px] px-4 py-4 text-[0.95rem]"
+                  />
+                  <PrivacyConsentField
+                    checked={routeFinalForm.values.privacyAccepted}
+                    onChange={routeFinalForm.handlePrivacyAcceptedChange}
+                    error={routeFinalForm.errors.privacy}
+                    language={isRu ? "ru" : "ua"}
+                    className="md:col-span-2"
                   />
                                     {routeFinalForm.submitError ? (
                     <p className="field-error md:col-span-2">{routeFinalForm.submitError}</p>

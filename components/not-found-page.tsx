@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import bookingBg from "../img/booking-bg.png";
 import {
   PhoneField,
+  PrivacyConsentField,
   TextField
 } from "./lux-form-fields";
 import {
@@ -300,6 +301,12 @@ export function NotFoundPage() {
                     placeholder="Місто прибуття"
                     error={notFoundForm.errors.toCity}
                     fieldClassName="h-14 rounded-[15px] px-4 text-[0.95rem]"
+                  />
+                  <PrivacyConsentField
+                    checked={notFoundForm.values.privacyAccepted}
+                    onChange={notFoundForm.handlePrivacyAcceptedChange}
+                    error={notFoundForm.errors.privacy}
+                    className="md:col-span-2"
                   />
                                     {notFoundForm.submitError ? (
                     <p className="field-error md:col-span-2">{notFoundForm.submitError}</p>

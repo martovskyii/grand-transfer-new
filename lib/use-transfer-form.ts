@@ -25,10 +25,20 @@ type TransferFormValues = {
   passengers: string;
   carClass: string;
   comment: string;
+  privacyAccepted: boolean;
 };
 
 type TransferFormErrors = Partial<
-  Record<"fullName" | "phone" | "fromCity" | "toCity" | "travelDate" | "carClass", string>
+  Record<
+    | "fullName"
+    | "phone"
+    | "fromCity"
+    | "toCity"
+    | "travelDate"
+    | "carClass"
+    | "privacy",
+    string
+  >
 >;
 
 type UseTransferFormOptions = {
@@ -39,7 +49,7 @@ type UseTransferFormOptions = {
   requireDate?: boolean;
   requireCarClass?: boolean;
   initialValues?: Partial<TransferFormValues>;
-  language?: "ua" | "ru";
+  language?: "ua" | "ru" | "en";
 };
 
 type LeadMeta = {
@@ -60,7 +70,8 @@ const defaultValues: TransferFormValues = {
   travelDate: "",
   passengers: "",
   carClass: "",
-  comment: ""
+  comment: "",
+  privacyAccepted: false
 };
 
 const errorFieldMap: Record<keyof TransferFormErrors, string> = {
@@ -69,7 +80,8 @@ const errorFieldMap: Record<keyof TransferFormErrors, string> = {
   fromCity: "from",
   toCity: "to",
   travelDate: "date",
-  carClass: "car_class"
+  carClass: "car_class",
+  privacy: "privacy_consent"
 };
 
 function toLocalDateString(date: Date) {
@@ -175,6 +187,7 @@ export function useTransferForm({
   language = "ua"
 }: UseTransferFormOptions) {
   const isRu = language === "ru";
+  const isEn = language === "en";
   const [values, setValues] = useState<TransferFormValues>({
     ...defaultValues,
     ...initialValues
@@ -214,6 +227,7 @@ export function useTransferForm({
     if (field === "toCity") clearFieldError("toCity");
     if (field === "travelDate") clearFieldError("travelDate");
     if (field === "carClass") clearFieldError("carClass");
+    if (field === "privacyAccepted") clearFieldError("privacy");
   }
 
   function handleTextChange(field: keyof TransferFormValues) {
@@ -235,35 +249,59 @@ export function useTransferForm({
     clearFieldError("phone");
   }
 
+  function handlePrivacyAcceptedChange(event: ChangeEvent<HTMLInputElement>) {
+    updateField("privacyAccepted", event.target.checked);
+  }
+
   function validate() {
     const nextErrors: TransferFormErrors = {};
     const normalizedPhone = normalizePhoneNumber(values.phoneNumber);
     const digitsLength = phoneDigitsLength(normalizedPhone);
 
     if (requireName && !values.fullName.trim()) {
-      nextErrors.fullName = isRu ? "Укажите имя." : "Вкажіть ім’я.";
+      nextErrors.fullName = isRu
+        ? "Укажите имя."
+        : isEn
+        ? "Enter your name."
+        : "Вкажіть ім’я.";
     }
 
     if (digitsLength === 0) {
       nextErrors.phone = isRu
         ? "Укажите номер телефона."
+        : isEn
+        ? "Enter your phone number."
         : "Вкажіть номер телефону.";
     } else if (digitsLength < 8 || digitsLength > 15) {
       nextErrors.phone = isRu
         ? "Введите корректный номер телефона."
+        : isEn
+        ? "Enter a valid phone number."
         : "Введіть коректний номер телефону";
     }
 
     if (requireDate && !values.travelDate) {
       nextErrors.travelDate = isRu
         ? "Выберите дату поездки."
+        : isEn
+        ? "Choose a trip date."
         : "Оберіть дату поїздки.";
     }
 
     if (requireCarClass && !values.carClass) {
       nextErrors.carClass = isRu
         ? "Выберите класс авто."
+        : isEn
+        ? "Choose a car class."
         : "Оберіть клас авто.";
+    }
+
+    if (!values.privacyAccepted) {
+      nextErrors.privacy = isRu
+        ? "Подтвердите согласие на обработку персональных данных."
+        : isEn
+        ? "Confirm consent to personal data processing."
+        : "Підтвердьте згоду на обробку персональних даних.";
     }
 
     setErrors(nextErrors);
@@ -349,6 +387,8 @@ export function useTransferForm({
       setSubmitError(
         isRu
           ? "Не удалось отправить заявку. Попробуйте ещё раз или напишите в Telegram."
+          : isEn
+          ? "Could not send the request. Try again or write in Telegram."
           : "Не вдалося надіслати заявку. Спробуйте ще раз або напишіть у Telegram."
       );
     } finally {
@@ -368,6 +408,7 @@ export function useTransferForm({
     closeSuccessModal: () => setIsSuccessOpen(false),
     handleSubmit,
     handleTextChange,
-    handlePhoneNumberChange
+    handlePhoneNumberChange,
+    handlePrivacyAcceptedChange
   };
 }

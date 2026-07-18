@@ -10,6 +10,7 @@ import contactsHeroImage from "../../img/contacts.png";
 import contactsMapImage from "../../img/maps-contacts.png";
 import {
   PhoneField,
+  PrivacyConsentField,
   TextAreaField,
   TextField
 } from "../../components/lux-form-fields";
@@ -81,10 +82,13 @@ type ContactFormValues = {
   phone: string;
   email: string;
   message: string;
+  privacyAccepted: boolean;
 };
 
+type ContactTextField = Exclude<keyof ContactFormValues, "privacyAccepted">;
+
 type ContactFormErrors = Partial<
-  Record<"fullName" | "phone" | "email" | "message", string>
+  Record<"fullName" | "phone" | "email" | "message" | "privacy", string>
 >;
 
 const navItems: NavItem[] = [
@@ -223,7 +227,8 @@ export default function KontaktyPage() {
     fullName: "",
     phone: "",
     email: "",
-    message: ""
+    message: "",
+    privacyAccepted: false
   });
   const [errors, setErrors] = useState<ContactFormErrors>({});
   const faqColumns = [contactFaqItems.slice(0, 3), contactFaqItems.slice(3)];
@@ -256,7 +261,7 @@ export default function KontaktyPage() {
     };
   }, []);
 
-  function handleFieldChange(field: keyof ContactFormValues) {
+  function handleFieldChange(field: ContactTextField) {
     return (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setValues((current) => ({
         ...current,
@@ -290,6 +295,23 @@ export default function KontaktyPage() {
 
       const nextErrors = { ...current };
       delete nextErrors.phone;
+      return nextErrors;
+    });
+  }
+
+  function handlePrivacyChange(event: ChangeEvent<HTMLInputElement>) {
+    setValues((current) => ({
+      ...current,
+      privacyAccepted: event.target.checked
+    }));
+
+    setErrors((current) => {
+      if (!current.privacy) {
+        return current;
+      }
+
+      const nextErrors = { ...current };
+      delete nextErrors.privacy;
       return nextErrors;
     });
   }
@@ -362,6 +384,10 @@ export default function KontaktyPage() {
       nextErrors.message = "Вкажіть повідомлення";
     }
 
+    if (!values.privacyAccepted) {
+      nextErrors.privacy = "Підтвердьте згоду на обробку персональних даних.";
+    }
+
     setErrors(nextErrors);
 
     if (Object.keys(nextErrors).length > 0) {
@@ -371,6 +397,7 @@ export default function KontaktyPage() {
       if (nextErrors.phone) errorFields.push("phone");
       if (nextErrors.email) errorFields.push("email");
       if (nextErrors.message) errorFields.push("message");
+      if (nextErrors.privacy) errorFields.push("privacy_consent");
 
       trackFormError({
         formName: "contacts_form",
@@ -419,7 +446,8 @@ export default function KontaktyPage() {
       fullName: "",
       phone: "",
       email: "",
-      message: ""
+      message: "",
+      privacyAccepted: false
     });
     setErrors({});
   }
@@ -635,6 +663,11 @@ export default function KontaktyPage() {
                     placeholder="Ваше повідомлення"
                     error={errors.message}
                     fieldClassName="min-h-[156px] rounded-[16px] px-4 py-3 text-[0.94rem] leading-[1.7]"
+                  />
+                  <PrivacyConsentField
+                    checked={values.privacyAccepted}
+                    onChange={handlePrivacyChange}
+                    error={errors.privacy}
                   />
 
                   <button

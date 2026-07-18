@@ -37,6 +37,14 @@ type DateFieldProps = SharedFieldProps &
     locale?: string;
   };
 
+type PrivacyConsentFieldProps = {
+  checked: boolean;
+  onChange: ChangeEventHandler<HTMLInputElement>;
+  error?: string;
+  language?: "ua" | "ru" | "en";
+  className?: string;
+};
+
 function cx(...classNames: Array<string | undefined | false>) {
   return classNames.filter(Boolean).join(" ");
 }
@@ -227,6 +235,58 @@ export function PhoneField({
           inputClassName
         )}
       />
+      <FieldError error={error} />
+    </label>
+  );
+}
+
+export function PrivacyConsentField({
+  checked,
+  onChange,
+  error,
+  language = "ua",
+  className
+}: PrivacyConsentFieldProps) {
+  const isRu = language === "ru";
+  const isEn = language === "en";
+  const copy = isEn
+    ? "I agree to the processing of personal data according to the "
+    : isRu
+    ? "Я соглашаюсь на обработку персональных данных согласно "
+    : "Я погоджуюсь на обробку персональних даних згідно з ";
+  const linkLabel = isEn
+    ? "Privacy Policy"
+    : isRu
+    ? "Политикой конфиденциальности"
+    : "Політикою конфіденційності";
+
+  return (
+    <label
+      className={cx(
+        "privacy-consent-field",
+        error && "is-invalid",
+        className
+      )}
+    >
+      <input
+        type="checkbox"
+        name="privacy_consent"
+        checked={checked}
+        onChange={onChange}
+        required
+        aria-invalid={Boolean(error)}
+        className="privacy-consent-checkbox"
+      />
+      <span className="privacy-consent-copy">
+        {copy}
+        <a
+          href="/privacy-policy"
+          className="privacy-consent-link"
+          onClick={(event) => event.stopPropagation()}
+        >
+          {linkLabel}
+        </a>
+      </span>
       <FieldError error={error} />
     </label>
   );
