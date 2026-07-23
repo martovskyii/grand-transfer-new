@@ -42,12 +42,12 @@ type FeatureRow = {
 };
 
 const navItems: NavItem[] = [
-  { label: "ÐÐÐÐÐÐÐ", href: "/" },
-  { label: "ÐÐÐÐ Ð¯ÐÐÐ", href: "/#directions" },
-  { label: "ÐÐÐ¢ÐÐÐÐ Ð", href: "/avtopark", isActive: true },
-  { label: "ÐÐÐÐ¢ÐÐÐ¢Ð", href: "/kontakty" },
-  { label: "ÐÐ Ð ÐÐÐ¡", href: "/pro-kompaniiu" },
-  { label: "ÐÐÐÐ", href: "/blog" }
+  { label: "ГОЛОВНА", href: "/" },
+  { label: "НАПРЯМКИ", href: "/#directions" },
+  { label: "АВТОПАРК", href: "/avtopark", isActive: true },
+  { label: "КОНТАКТИ", href: "/kontakty" },
+  { label: "ПРО НАС", href: "/pro-kompaniiu" },
+  { label: "БЛОГ", href: "/blog" }
 ];
 
 const mobileNavItems: NavItem[] = navItems;
@@ -56,69 +56,69 @@ const phoneNumber = "+38 063 824 3223";
 const phoneHref = "+380638243223";
 
 const featureRows: FeatureRow[] = [
-  { text: "Ð¡ÑÑÐ°ÑÐ½Ñ Ð°Ð²ÑÐ¾ Ð½Ðµ ÑÑÐ°ÑÑÑ 3 ÑÐ¾ÐºÑÐ²", Icon: CarIcon },
-  { text: "Ð ÐµÐ³ÑÐ»ÑÑÐ½Ðµ ÑÐµÑÐ½ÑÑÐ½Ðµ Ð¾Ð±ÑÐ»ÑÐ³Ð¾Ð²ÑÐ²Ð°Ð½Ð½Ñ", Icon: ServiceIcon },
-  { text: "Ð§Ð¸ÑÑÐ¸Ð¹ ÑÐ° Ð´Ð¾Ð³Ð»ÑÐ½ÑÑÐ¸Ð¹ ÑÐ°Ð»Ð¾Ð½", Icon: SeatIcon },
-  { text: "ÐÑÐ¾ÑÐµÑÑÐ¹Ð½Ñ ÑÐ° Ð²Ð²ÑÑÐ»Ð¸Ð²Ñ Ð²Ð¾Ð´ÑÑ", Icon: DriverIcon }
+  { text: "Сучасні авто не старші 3 років", Icon: CarIcon },
+  { text: "Регулярне технічне обслуговування", Icon: ServiceIcon },
+  { text: "Чистий та доглянутий салон", Icon: SeatIcon },
+  { text: "Професійні та ввічливі водії", Icon: DriverIcon }
 ];
 
 const carClassCards: CarClassCardData[] = [
   {
-    title: "ÐÐ¾Ð¼ÑÐ¾ÑÑ",
-    description: "ÐÐ´ÐµÐ°Ð»ÑÐ½Ð¸Ð¹ Ð²Ð¸Ð±ÑÑ Ð´Ð»Ñ ÑÐ¾Ð´ÐµÐ½Ð½Ð¸Ñ Ð¿Ð¾ÑÐ·Ð´Ð¾Ðº ÑÐ° Ð¿Ð¾Ð´Ð¾ÑÐ¾Ð¶ÐµÐ¹",
+    title: "Комфорт",
+    description: "Ідеальний вибір для щоденних поїздок та подорожей",
     image: classOneImage,
     models: ["VW Passat", "Skoda Octavia", "Sonata", "Kia Optima"],
     seats: "3",
-    luggage: "2â3",
-    climate: "ÐÐ»ÑÐ¼Ð°Ñ-ÐºÐ¾Ð½ÑÑÐ¾Ð»Ñ",
+    luggage: "2–3",
+    climate: "Клімат-контроль",
     price: "€170"
   },
   {
-    title: "ÐÑÐ·Ð½ÐµÑ",
-    description: "ÐÑÐ´Ð²Ð¸ÑÐµÐ½Ð¸Ð¹ ÑÑÐ²ÐµÐ½Ñ ÐºÐ¾Ð¼ÑÐ¾ÑÑÑ Ð´Ð»Ñ Ð´ÑÐ»Ð¾Ð²Ð¸Ñ Ð¿Ð¾ÑÐ·Ð´Ð¾Ðº",
+    title: "Бізнес",
+    description: "Підвищений рівень комфорту для ділових поїздок",
     image: classTwoImage,
     models: ["Toyota Camry", "Nissan Teana", "Skoda Superb", "VW Passat B8"],
     seats: "3",
-    luggage: "2â3",
-    climate: "ÐÐ»ÑÐ¼Ð°Ñ-ÐºÐ¾Ð½ÑÑÐ¾Ð»Ñ",
+    luggage: "2–3",
+    climate: "Клімат-контроль",
     price: "€220"
   },
   {
-    title: "ÐÑÐµÐ¼ÑÑÐ¼",
-    description: "ÐÐ°ÐºÑÐ¸Ð¼Ð°Ð»ÑÐ½Ð¸Ð¹ ÐºÐ¾Ð¼ÑÐ¾ÑÑ ÑÐ° Ð¿ÑÐµÐ´ÑÑÐ°Ð²Ð½Ð¸ÑÑÐºÐ¸Ð¹ ÐºÐ»Ð°Ñ",
+    title: "Преміум",
+    description: "Максимальний комфорт та представницький клас",
     image: classThreeImage,
     models: ["S-class", "Audi A8", "BMW 7-series", "Lexus LS"],
     seats: "3",
-    luggage: "3â4",
-    climate: "ÐÐ»ÑÐ¼Ð°Ñ-ÐºÐ¾Ð½ÑÑÐ¾Ð»Ñ",
+    luggage: "3–4",
+    climate: "Клімат-контроль",
     price: "€300"
   },
   {
-    title: "ÐÑÐ½ÑÐ²ÐµÐ½",
-    description: "ÐÑÐ¾ÑÑÐ¾ÑÐ¸Ð¹ ÑÐ°Ð»Ð¾Ð½ Ð´Ð»Ñ Ð²ÐµÐ»Ð¸ÐºÐ¸Ñ ÐºÐ¾Ð¼Ð¿Ð°Ð½ÑÐ¹ ÑÐ° ÑÑÐ¼ÐµÐ¹Ð½Ð¸Ñ Ð¿Ð¾Ð´Ð¾ÑÐ¾Ð¶ÐµÐ¹",
+    title: "Мінівен",
+    description: "Просторий салон для великих компаній та сімейних подорожей",
     image: classFourImage,
     models: ["Mercedes Vito", "VW Caravelle", "Opel Vivaro", "Hyundai H-1"],
     seats: "7",
-    luggage: "6â8",
-    climate: "ÐÐ»ÑÐ¼Ð°Ñ-ÐºÐ¾Ð½ÑÑÐ¾Ð»Ñ",
+    luggage: "6–8",
+    climate: "Клімат-контроль",
     price: "€260"
   }
 ];
 
 const tripInclusions = [
-  "ÐÑÑÑÑÑÑ Ð· ÑÐ°Ð±Ð»Ð¸ÑÐºÐ¾Ñ Ð² Ð°ÐµÑÐ¾Ð¿Ð¾ÑÑÑ / Ð½Ð° Ð²Ð¾ÐºÐ·Ð°Ð»Ñ",
-  "ÐÐ¾Ð¿Ð¾Ð¼Ð¾Ð³Ð° Ð· Ð±Ð°Ð³Ð°Ð¶ÐµÐ¼",
-  "ÐÑÑÐºÑÐ²Ð°Ð½Ð½Ñ ÑÐµÐ¹ÑÑ Ð±ÐµÐ· Ð´Ð¾Ð¿Ð»Ð°Ñ",
-  "ÐÐ¸ÑÑÑÑ ÐºÑÑÑÐ»Ð° Ð·Ð° Ð·Ð°Ð¿Ð¸ÑÐ¾Ð¼",
-  "WiâFi ÑÐ° Ð·Ð°ÑÑÐ´Ð½Ñ Ð¿ÑÐ¸ÑÑÑÐ¾Ñ",
-  "ÐÐ¾Ð´Ð° Ð² ÑÐ°Ð»Ð¾Ð½Ñ"
+  "Зустріч з табличкою в аеропорту / на вокзалі",
+  "Допомога з багажем",
+  "Очікування рейсу без доплат",
+  "Дитячі крісла за запитом",
+  "Wi‑Fi та зарядні пристрої",
+  "Вода в салоні"
 ];
 
 const carClassTrackingKeyByTitle: Record<string, "comfort" | "business" | "premium" | "minivan"> = {
-  "ÐÐ¾Ð¼ÑÐ¾ÑÑ": "comfort",
-  "ÐÑÐ·Ð½ÐµÑ": "business",
-  "ÐÑÐµÐ¼ÑÑÐ¼": "premium",
-  "ÐÑÐ½ÑÐ²ÐµÐ½": "minivan"
+  "Комфорт": "comfort",
+  "Бізнес": "business",
+  "Преміум": "premium",
+  "Мінівен": "minivan"
 };
 
 function desktopNavLinkClasses(isActive = false) {
@@ -194,7 +194,7 @@ export default function AvtoparkPage() {
             <div className="flex min-h-[72px] items-center justify-between gap-3 md:min-h-[74px] lg:grid lg:min-h-[88px] lg:grid-cols-[190px_minmax(0,1fr)_300px] lg:justify-normal lg:gap-4 xl:grid-cols-[202px_minmax(0,1fr)_470px]">
               <Link href="/" className="header-brand block">
                 <div className="luxury-logo-title">GRAND TRANSFER</div>
-                <div className="luxury-logo-subtitle">VIP Ð¡ÐÐ ÐÐÐ¡</div>
+                <div className="luxury-logo-subtitle">VIP СЕРВІС</div>
               </Link>
 
               <nav className="hidden items-center justify-self-center lg:flex lg:gap-3 xl:gap-5">
@@ -229,7 +229,7 @@ export default function AvtoparkPage() {
                   }
                   className="button-gold inline-flex h-11 items-center justify-center rounded-full px-6 text-[0.75rem] font-bold uppercase tracking-[0.09em] xl:h-12 xl:px-7 xl:text-[0.78rem] xl:tracking-[0.11em]"
                 >
-                  ÐÐÐÐÐÐÐ¢Ð
+                  ЗАМОВИТИ
                 </Link>
               </div>
 
@@ -238,7 +238,7 @@ export default function AvtoparkPage() {
                   type="button"
                   aria-expanded={menuOpen}
                   aria-controls="mobile-drawer-avtopark"
-                  aria-label="ÐÑÐ´ÐºÑÐ¸ÑÐ¸ Ð¼ÐµÐ½Ñ"
+                  aria-label="Відкрити меню"
                   onClick={() => setMenuOpen(true)}
                   className="burger-button inline-flex h-12 w-12 items-center justify-center rounded-full"
                 >
@@ -251,17 +251,17 @@ export default function AvtoparkPage() {
           <section className="relative z-10 mt-6 md:mt-8">
             <div className="grid gap-6 lg:grid-cols-[minmax(0,1.05fr)_minmax(360px,0.7fr)] lg:items-start xl:gap-8">
               <div className="pt-2 md:pt-5">
-                <p className="eyebrow-lux">ÐÐÐ¢ÐÐÐÐ Ð</p>
+                <p className="eyebrow-lux">АВТОПАРК</p>
                 <h1 className="section-title-lux mt-5 max-w-[43rem] text-[clamp(2.35rem,4.85vw,4.5rem)] font-medium not-italic leading-[1.05] tracking-[-0.038em] text-[var(--champagne)]">
                   <span className="inline-block md:whitespace-nowrap">
-                    ÐÐ¾Ð¼ÑÐ¾ÑÑ Ð´Ð»Ñ&nbsp;ÐºÐ¾Ð¶Ð½Ð¾Ñ
+                    Комфорт для&nbsp;кожної
                   </span>
                   <br />
-                  Ð¿Ð¾ÑÐ·Ð´ÐºÐ¸
+                  поїздки
                 </h1>
                 <p className="mt-6 max-w-[34rem] text-[1rem] leading-[1.85] text-[var(--muted)] md:text-[1.08rem]">
-                  Ð¡ÑÑÐ°ÑÐ½Ñ Ð°Ð²ÑÐ¾ Ð¿ÑÐµÐ¼ÑÑÐ¼-ÐºÐ»Ð°ÑÑ, ÑÐ´ÐµÐ°Ð»ÑÐ½Ð¸Ð¹ ÑÑÐ°Ð½, ÑÐ¸ÑÑÐ¾ÑÐ° ÑÐ° Ð¿Ð¾Ð²Ð½Ð¸Ð¹
-                  ÐºÐ¾Ð¼ÑÐ¾ÑÑ Ð´Ð»Ñ Ð²Ð°ÑÐ¾Ñ Ð¿Ð¾Ð´Ð¾ÑÐ¾Ð¶Ñ.
+                  Сучасні авто преміум-класу, ідеальний стан, чистота та повний
+                  комфорт для вашої подорожі.
                 </p>
               </div>
 
@@ -290,7 +290,7 @@ export default function AvtoparkPage() {
           </section>
 
           <section className="relative z-10 mt-12 md:mt-16">
-            <p className="eyebrow-lux">ÐÐÐÐ¡Ð ÐÐÐ¢Ð</p>
+            <p className="eyebrow-lux">КЛАСИ АВТО</p>
             <CarClassesGrid
               cards={carClassCards}
               className="mt-6"
@@ -310,9 +310,9 @@ export default function AvtoparkPage() {
               <div className="autopark-salon-overlay absolute inset-0" />
 
               <div className="relative z-10 max-w-[34rem] px-5 py-8 sm:px-6 md:px-10 md:py-11 lg:px-12 lg:py-12">
-                <p className="eyebrow-lux">Ð©Ð ÐÐ¥ÐÐÐÐ¢Ð¬ Ð£ ÐÐÐÐÐ£ ÐÐÐÐÐÐÐ£</p>
+                <p className="eyebrow-lux">ЩО ВХОДИТЬ У КОЖНУ ПОЇЗДКУ</p>
                 <h2 className="section-title-lux mt-4 text-[clamp(2rem,4vw,3.15rem)] font-medium leading-[1.08] tracking-[-0.035em] text-[var(--text)]">
-                  Ð¢ÑÑÐ±Ð¾ÑÐ° Ð¿ÑÐ¾ ÐºÐ¾Ð¼ÑÐ¾ÑÑ Ñ ÐºÐ¾Ð¶Ð½ÑÐ¹ Ð´ÐµÑÐ°Ð»Ñ
+                  Турбота про комфорт у кожній деталі
                 </h2>
 
                 <ul className="mt-6 space-y-3.5">
@@ -338,11 +338,11 @@ export default function AvtoparkPage() {
                   </span>
                   <div>
                     <h2 className="section-title-lux text-[clamp(1.7rem,3vw,2.45rem)] font-medium leading-[1.08] tracking-[-0.03em] text-[var(--text)]">
-                      ÐÐµ Ð·Ð½Ð°Ð¹ÑÐ»Ð¸ Ð¿Ð¾ÑÑÑÐ±Ð½Ð¸Ð¹ Ð°Ð²ÑÐ¾Ð¼Ð¾Ð±ÑÐ»Ñ?
+                      Не знайшли потрібний автомобіль?
                     </h2>
                     <p className="mt-3 max-w-[34rem] text-[0.98rem] leading-[1.75] text-[var(--muted)]">
-                      ÐÐ²&apos;ÑÐ¶ÑÑÑÑÑ Ð· Ð½Ð°Ð¼Ð¸ â Ð¿ÑÐ´Ð±ÐµÑÐµÐ¼Ð¾ Ð°Ð²ÑÐ¾ Ð¿ÑÐ´ Ð²Ð°ÑÑ Ð¿Ð¾ÑÑÐµÐ±Ð¸ ÑÐ°
-                      Ð±ÑÐ´Ð¶ÐµÑ.
+                      Зв&apos;яжіться з нами — підберемо авто під ваші потреби та
+                      бюджет.
                     </p>
                   </div>
                 </div>
@@ -358,7 +358,7 @@ export default function AvtoparkPage() {
                   }
                   className="button-gold inline-flex h-[52px] w-full items-center justify-center rounded-[12px] px-8 text-[0.8rem] font-bold uppercase tracking-[0.1em] sm:w-auto"
                 >
-                  ÐÐÐÐÐÐÐ¢Ð Ð¢Ð ÐÐÐ¡Ð¤ÐÐ 
+                  ЗАМОВИТИ ТРАНСФЕР
                 </Link>
               </div>
             </div>
@@ -376,7 +376,7 @@ export default function AvtoparkPage() {
       >
         <button
           type="button"
-          aria-label="ÐÐ°ÐºÑÐ¸ÑÐ¸ Ð¼ÐµÐ½Ñ"
+          aria-label="Закрити меню"
           onClick={() => setMenuOpen(false)}
           className={`mobile-drawer-overlay ${menuOpen ? "is-open" : ""}`}
         />
@@ -392,11 +392,11 @@ export default function AvtoparkPage() {
               <div className="luxury-logo-title text-[1rem] leading-none">
                 GRAND TRANSFER
               </div>
-              <div className="luxury-logo-subtitle mt-2">VIP Ð¡ÐÐ ÐÐÐ¡</div>
+              <div className="luxury-logo-subtitle mt-2">VIP СЕРВІС</div>
             </Link>
             <button
               type="button"
-              aria-label="ÐÐ°ÐºÑÐ¸ÑÐ¸ Ð¼ÐµÐ½Ñ"
+              aria-label="Закрити меню"
               onClick={() => setMenuOpen(false)}
               className="burger-button inline-flex h-11 w-11 items-center justify-center rounded-full"
             >
@@ -424,7 +424,7 @@ export default function AvtoparkPage() {
               pageType="route"
               phoneHref={phoneHref}
               phoneLabel={phoneNumber}
-              compactLabel="ÐÐ¾Ð´Ð·Ð²Ð¾Ð½Ð¸ÑÐ¸"
+              compactLabel="Подзвонити"
               className="inline-flex"
             />
             <Link
@@ -439,7 +439,7 @@ export default function AvtoparkPage() {
               }
               className="button-gold inline-flex h-[52px] w-full items-center justify-center rounded-full px-7 text-[0.76rem] font-bold uppercase tracking-[0.1em]"
             >
-              ÐÐÐÐÐÐÐ¢Ð
+              ЗАМОВИТИ
             </Link>
           </div>
         </aside>
@@ -455,7 +455,7 @@ export default function AvtoparkPage() {
         <div className="fixed inset-0 z-[85] flex items-center justify-center p-3 sm:p-5 lg:p-8">
           <button
             type="button"
-            aria-label="ÐÐ°ÐºÑÐ¸ÑÐ¸ Ð·Ð¾Ð±ÑÐ°Ð¶ÐµÐ½Ð½Ñ Ð°Ð²ÑÐ¾"
+            aria-label="Закрити зображення авто"
             onClick={() => setSelectedCarCard(null)}
             className="absolute inset-0 bg-[rgba(0,0,0,0.76)] backdrop-blur-[8px]"
           />
@@ -463,7 +463,7 @@ export default function AvtoparkPage() {
           <div className="relative z-10 w-full max-w-[1280px] rounded-[24px] border border-[rgba(216,185,130,0.14)] bg-[linear-gradient(180deg,rgba(12,16,13,0.92),rgba(8,11,9,0.9))] p-3 shadow-[0_26px_90px_rgba(0,0,0,0.45)] sm:p-5 lg:p-6">
             <button
               type="button"
-              aria-label="ÐÐ°ÐºÑÐ¸ÑÐ¸"
+              aria-label="Закрити"
               onClick={() => setSelectedCarCard(null)}
               className="absolute right-3 top-3 inline-flex h-11 w-11 items-center justify-center rounded-full border border-[rgba(216,185,130,0.14)] bg-[rgba(10,13,11,0.7)] text-[var(--soft-gold)] transition hover:border-[rgba(216,185,130,0.28)]"
             >
@@ -472,7 +472,7 @@ export default function AvtoparkPage() {
 
             <div className="mb-4 pr-10">
               <p className="text-[0.74rem] font-bold uppercase tracking-[0.22em] text-[rgba(216,185,130,0.8)]">
-                ÐÐÐÐ¡ ÐÐÐ¢Ð
+                КЛАС АВТО
               </p>
               <h2 className="section-title-lux mt-2 text-[2rem] font-medium leading-[1.02] tracking-[-0.03em] text-[var(--text)] sm:text-[2.4rem]">
                 {selectedCarCard.title}
