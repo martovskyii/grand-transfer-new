@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faViber } from "@fortawesome/free-brands-svg-icons";
@@ -534,24 +534,146 @@ export function FloatingContactWidget({
   phoneHref,
   phoneLabel
 }: FloatingContactWidgetProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const widgetRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+
+    function handlePointerDown(event: PointerEvent) {
+      if (!widgetRef.current?.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setIsOpen(false);
+      }
+    }
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen]);
+
   return (
-    <div className="floating-contact-widget">
-      <a
-        href={`tel:${phoneHref}`}
-        aria-label="Зателефонувати"
-        title={phoneLabel}
-        onClick={() =>
-          trackPhoneClick({
-            phone: phoneHref,
-            location: "floating_contact_widget",
-            pageType
-          })
-        }
-        className="floating-contact-trigger"
+    <div ref={widgetRef} className="floating-contact-widget">
+      <div
+        id="floating-contact-menu"
+        className={`floating-contact-menu ${isOpen ? "is-open" : ""}`}
       >
-        <PhoneIcon className="h-6 w-6 sm:h-[26px] sm:w-[26px]" />
-      </a>
+        <a
+          href={`tel:${phoneHref}`}
+          onClick={() => {
+            trackPhoneClick({
+              phone: phoneHref,
+              location: "floating_contact_widget",
+              pageType
+            });
+            setIsOpen(false);
+          }}
+          className="floating-contact-item"
+        >
+          <span className="floating-contact-item-icon" aria-hidden="true">
+            <PhoneIcon className="h-[18px] w-[18px]" />
+          </span>
+          <span>Телефон</span>
+        </a>
+        <a
+          href={WHATSAPP_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => {
+            trackMessengerClick({
+              messenger: "whatsapp",
+              location: "floating_contact_widget",
+              pageType
+            });
+            setIsOpen(false);
+          }}
+          className="floating-contact-item"
+        >
+          <span className="floating-contact-item-icon" aria-hidden="true">
+            <WhatsAppOutlineIcon className="h-[18px] w-[18px]" />
+          </span>
+          <span>WhatsApp</span>
+        </a>
+        <a
+          href={VIBER_URL}
+          onClick={() => {
+            trackMessengerClick({
+              messenger: "viber",
+              location: "floating_contact_widget",
+              pageType
+            });
+            setIsOpen(false);
+          }}
+          className="floating-contact-item"
+        >
+          <span className="floating-contact-item-icon" aria-hidden="true">
+            <ViberOutlineIcon className="h-[18px] w-[18px]" />
+          </span>
+          <span>Viber</span>
+        </a>
+        <a
+          href={TELEGRAM_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => {
+            trackMessengerClick({
+              messenger: "telegram",
+              location: "floating_contact_widget",
+              pageType
+            });
+            setIsOpen(false);
+          }}
+          className="floating-contact-item"
+        >
+          <span className="floating-contact-item-icon" aria-hidden="true">
+            <TelegramOutlineIcon className="h-[18px] w-[18px]" />
+          </span>
+          <span>Telegram</span>
+        </a>
+      </div>
+
+      <button
+        type="button"
+        aria-label={isOpen ? "Закрити контакти" : "Відкрити контакти"}
+        aria-expanded={isOpen}
+        aria-controls="floating-contact-menu"
+        title={phoneLabel}
+        onClick={() => setIsOpen((current) => !current)}
+        className={`floating-contact-trigger ${isOpen ? "is-open" : ""}`}
+      >
+        <ChatBubbleIcon className="floating-contact-trigger-icon h-[27px] w-[27px] sm:h-[29px] sm:w-[29px]" />
+      </button>
     </div>
+  );
+}
+
+function ChatBubbleIcon({ className = "h-4 w-4" }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+      <path
+        d="M5.25 6.05h13.5c1.25 0 2.25 1 2.25 2.25v5.95c0 1.25-1 2.25-2.25 2.25h-6.2L8.2 20.1c-.58.48-1.45.07-1.45-.68V16.5h-1.5A2.25 2.25 0 0 1 3 14.25V8.3c0-1.25 1-2.25 2.25-2.25Z"
+        stroke="currentColor"
+        strokeWidth="1.55"
+        strokeLinejoin="round"
+      />
+      <path
+        d="M7.25 10.15h8.9M7.25 13h5.65"
+        stroke="currentColor"
+        strokeWidth="1.55"
+        strokeLinecap="round"
+      />
+    </svg>
   );
 }
 
