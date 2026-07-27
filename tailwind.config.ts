@@ -6,7 +6,11 @@ const config: Config = {
     "./components/**/*.{js,ts,jsx,tsx,mdx}"
   ],
   theme: {
-    extend: {}
+    extend: {
+      screens: {
+        lg: "1200px"
+      }
+    }
   },
   plugins: []
 };
