@@ -331,7 +331,7 @@ export default function RoutePageSupabaseClient({
     breadcrumbHome: isRu ? "Главная" : "Головна",
     breadcrumbDirections: isRu ? "Направления" : "Напрямки",
     heroEyebrow: "VIP ТРАНСФЕР",
-    heroOrder: isRu ? "ЗАКАЗАТЬ ТРАНСФЕР" : "ЗАМОВИТИ ТРАНСФЕР",
+    heroOrder: isRu ? "УЗНАТЬ ЦЕНУ" : "ДІЗНАТИСЬ ЦІНУ",
     telegram: isRu ? "НАПИСАТЬ В TELEGRAM" : "НАПИСАТИ В TELEGRAM",
     quickRequest: isRu ? "БЫСТРАЯ ЗАЯВКА" : "ШВИДКА ЗАЯВКА",
     quickCallback: isRu
@@ -919,15 +919,20 @@ export default function RoutePageSupabaseClient({
 
                   <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap md:gap-3.5">
                     <a
-                      href="#route-booking-final"
-                      onClick={() =>
+                      href="#route-pricing"
+                      onClick={(event) => {
                         trackCtaClick({
                           ctaType: "order",
                           location: "route_hero",
                           pageType: "route",
-                          target: "route-booking-final"
-                        })
-                      }
+                          target: "route-pricing"
+                        });
+                        const target = document.getElementById("route-pricing");
+                        if (target) {
+                          event.preventDefault();
+                          target.scrollIntoView({ behavior: "smooth", block: "start" });
+                        }
+                      }}
                       className="button-gold cta-border-shine inline-flex h-14 w-full items-center justify-center rounded-full px-7 text-[0.76rem] font-bold uppercase tracking-[0.1em] sm:w-auto md:text-[0.8rem] lg:tracking-[0.12em]"
                     >
                       {ui.heroOrder}
@@ -1035,7 +1040,7 @@ export default function RoutePageSupabaseClient({
             </div>
           </section>
 
-          <section className="relative z-10 mt-12 md:mt-16 xl:mt-20">
+          <section id="route-pricing" className="relative z-10 mt-12 md:mt-16 xl:mt-20 scroll-mt-24">
             <div className="route-pricing-shell rounded-[28px] px-5 py-7 sm:px-7 md:px-9 lg:px-10 lg:py-9">
               <div className="grid gap-7 lg:grid-cols-[minmax(0,0.4fr)_minmax(0,0.6fr)] lg:items-stretch lg:gap-8 xl:gap-10">
                 <div className="route-pricing-aside flex flex-col lg:min-h-full">
