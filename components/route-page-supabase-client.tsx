@@ -348,7 +348,7 @@ export default function RoutePageSupabaseClient({
     fixedPrice: isRu ? "Фиксированная цена" : "Фіксована ціна",
     duration: isRu ? "Время в пути" : "Час у дорозі",
     fromPrefix: isRu ? "от" : "від",
-    basePrice: isRu ? "Базовая стоимость маршрута" : "Базова вартість маршруту",
+    basePrice: isRu ? "Цены указаны ориентировочно" : "Ціни вказані орієнтовно",
     factorsTitle: isRu ? "ЧТО ВЛИЯЕТ НА ЦЕНУ" : "ЩО ВПЛИВАЄ НА ЦІНУ",
     availabilityNote: isRu
       ? "Модели авто могут отличаться в зависимости от доступности. Точный класс и авто согласовываются перед поездкой."
@@ -416,7 +416,8 @@ export default function RoutePageSupabaseClient({
     passengersShort: "пас.",
     luggageShort: isRu ? "багаж" : "багаж",
     climateShort: isRu ? "Климат" : "Клімат",
-    carCardCta: isRu ? "Выбрать" : "Обрати"
+    carCardCta: isRu ? "Выбрать" : "Обрати",
+    priceApproxShort: isRu ? "Цены указаны ориентировочно" : "Ціни вказані орієнтовно"
   };
   const navItems = [
     { label: ui.navHome, href: homeHref },
@@ -1172,6 +1173,7 @@ export default function RoutePageSupabaseClient({
                           <div className="route-inline-class-price-main">
                             <span className="route-inline-class-price-prefix">{ui.fromPrefix}</span>
                             <span className="route-inline-class-price-value">{card.price}</span>
+                            <span className="route-inline-class-price-note">{ui.priceApproxShort}</span>
                           </div>
                           <a
                             href="#route-booking-final"

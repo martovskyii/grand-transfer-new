@@ -1844,6 +1844,10 @@ input {
   letter-spacing: -0.02em;
 }
 
+.route-inline-class-price-note {
+  display: none;
+}
+
 .route-inline-class-select {
   display: none;
 }
@@ -4212,6 +4216,16 @@ input {
     .route-inline-class-price-value {
       font-size: 2.35rem;
       line-height: 0.95;
+    }
+
+    .route-inline-class-price-note {
+      display: block;
+      max-width: 8.4rem;
+      color: rgba(247, 243, 234, 0.58);
+      font-size: 0.68rem;
+      font-weight: 600;
+      line-height: 1.25;
+      letter-spacing: 0.01em;
     }
 
     .route-inline-class-select {
