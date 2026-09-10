@@ -3,7 +3,7 @@ import HomePageClient, { type HomepageRoute } from "../home-page-client";
 import { supabase } from "../../lib/supabase";
 import { buildPageMetadata } from "../../lib/seo";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export const metadata: Metadata = buildPageMetadata({
   title: "Grand Transfer | VIP трансферы Украина — Молдова — Польша",
@@ -40,7 +40,6 @@ export default async function RussianHomePage() {
     <HomePageClient
       initialHomepageRoutes={initialHomepageRoutes}
       currentLanguage="ru"
-      routeLanguage="ru"
       routeHrefPrefix="/ru"
     />
   );

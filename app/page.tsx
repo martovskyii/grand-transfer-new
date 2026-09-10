@@ -3,7 +3,7 @@ import HomePageClient, { type HomepageRoute } from "./home-page-client";
 import { supabase } from "../lib/supabase";
 import { buildPageMetadata } from "../lib/seo";
 
-export const dynamic = "force-dynamic";
+export const revalidate = 3600;
 
 export const metadata: Metadata = buildPageMetadata({
   title: "VIP трансфери Україна — Молдова — Польща | Grand Transfer",

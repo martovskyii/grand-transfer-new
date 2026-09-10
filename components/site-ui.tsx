@@ -678,7 +678,17 @@ function ChatBubbleIcon({ className = "h-4 w-4" }: { className?: string }) {
 }
 
 function PhoneIcon({ className = "h-4 w-4" }: { className?: string }) {
-  return <i className={`bi bi-telephone ${className}`} aria-hidden="true" />;
+  return (
+    <svg viewBox="0 0 24 24" fill="none" className={className} aria-hidden="true">
+      <path
+        d="M6.62 4.55 8.7 4.05c.72-.17 1.47.16 1.82.81l1.07 1.98c.31.58.25 1.29-.16 1.8l-.94 1.18a12.3 12.3 0 0 0 3.69 3.69l1.18-.94c.51-.41 1.22-.47 1.8-.16l1.98 1.07c.65.35.98 1.1.81 1.82l-.5 2.08c-.18.76-.86 1.29-1.64 1.29C10.94 18.67 5.33 13.06 5.33 6.19c0-.78.53-1.46 1.29-1.64Z"
+        stroke="currentColor"
+        strokeWidth="1.55"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
 }
 
 function MailIcon({ className = "h-4 w-4" }: { className?: string }) {

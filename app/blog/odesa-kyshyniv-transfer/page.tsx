@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import routeHeroDesktop from "../../../img/main-2-screen-desk.png";
+import routeHeroDesktop from "../../../img/main-2-screen-desk.webp";
 import { BlogStaticShell } from "../../../components/blog-static-shell";
 import { JsonLd } from "../../../components/json-ld";
 import { PHONE_TEL_HREF, TELEGRAM_URL } from "../../../lib/contact-links";

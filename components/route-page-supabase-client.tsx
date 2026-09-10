@@ -1,17 +1,18 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import type { ComponentType } from "react";
 import { useEffect, useState } from "react";
-import routeHeroDesktop from "../img/main-2-screen-desk.png";
-import routeHeroMobile from "../img/main-2-screen-mob.png";
-import airportImage from "../img/airport.png";
+import routeHeroDesktop from "../img/main-2-screen-desk.webp";
+import routeHeroMobile from "../img/main-2-screen-mob.webp";
+import airportImage from "../img/airport.webp";
 import comfortCarImage from "../img/comfort.png";
 import businessCarImage from "../img/business.png";
 import premiumCarImage from "../img/class-3.png";
 import minivanCarImage from "../img/class-4.png";
-import routeInfoFallbackImage from "../img/route-map-fallback-2.png";
+import routeInfoFallbackImage from "../img/route-map-fallback-2.webp";
 import {
   DateField,
   PhoneField,
@@ -21,7 +22,6 @@ import {
   TextField
 } from "./lux-form-fields";
 import type { CarClassCardData } from "./car-classes-grid";
-import { ReviewsSection } from "./reviews-section";
 import { JsonLd } from "./json-ld";
 import {
   buildBreadcrumbSchema,
@@ -52,6 +52,11 @@ import {
   trackRouteClick
 } from "../lib/tracking";
 import { useTransferForm } from "../lib/use-transfer-form";
+
+const ReviewsSection = dynamic(
+  () => import("./reviews-section").then((module) => module.ReviewsSection),
+  { ssr: false }
+);
 
 type IconProps = {
   className?: string;
@@ -862,22 +867,16 @@ export default function RoutePageSupabaseClient({
           <section className="relative z-10 mt-4 md:mt-6">
             <div className="route-hero-shell hero-shell panel-soft relative overflow-hidden rounded-[32px]">
               <div className="absolute inset-0">
-                <Image
-                  src={routeHeroDesktop}
-                  alt={heroImageAlt}
-                  priority
-                  fill
-                  className="hidden object-cover object-[68%_center] md:block"
-                  sizes="100vw"
-                />
-                <Image
-                  src={routeHeroMobile}
-                  alt={heroImageAlt}
-                  priority
-                  fill
-                  className="object-cover object-bottom md:hidden"
-                  sizes="100vw"
-                />
+                <picture className="absolute inset-0 block">
+                  <source media="(min-width: 768px)" srcSet={routeHeroDesktop.src} />
+                  <img
+                    src={routeHeroMobile.src}
+                    alt={heroImageAlt}
+                    fetchPriority="high"
+                    decoding="async"
+                    className="h-full w-full object-cover object-bottom md:object-[68%_center]"
+                  />
+                </picture>
                 <div className="route-hero-overlay-primary absolute inset-0" />
                 <div className="route-hero-overlay-secondary absolute inset-0" />
               </div>

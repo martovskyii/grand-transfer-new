@@ -1,13 +1,14 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import Link from "next/link";
 import type { ComponentType } from "react";
 import { useEffect, useState } from "react";
-import desktopHero from "../img/general_screen.png";
-import mobileHero from "../img/mob.png";
-import serviceImage from "../img/3-screen.png";
-import mapsNewImage from "../img/maps_new.png";
+import desktopHero from "../img/general_screen.webp";
+import mobileHero from "../img/mob.webp";
+import serviceImage from "../img/3-screen.webp";
+import mapsNewImage from "../img/maps_new.webp";
 import {
   DateField,
   PhoneField,
@@ -23,7 +24,6 @@ import {
   SiteFooter,
   SuccessPopup
 } from "../components/site-ui";
-import { ReviewsSection } from "../components/reviews-section";
 import {
   formatRouteId,
   trackCtaClick,
@@ -32,11 +32,15 @@ import {
   trackPhoneClick,
   trackRouteClick
 } from "../lib/tracking";
-import { supabase } from "../lib/supabase";
 import { useTransferForm } from "../lib/use-transfer-form";
 import { TELEGRAM_URL } from "../lib/contact-links";
 import { JsonLd } from "../components/json-ld";
 import { buildFaqSchema, buildHowToSchema } from "../lib/structured-data";
+
+const ReviewsSection = dynamic(
+  () => import("../components/reviews-section").then((module) => module.ReviewsSection),
+  { ssr: false }
+);
 
 type IconProps = {
   className?: string;
@@ -258,14 +262,12 @@ function getRouteDestinationPriority(toCity: string | null) {
 type HomePageClientProps = {
   initialHomepageRoutes: HomepageRoute[];
   currentLanguage?: "ua" | "ru" | "en";
-  routeLanguage?: "ua" | "ru";
   routeHrefPrefix?: "" | "/ru";
 };
 
 export default function HomePageClient({
   initialHomepageRoutes,
   currentLanguage = "ua",
-  routeLanguage = "ua",
   routeHrefPrefix = ""
 }: HomePageClientProps) {
   const isRu = currentLanguage === "ru";
@@ -508,8 +510,8 @@ export default function HomePageClient({
   const [activeRouteCity, setActiveRouteCity] = useState<string>(defaultRouteCity);
   const [showMoreRoutesFromCity, setShowMoreRoutesFromCity] = useState(false);
   const [isMobileViewport, setIsMobileViewport] = useState(false);
-  const [homepageRoutes, setHomepageRoutes] = useState<HomepageRoute[]>(initialHomepageRoutes);
-  const [routesLoaded, setRoutesLoaded] = useState(initialHomepageRoutes.length > 0);
+  const homepageRoutes = initialHomepageRoutes;
+  const routesLoaded = true;
   const homeFinalForm = useTransferForm({
     formName: "homepage_booking_form",
     pageType: "home",
@@ -550,45 +552,6 @@ export default function HomePageClient({
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
-
-  useEffect(() => {
-    let isMounted = true;
-
-    async function loadHomepageRoutes() {
-      if (!supabase) {
-        if (isMounted) {
-          setRoutesLoaded(true);
-        }
-        return;
-      }
-
-      const { data, error } = await supabase
-        .from("routes")
-        .select("slug, from_city, to_city, price_from, duration")
-        .eq("is_active", true)
-        .eq("lang", routeLanguage)
-        .order("from_city", { ascending: true })
-        .order("to_city", { ascending: true });
-
-      if (!isMounted) {
-        return;
-      }
-
-      if (error || !data) {
-        setRoutesLoaded(true);
-        return;
-      }
-
-      setHomepageRoutes(data as HomepageRoute[]);
-      setRoutesLoaded(true);
-    }
-
-    void loadHomepageRoutes();
-
-    return () => {
-      isMounted = false;
-    };
-  }, [routeLanguage]);
 
   const routeCities = Array.from(
     new Set(
@@ -841,22 +804,16 @@ export default function HomePageClient({
           <section className="relative z-10 mt-3 md:mt-4">
             <div className="hero-shell hero-shell-home relative overflow-hidden rounded-[28px] md:rounded-[30px]">
               <div className="absolute inset-0">
-                <Image
-                  src={desktopHero}
-                  alt="Автомобіль Grand Transfer для міжнародного VIP трансферу"
-                  priority
-                  fill
-                  className="hidden object-cover object-[82%_center] md:block lg:object-[76%_center] xl:object-[70%_center]"
-                  sizes="100vw"
-                />
-                <Image
-                  src={mobileHero}
-                  alt="Автомобіль Grand Transfer для міжнародного VIP трансферу"
-                  priority
-                  fill
-                  className="object-cover object-bottom md:hidden"
-                  sizes="100vw"
-                />
+                <picture className="absolute inset-0 block">
+                  <source media="(min-width: 768px)" srcSet={desktopHero.src} />
+                  <img
+                    src={mobileHero.src}
+                    alt="Автомобіль Grand Transfer для міжнародного VIP трансферу"
+                    fetchPriority="high"
+                    decoding="async"
+                    className="h-full w-full object-cover object-bottom md:object-[82%_center] lg:object-[76%_center] xl:object-[70%_center]"
+                  />
+                </picture>
                 <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(5,7,6,0.2)_0%,rgba(5,7,6,0.48)_100%)] md:bg-[linear-gradient(92deg,rgba(4,6,5,0.95)_0%,rgba(4,6,5,0.84)_28%,rgba(4,6,5,0.46)_58%,rgba(4,6,5,0.05)_100%)]" />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(29,42,31,0.28),transparent_34%),linear-gradient(180deg,rgba(6,8,7,0.1)_0%,rgba(6,8,7,0.52)_100%)] md:bg-[radial-gradient(circle_at_16%_18%,rgba(29,42,31,0.26),transparent_34%),radial-gradient(circle_at_82%_44%,rgba(216,185,130,0.16),transparent_24%),linear-gradient(180deg,rgba(6,8,7,0.03)_0%,rgba(6,8,7,0.28)_100%)]" />
               </div>
