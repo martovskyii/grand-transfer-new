@@ -223,6 +223,13 @@ input {
   }
 }
 
+@media (max-width: 767px), (prefers-reduced-motion: reduce) {
+  .cta-border-shine::after {
+    animation: none;
+    opacity: 0;
+  }
+}
+
 .language-switcher {
   display: inline-flex;
   align-items: center;
