@@ -219,17 +219,20 @@ export function ReviewsSection({
     reviews ?? []
   );
   const [reviewsLoaded, setReviewsLoaded] = useState(Boolean(reviews));
-  const supabaseReviews = mapSupabaseReviewsToViewModel(
+  const mappedSupabaseReviews = mapSupabaseReviewsToViewModel(
     resolvedReviews,
     routeLabel,
     language
   );
+  const supabaseReviews = isEn
+    ? mappedSupabaseReviews.filter(isEnglishReviewItem)
+    : mappedSupabaseReviews;
   const visibleReviews = supabaseReviews;
   const ratingAverage =
-    supabaseReviews.length > 0
+    visibleReviews.length > 0
       ? Math.round(
-          (supabaseReviews.reduce((sum, review) => sum + review.rating, 0) /
-            supabaseReviews.length) *
+          (visibleReviews.reduce((sum, review) => sum + review.rating, 0) /
+            visibleReviews.length) *
             10
         ) / 10
       : 4.9;
@@ -992,6 +995,19 @@ function mapSupabaseReviewsToViewModel(
       mediaUrl: review.media_url || undefined,
       mediaType: normalizeMediaType(review.media_type, review.media_url)
     }));
+}
+
+function hasCyrillicText(value: string | null | undefined) {
+  return /[А-Яа-яІіЇїЄєҐґ]/.test(value || "");
+}
+
+function isEnglishReviewItem(review: ReviewItem) {
+  return (
+    review.text.trim().length > 0 &&
+    !hasCyrillicText(review.name) &&
+    !hasCyrillicText(review.route) &&
+    !hasCyrillicText(review.text)
+  );
 }
 
 function normalizeMediaType(
