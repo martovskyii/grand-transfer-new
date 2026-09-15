@@ -1815,6 +1815,9 @@ export default function HomePageClient({
         pageType="home"
         phoneHref={phoneHref}
         phoneLabel={phoneNumber}
+        phoneText={ui.phone}
+        openLabel={isEn ? "Open contacts" : isRu ? "Открыть контакты" : "Відкрити контакти"}
+        closeLabel={isEn ? "Close contacts" : isRu ? "Закрыть контакты" : "Закрити контакти"}
       />
     </>
   );

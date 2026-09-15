@@ -53,6 +53,9 @@ type FloatingContactWidgetProps = {
   pageType: PageType;
   phoneHref: string;
   phoneLabel: string;
+  phoneText?: string;
+  openLabel?: string;
+  closeLabel?: string;
 };
 
 type FooterContactLinksProps = {
@@ -531,7 +534,10 @@ export function SuccessPopup({
 export function FloatingContactWidget({
   pageType,
   phoneHref,
-  phoneLabel
+  phoneLabel,
+  phoneText = "Телефон",
+  openLabel = "Відкрити контакти",
+  closeLabel = "Закрити контакти"
 }: FloatingContactWidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
   const widgetRef = useRef<HTMLDivElement | null>(null);
@@ -583,7 +589,7 @@ export function FloatingContactWidget({
           <span className="floating-contact-item-icon" aria-hidden="true">
             <PhoneIcon className="h-[18px] w-[18px]" />
           </span>
-          <span>Телефон</span>
+          <span>{phoneText}</span>
         </a>
         <a
           href={WHATSAPP_URL}
@@ -644,7 +650,7 @@ export function FloatingContactWidget({
 
       <button
         type="button"
-        aria-label={isOpen ? "Закрити контакти" : "Відкрити контакти"}
+        aria-label={isOpen ? closeLabel : openLabel}
         aria-expanded={isOpen}
         aria-controls="floating-contact-menu"
         title={phoneLabel}

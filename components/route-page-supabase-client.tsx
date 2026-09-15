@@ -307,9 +307,13 @@ const carClassOptions = ["Комфорт", "Бізнес", "Преміум", "М
 
 const carClassTrackingKeyByTitle: Record<string, "comfort" | "business" | "premium" | "minivan"> = {
   "Комфорт": "comfort",
+  "Comfort": "comfort",
   "Бізнес": "business",
+  "Business": "business",
   "Преміум": "premium",
+  "Premium": "premium",
   "Мінівен": "minivan",
+  "Minivan": "minivan",
   "Бизнес": "business",
   "Премиум": "premium",
   "Минивэн": "minivan"
@@ -398,7 +402,9 @@ export default function RoutePageSupabaseClient({
     footerCompany: isEn ? "Company" : isRu ? "Компания" : "Компанія",
     footerContacts: isEn ? "Contacts" : isRu ? "Контакты" : "Контакти",
     footerLanguages: isEn ? "Languages" : isRu ? "Языки" : "Мови",
-    footerDescription: isRu
+    footerDescription: isEn
+      ? "Premium international transfers between Ukraine, Moldova and Poland for private, business and VIP clients."
+      : isRu
       ? "Премиальные международные трансферы между Украиной, Молдовой и Польшей для частных, бизнес- и VIP-клиентов."
       : "Преміальні міжнародні трансфери між Україною, Молдовою та Польщею для приватних, бізнес- та VIP-клієнтів.",
     footerHome: isEn ? "Home" : isRu ? "Главная" : "Головна",
@@ -407,8 +413,10 @@ export default function RoutePageSupabaseClient({
     footerFleet: isEn ? "Fleet" : isRu ? "Автопарк" : "Автопарк",
     footerContactsLink: isEn ? "Contacts" : isRu ? "Контакты" : "Контакти",
     footerAbout: isEn ? "About" : isRu ? "О нас" : "Про нас",
-    footerBlog: isRu ? "Блог" : "Блог",
-    footerCopyright: isRu
+    footerBlog: isEn ? "Blog" : "Блог",
+    footerCopyright: isEn
+      ? "© 2026 Grand Transfer. All rights reserved."
+      : isRu
       ? "© 2026 Grand Transfer. Все права защищены."
       : "© 2026 Grand Transfer. Усі права захищені.",
     openMenu: isEn ? "Open menu" : isRu ? "Открыть меню" : "Відкрити меню",
@@ -433,7 +441,7 @@ export default function RoutePageSupabaseClient({
     successCallButton: isEn ? "Call now" : isRu ? "Позвонить сейчас" : "Подзвонити зараз",
     chooseDate: isEn ? "Choose date" : isRu ? "Выберите дату" : "Оберіть дату",
     onRequest: isEn ? "on request" : isRu ? "по запросу" : "за запитом",
-    passengersShort: "пас.",
+    passengersShort: isEn ? "pass." : "пас.",
     luggageShort: isEn ? "luggage" : isRu ? "багаж" : "багаж",
     climateShort: isEn ? "Climate" : isRu ? "Климат" : "Клімат",
     carCardCta: isEn ? "Select" : isRu ? "Выбрать" : "Обрати",
@@ -613,16 +621,25 @@ export default function RoutePageSupabaseClient({
         "Дополнительные остановки и ожидание"
       ]
     : pricingFactors;
+  const getCarClassTitle = (title: string) => {
+    if (isEn) {
+      if (title === "Комфорт") return "Comfort";
+      if (title === "Бізнес") return "Business";
+      if (title === "Преміум") return "Premium";
+      if (title === "Мінівен") return "Minivan";
+    }
+
+    if (isRu) {
+      if (title === "Бізнес") return "Бизнес";
+      if (title === "Преміум") return "Премиум";
+      if (title === "Мінівен") return "Минивэн";
+    }
+
+    return title;
+  };
   const carClassCards: CarClassCardData[] = carClassCardTemplates.map((card) => ({
     ...card,
-    title:
-      isRu && card.title === "Бізнес"
-        ? "Бизнес"
-        : isRu && card.title === "Преміум"
-          ? "Премиум"
-          : isRu && card.title === "Мінівен"
-            ? "Минивэн"
-            : card.title,
+    title: getCarClassTitle(card.title),
     description:
       card.title === "Комфорт"
         ? isEn
@@ -648,6 +665,13 @@ export default function RoutePageSupabaseClient({
               ? "Для нескольких пассажиров и багажа."
               : "Оптимальний вибір для групових поїздок.",
     climate: isEn ? "Climate control" : isRu ? "Климат-контроль" : "Клімат-контроль",
+    models: card.models.map((model) =>
+      isEn
+        ? model.replace(/\s+та ін\.$/, " and similar")
+        : isRu
+          ? model.replace(/\s+та ін\.$/, " и др.")
+          : model
+    ),
     price:
       card.title === "Комфорт"
         ? routePriceDisplay
@@ -1277,11 +1301,11 @@ export default function RoutePageSupabaseClient({
                       <article key={card.title} className="route-inline-class-card">
                         <div className="route-inline-class-top">
                           <span className="route-inline-class-icon">
-                            {card.title === "Комфорт" ? (
+                            {card.title === "Комфорт" || card.title === "Comfort" ? (
                               <ShieldClassIcon className="h-[20px] w-[20px]" />
-                            ) : card.title === "Бізнес" || card.title === "Бизнес" ? (
+                            ) : card.title === "Бізнес" || card.title === "Бизнес" || card.title === "Business" ? (
                               <BriefcaseClassIcon className="h-[20px] w-[20px]" />
-                            ) : card.title === "Преміум" || card.title === "Премиум" ? (
+                            ) : card.title === "Преміум" || card.title === "Премиум" || card.title === "Premium" ? (
                               <StarClassIcon className="h-[20px] w-[20px]" />
                             ) : (
                               <GroupClassIcon className="h-[20px] w-[20px]" />
@@ -1611,7 +1635,9 @@ export default function RoutePageSupabaseClient({
               <div className="route-info-content relative z-10 max-w-[29rem] lg:max-w-[30rem]">
                 <p className="eyebrow-lux">{ui.routeInfoEyebrow}</p>
                 <p className="mt-4 max-w-[28rem] text-[0.92rem] leading-[1.72] text-[var(--muted)]">
-                  {isRu
+                  {isEn
+                    ? `The ${routeLabel} route is suitable for private clients, business trips and airport transfers. If needed, a private driver is available for ${fromCity} ${toCity} with vehicle pickup matched to your schedule.`
+                    : isRu
                     ? `Маршрут ${routeLabel} подходит для частных клиентов, бизнес-поездок и трансферов в аэропорт Кишинёва. При необходимости доступен индивидуальный водитель ${fromCity} ${toCity} с подачей авто под ваш график.`
                     : `Маршрут ${routeLabel} підходить для приватних клієнтів, бізнес-поїздок та трансферів в аеропорт Кишинева. За потреби доступний індивідуальний водій ${fromCity} ${toCity} з подачею авто під ваш графік.`}
                 </p>
@@ -1633,7 +1659,9 @@ export default function RoutePageSupabaseClient({
                   ))}
                 </div>
                 <p className="mt-6 max-w-[29rem] text-[0.9rem] leading-[1.72] text-[var(--muted)]">
-                  {isRu
+                  {isEn
+                    ? `The ${routeLabel} route is planned with traffic, border crossing time and road conditions in mind. The driver selects the optimal route for a fast and comfortable trip.`
+                    : isRu
                     ? `Маршрут ${routeLabel} проходит через пограничные пункты с учётом трафика и времени прохождения границы. Водитель подбирает оптимальный путь для быстрой и комфортной поездки.`
                     : `Маршрут ${routeLabel} проходить через прикордонні пункти з урахуванням трафіку та часу проходження кордону. Водій підбирає оптимальний шлях для швидкої та комфортної поїздки.`}
                 </p>
@@ -1963,6 +1991,9 @@ export default function RoutePageSupabaseClient({
         pageType="route"
         phoneHref={phoneHref}
         phoneLabel={phoneNumber}
+        phoneText={ui.phone}
+        openLabel={isEn ? "Open contacts" : isRu ? "Открыть контакты" : "Відкрити контакти"}
+        closeLabel={isEn ? "Close contacts" : isRu ? "Закрыть контакты" : "Закрити контакти"}
       />
     </>
   );

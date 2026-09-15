@@ -66,25 +66,38 @@ function buildEntry(
 }
 
 async function fetchPriorityRoutes(): Promise<SitemapRouteRecord[]> {
-  if (!supabase) {
+  const client = supabase;
+
+  if (!client) {
     return [];
   }
 
-  const { data, error } = await supabase
-    .from("routes")
-    .select("slug, lang, updated_at, created_at")
-    .eq("is_active", true)
-    .in("lang", ["ua", "ru", "en"])
-    .eq("sitemap_priority", true)
-    .order("lang", { ascending: true })
-    .order("slug", { ascending: true });
+  const fetchRoutes = (columns: string) =>
+    client
+      .from("routes")
+      .select(columns)
+      .eq("is_active", true)
+      .in("lang", ["ua", "ru", "en"])
+      .eq("sitemap_priority", true)
+      .order("lang", { ascending: true })
+      .order("slug", { ascending: true });
 
-  if (error) {
-    console.error("[sitemap] Failed to fetch priority routes:", error);
+  const { data, error } = await fetchRoutes("slug, lang, updated_at, created_at");
+
+  if (!error) {
+    return (data as unknown as SitemapRouteRecord[] | null) || [];
+  }
+
+  console.error("[sitemap] Failed to fetch priority routes with updated_at:", error);
+
+  const fallbackResult = await fetchRoutes("slug, lang, created_at");
+
+  if (fallbackResult.error) {
+    console.error("[sitemap] Failed to fetch priority routes:", fallbackResult.error);
     return [];
   }
 
-  return (data as SitemapRouteRecord[] | null) || [];
+  return (fallbackResult.data as unknown as SitemapRouteRecord[] | null) || [];
 }
 
 export const dynamic = "force-dynamic";
