@@ -226,7 +226,7 @@ export function ReviewsSection({
   );
   const supabaseReviews = isEn
     ? mappedSupabaseReviews.filter(isEnglishReviewItem)
-    : mappedSupabaseReviews;
+    : mappedSupabaseReviews.filter(isCyrillicReviewItem);
   const visibleReviews = supabaseReviews;
   const ratingAverage =
     visibleReviews.length > 0
@@ -1007,6 +1007,15 @@ function isEnglishReviewItem(review: ReviewItem) {
     !hasCyrillicText(review.name) &&
     !hasCyrillicText(review.route) &&
     !hasCyrillicText(review.text)
+  );
+}
+
+function isCyrillicReviewItem(review: ReviewItem) {
+  return (
+    review.text.trim().length > 0 &&
+    (hasCyrillicText(review.name) ||
+      hasCyrillicText(review.route) ||
+      hasCyrillicText(review.text))
   );
 }
 
