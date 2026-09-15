@@ -15,8 +15,6 @@ export const metadata: Metadata = buildPageMetadata({
   locale: "ru_RU"
 });
 
-const routePreviewLimitPerCity = 10;
-
 const routeDestinationPriorityTiers = [
   ["кишинів", "кишинёв", "кишинев", "chisinau", "kishinev", "kyshyniv"],
   ["варшава", "warsaw", "warszawa", "varshava"],
@@ -64,7 +62,6 @@ function prepareHomepageRoutePreview(routes: HomepageRoute[]) {
 
         return (left.to_city || "").localeCompare(right.to_city || "", "ru");
       })
-      .slice(0, routePreviewLimitPerCity)
   );
 }
 
