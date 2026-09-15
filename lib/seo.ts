@@ -26,7 +26,7 @@ export const DEFAULT_OG_IMAGE = {
   url: absoluteUrl(ogImageAsset.src),
   width: ogImageAsset.width,
   height: ogImageAsset.height,
-  alt: "Grand Transfer — приватні VIP трансфери між Україною та Європою"
+  alt: "Grand Transfer — VIP transfers between Ukraine, Moldova and Europe"
 };
 
 /** Absolute URL to the brand logo, used in structured data. */

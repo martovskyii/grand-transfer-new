@@ -3,29 +3,16 @@ import { notFound } from "next/navigation";
 import RoutePageSupabaseClient from "@/components/route-page-supabase-client";
 import {
   buildRouteMetadata,
-  getRouteAlternates,
   getApprovedReviews,
   getRelatedRoutesForRoute,
+  getRouteAlternates,
   getRouteBySlug,
   type DynamicRoutePageProps
 } from "@/lib/route-page-data";
 
 export const dynamic = "force-dynamic";
 
-const reservedSlugs = new Set([
-  "api",
-  "avtopark",
-  "blog",
-  "en",
-  "kontakty",
-  "legal-information",
-  "about",
-  "pro-kompaniiu",
-  "privacy-policy",
-  "public-offer",
-  "routes",
-  "ru"
-]);
+const reservedSlugs = new Set(["api", "routes"]);
 
 function isReservedSlug(slug: string) {
   return reservedSlugs.has(slug);
@@ -38,21 +25,21 @@ export async function generateMetadata({
   const slug = typeof resolvedParams.slug === "string" ? resolvedParams.slug.trim() : "";
 
   if (!slug || isReservedSlug(slug)) {
-    return buildRouteMetadata(null);
+    return buildRouteMetadata(null, undefined, "en");
   }
 
-  const route = await getRouteBySlug(slug, "ua");
+  const route = await getRouteBySlug(slug, "en");
 
   if (!route) {
-    return buildRouteMetadata(null);
+    return buildRouteMetadata(null, undefined, "en");
   }
 
-  const alternates = await getRouteAlternates(route, "ua");
+  const alternates = await getRouteAlternates(route, "en");
 
-  return buildRouteMetadata(route, alternates, "ua");
+  return buildRouteMetadata(route, alternates, "en");
 }
 
-export default async function CleanDynamicRoutePage({
+export default async function EnglishDynamicRoutePage({
   params
 }: DynamicRoutePageProps) {
   const resolvedParams = await params;
@@ -62,16 +49,16 @@ export default async function CleanDynamicRoutePage({
     notFound();
   }
 
-  const route = await getRouteBySlug(slug, "ua");
+  const route = await getRouteBySlug(slug, "en");
 
   if (!route) {
     notFound();
   }
 
-  const alternates = await getRouteAlternates(route, "ua");
+  const alternates = await getRouteAlternates(route, "en");
   const [routeReviews, relatedRoutes] = await Promise.all([
     getApprovedReviews(),
-    getRelatedRoutesForRoute(route.slug, route.from_city, route.to_city, "ua")
+    getRelatedRoutesForRoute(route.slug, route.from_city, route.to_city, "en")
   ]);
 
   return (
@@ -79,7 +66,7 @@ export default async function CleanDynamicRoutePage({
       routeData={route}
       routeReviews={routeReviews}
       relatedRoutes={relatedRoutes}
-      currentLanguage="ua"
+      currentLanguage="en"
       languageLinks={alternates.languageLinks}
     />
   );

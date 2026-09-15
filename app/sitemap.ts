@@ -11,6 +11,7 @@ const reservedStaticSlugs = new Set([
   "api",
   "avtopark",
   "blog",
+  "en",
   "kontakty",
   "legal-information",
   "pro-kompaniiu",
@@ -71,9 +72,9 @@ async function fetchPriorityRoutes(): Promise<SitemapRouteRecord[]> {
 
   const { data, error } = await supabase
     .from("routes")
-    .select("slug, lang, created_at")
+    .select("slug, lang, updated_at, created_at")
     .eq("is_active", true)
-    .in("lang", ["ua", "ru"])
+    .in("lang", ["ua", "ru", "en"])
     .eq("sitemap_priority", true)
     .order("lang", { ascending: true })
     .order("slug", { ascending: true });
@@ -94,6 +95,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPaths = [
     "/",
     "/ru",
+    "/en",
     "/avtopark",
     "/blog",
     "/blog/odesa-kyshyniv-transfer",
@@ -103,7 +105,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     "/pro-kompaniiu",
     "/public-offer",
     "/routes",
-    "/ru/routes"
+    "/ru/routes",
+    "/en/routes"
   ] as const;
 
   for (const path of staticPaths) {
@@ -124,7 +127,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       continue;
     }
 
-    const routePath = lang === "ru" ? `/ru/${slug}` : `/${slug}`;
+    const routePath =
+      lang === "ru" ? `/ru/${slug}` : lang === "en" ? `/en/${slug}` : `/${slug}`;
     const lastModified = resolveLastModified(route.updated_at, route.created_at, now);
 
     const entry = buildEntry(routePath, {

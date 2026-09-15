@@ -22,7 +22,7 @@ type ReviewsSectionProps = {
   routeLabel?: string;
   routeSlug?: string | null;
   reviews?: DynamicRouteReview[];
-  language?: "ua" | "ru";
+  language?: "ua" | "ru" | "en";
 };
 
 type MediaType = "instagram" | "messenger" | "photo" | "video";
@@ -59,24 +59,41 @@ const reviewFormInitialState: ReviewFormState = {
   privacyAccepted: false
 };
 
-function getMediaPreviewMeta(language: "ua" | "ru") {
+function getMediaPreviewMeta(language: "ua" | "ru" | "en") {
   const isRu = language === "ru";
+  const isEn = language === "en";
 
   return {
     instagram: {
-      title: isRu ? "Скрин отзыва клиента" : "Скрин відгуку клієнта",
+      title: isEn
+        ? "Client review screenshot"
+        : isRu
+          ? "Скрин отзыва клиента"
+          : "Скрин відгуку клієнта",
       Icon: PhotoIcon
     },
     messenger: {
-      title: isRu ? "Скрин переписки с клиентом" : "Скрин переписки з клієнтом",
+      title: isEn
+        ? "Messenger screenshot"
+        : isRu
+          ? "Скрин переписки с клиентом"
+          : "Скрин переписки з клієнтом",
       Icon: MessengerIcon
     },
     photo: {
-      title: isRu ? "Фото после поездки" : "Фото після поїздки",
+      title: isEn
+        ? "Photo after the trip"
+        : isRu
+          ? "Фото после поездки"
+          : "Фото після поїздки",
       Icon: PhotoIcon
     },
     video: {
-      title: isRu ? "Видеоотзыв клиента" : "Відеовідгук клієнта",
+      title: isEn
+        ? "Client video review"
+        : isRu
+          ? "Видеоотзыв клиента"
+          : "Відеовідгук клієнта",
       Icon: VideoIcon
     }
   } satisfies Record<MediaType, { title: string; Icon: typeof PhotoIcon }>;
@@ -115,54 +132,67 @@ export function ReviewsSection({
 }: ReviewsSectionProps) {
   const pageType = location === "homepage" ? "home" : "route";
   const isRu = language === "ru";
+  const isEn = language === "en";
   const ui = {
-    sectionEyebrow: isRu ? "ОТЗЫВЫ КЛИЕНТОВ" : "ВІДГУКИ КЛІЄНТІВ",
-    sectionTitle: isRu
+    sectionEyebrow: isEn ? "CLIENT REVIEWS" : isRu ? "ОТЗЫВЫ КЛИЕНТОВ" : "ВІДГУКИ КЛІЄНТІВ",
+    sectionTitle: isEn
+      ? "Real impressions after trips"
+      : isRu
       ? "Реальные впечатления после поездок"
       : "Реальні враження після поїздок",
-    sectionSubtitle: isRu
+    sectionSubtitle: isEn
+      ? "Short client reviews after private transfers between Ukraine, Moldova and Poland."
+      : isRu
       ? "Короткие отзывы клиентов после частных трансферов Украина — Молдова — Польша."
       : "Короткі відгуки клієнтів після приватних трансферів Україна — Молдова — Польща.",
-    ratingLabel: isRu ? "Рейтинг сервиса" : "Рейтинг сервісу",
-    ratingBasedOn: isRu ? "На основе реальных поездок" : "На основі реальних поїздок",
-    leaveReview: isRu ? "ОСТАВИТЬ ОТЗЫВ" : "ЗАЛИШИТИ ВІДГУК",
-    loading: isRu ? "Загружаем отзывы..." : "Завантажуємо відгуки...",
-    empty: isRu ? "Отзывы скоро появятся." : "Відгуки скоро з’являться.",
-    mediaButton: isRu ? "Смотреть скрин" : "Дивитись скрин",
-    scrollHint: isRu ? "Листайте отзывы" : "Гортайте відгуки",
-    reviewsCountSuffix: isRu ? "отзывов" : "відгуків",
-    closeReviewForm: isRu ? "Закрыть форму отзыва" : "Закрити форму відгуку",
-    formEyebrow: isRu ? "ОСТАВИТЬ ОТЗЫВ" : "ЗАЛИШИТИ ВІДГУК",
-    formTitle: isRu
+    ratingLabel: isEn ? "Service rating" : isRu ? "Рейтинг сервиса" : "Рейтинг сервісу",
+    ratingBasedOn: isEn ? "Based on real trips" : isRu ? "На основе реальных поездок" : "На основі реальних поїздок",
+    leaveReview: isEn ? "LEAVE A REVIEW" : isRu ? "ОСТАВИТЬ ОТЗЫВ" : "ЗАЛИШИТИ ВІДГУК",
+    loading: isEn ? "Loading reviews..." : isRu ? "Загружаем отзывы..." : "Завантажуємо відгуки...",
+    empty: isEn ? "Reviews will appear soon." : isRu ? "Отзывы скоро появятся." : "Відгуки скоро з’являться.",
+    mediaButton: isEn ? "View screenshot" : isRu ? "Смотреть скрин" : "Дивитись скрин",
+    scrollHint: isEn ? "Swipe reviews" : isRu ? "Листайте отзывы" : "Гортайте відгуки",
+    reviewsCountSuffix: isEn ? "reviews" : isRu ? "отзывов" : "відгуків",
+    closeReviewForm: isEn ? "Close review form" : isRu ? "Закрыть форму отзыва" : "Закрити форму відгуку",
+    formEyebrow: isEn ? "LEAVE A REVIEW" : isRu ? "ОСТАВИТЬ ОТЗЫВ" : "ЗАЛИШИТИ ВІДГУК",
+    formTitle: isEn
+      ? "Share your impression after the trip"
+      : isRu
       ? "Поделитесь впечатлением после поездки"
       : "Поділіться враженням після поїздки",
-    nameLabel: isRu ? "Имя" : "Ім’я",
-    namePlaceholder: isRu ? "Ваше имя" : "Ваше ім’я",
-    ratingField: isRu ? "Оценка" : "Оцінка",
-    ratingAriaPrefix: isRu ? "Оценка" : "Оцінка",
-    reviewLabel: isRu ? "Отзыв" : "Відгук",
-    reviewPlaceholder: isRu ? "Напишите коротко о поездке" : "Напишіть коротко про поїздку",
-    submitSending: isRu ? "ОТПРАВЛЯЕМ..." : "НАДСИЛАЄМО...",
-    submitReview: isRu ? "ОТПРАВИТЬ ОТЗЫВ" : "НАДІСЛАТИ ВІДГУК",
-    thanksEyebrow: isRu ? "СПАСИБО" : "ДЯКУЄМО",
-    thanksTitle: isRu ? "Отзыв получен" : "Відгук отримано",
-    thanksBody: isRu
+    nameLabel: isEn ? "Name" : isRu ? "Имя" : "Ім’я",
+    namePlaceholder: isEn ? "Your name" : isRu ? "Ваше имя" : "Ваше ім’я",
+    ratingField: isEn ? "Rating" : isRu ? "Оценка" : "Оцінка",
+    ratingAriaPrefix: isEn ? "Rating" : isRu ? "Оценка" : "Оцінка",
+    reviewLabel: isEn ? "Review" : isRu ? "Отзыв" : "Відгук",
+    reviewPlaceholder: isEn ? "Write a short note about the trip" : isRu ? "Напишите коротко о поездке" : "Напишіть коротко про поїздку",
+    submitSending: isEn ? "SENDING..." : isRu ? "ОТПРАВЛЯЕМ..." : "НАДСИЛАЄМО...",
+    submitReview: isEn ? "SEND REVIEW" : isRu ? "ОТПРАВИТЬ ОТЗЫВ" : "НАДІСЛАТИ ВІДГУК",
+    thanksEyebrow: isEn ? "THANK YOU" : isRu ? "СПАСИБО" : "ДЯКУЄМО",
+    thanksTitle: isEn ? "Review received" : isRu ? "Отзыв получен" : "Відгук отримано",
+    thanksBody: isEn
+      ? "Thank you for your review. After moderation it may be published on the website."
+      : isRu
       ? "Спасибо за отзыв. После проверки он может быть опубликован на сайте."
       : "Дякуємо за відгук. Після перевірки він може бути опублікований на сайті.",
-    close: isRu ? "Закрыть" : "Закрити",
-    addAnother: isRu ? "Добавить ещё один" : "Додати ще один",
-    closePreview: isRu ? "Закрыть просмотр" : "Закрити перегляд",
-    mediaEyebrow: isRu ? "МЕДИА ОТЗЫВ" : "МЕДІА ВІДГУК",
-    prevReviews: isRu ? "Предыдущие отзывы" : "Попередні відгуки",
-    nextReviews: isRu ? "Следующие отзывы" : "Наступні відгуки",
+    close: isEn ? "Close" : isRu ? "Закрыть" : "Закрити",
+    addAnother: isEn ? "Add another" : isRu ? "Добавить ещё один" : "Додати ще один",
+    closePreview: isEn ? "Close preview" : isRu ? "Закрыть просмотр" : "Закрити перегляд",
+    mediaEyebrow: isEn ? "REVIEW MEDIA" : isRu ? "МЕДИА ОТЗЫВ" : "МЕДІА ВІДГУК",
+    prevReviews: isEn ? "Previous reviews" : isRu ? "Предыдущие отзывы" : "Попередні відгуки",
+    nextReviews: isEn ? "Next reviews" : isRu ? "Следующие отзывы" : "Наступні відгуки",
     errors: {
-      name: isRu ? "Укажите имя." : "Вкажіть ім’я.",
-      rating: isRu ? "Выберите оценку." : "Оберіть оцінку.",
-      review: isRu ? "Напишите короткий отзыв." : "Напишіть короткий відгук.",
-      privacy: isRu
+      name: isEn ? "Enter your name." : isRu ? "Укажите имя." : "Вкажіть ім’я.",
+      rating: isEn ? "Choose a rating." : isRu ? "Выберите оценку." : "Оберіть оцінку.",
+      review: isEn ? "Write a short review." : isRu ? "Напишите короткий отзыв." : "Напишіть короткий відгук.",
+      privacy: isEn
+        ? "Confirm consent to personal data processing."
+        : isRu
         ? "Подтвердите согласие на обработку персональных данных."
         : "Підтвердьте згоду на обробку персональних даних.",
-      submit: isRu
+      submit: isEn
+        ? "Could not send the review now. Please try again later."
+        : isRu
         ? "Сейчас не удалось отправить отзыв. Попробуйте позже."
         : "Наразі не вдалося надіслати відгук. Спробуйте пізніше."
     }
@@ -824,7 +854,7 @@ export function ReviewsSection({
                       }));
                     }}
                     error={formErrors.privacy}
-                    language={isRu ? "ru" : "ua"}
+                    language={isEn ? "en" : isRu ? "ru" : "ua"}
                   />
 
                   {submitError ? (
@@ -939,7 +969,7 @@ export function ReviewsSection({
 function mapSupabaseReviewsToViewModel(
   reviews: DynamicRouteReview[] | undefined,
   routeLabel?: string,
-  language: "ua" | "ru" = "ua"
+  language: "ua" | "ru" | "en" = "ua"
 ): ReviewItem[] {
   if (!reviews || reviews.length === 0) {
     return [];
@@ -949,7 +979,9 @@ function mapSupabaseReviewsToViewModel(
     .filter((review) => review.name && review.text)
     .map((review) => ({
       id: review.id,
-      name: review.name || (language === "ru" ? "Клиент" : "Клієнт"),
+      name:
+        review.name ||
+        (language === "en" ? "Client" : language === "ru" ? "Клиент" : "Клієнт"),
       route:
         review.route_from_city && review.route_to_city
           ? `${review.route_from_city} — ${review.route_to_city}`

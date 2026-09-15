@@ -31,7 +31,7 @@ export type DynamicRelatedRoute = {
   duration: string | null;
 };
 
-export type RouteLanguage = "ua" | "ru";
+export type RouteLanguage = "ua" | "ru" | "en";
 
 export type RouteLanguageLinks = Partial<Record<"ua" | "ru" | "en", string>>;
 
@@ -90,10 +90,14 @@ function resolveRouteCanonicalPath(
     typeof route?.slug === "string" ? route.slug.trim() : "";
 
   if (!normalizedSlug) {
-    return lang === "ru" ? "/ru" : "/";
+    if (lang === "ru") return "/ru";
+    if (lang === "en") return "/en";
+    return "/";
   }
 
-  return lang === "ru" ? `/ru/${normalizedSlug}` : `/${normalizedSlug}`;
+  if (lang === "ru") return `/ru/${normalizedSlug}`;
+  if (lang === "en") return `/en/${normalizedSlug}`;
+  return `/${normalizedSlug}`;
 }
 
 export async function getRouteAlternates(
@@ -103,20 +107,28 @@ export async function getRouteAlternates(
   const canonicalPath = resolveRouteCanonicalPath(route, currentLang);
   const languageLinks: RouteLanguageLinks = {
     ua: "/",
-    ru: "/ru"
+    ru: "/ru",
+    en: "/en"
   };
   const metadataLanguages: Record<string, string> = {};
+  let defaultLanguagePath: string | null = null;
   const currentSlug =
     typeof route.slug === "string" ? route.slug.trim() : "";
 
   if (currentLang === "ua" && currentSlug) {
     languageLinks.ua = canonicalPath;
     metadataLanguages["uk-UA"] = canonicalPath;
+    defaultLanguagePath = canonicalPath;
   }
 
   if (currentLang === "ru" && currentSlug) {
     languageLinks.ru = canonicalPath;
     metadataLanguages["ru-UA"] = canonicalPath;
+  }
+
+  if (currentLang === "en" && currentSlug) {
+    languageLinks.en = canonicalPath;
+    metadataLanguages.en = canonicalPath;
   }
 
   const translationGroup =
@@ -125,7 +137,7 @@ export async function getRouteAlternates(
       : "";
 
   if (!translationGroup || !supabase) {
-    metadataLanguages["x-default"] = languageLinks.ua || canonicalPath;
+    metadataLanguages["x-default"] = defaultLanguagePath || canonicalPath;
 
     return {
       canonicalPath,
@@ -139,11 +151,11 @@ export async function getRouteAlternates(
     .select("slug, lang")
     .eq("translation_group", translationGroup)
     .eq("is_active", true)
-    .in("lang", ["ua", "ru"]);
+    .in("lang", ["ua", "ru", "en"]);
 
   if (error) {
     console.error("[route-alternates] Failed to fetch translation group:", error);
-    metadataLanguages["x-default"] = languageLinks.ua || canonicalPath;
+    metadataLanguages["x-default"] = defaultLanguagePath || canonicalPath;
 
     return {
       canonicalPath,
@@ -165,6 +177,7 @@ export async function getRouteAlternates(
       const href = `/${slug}`;
       languageLinks.ua = href;
       metadataLanguages["uk-UA"] = href;
+      defaultLanguagePath = href;
     }
 
     if (lang === "ru") {
@@ -172,9 +185,15 @@ export async function getRouteAlternates(
       languageLinks.ru = href;
       metadataLanguages["ru-UA"] = href;
     }
+
+    if (lang === "en") {
+      const href = `/en/${slug}`;
+      languageLinks.en = href;
+      metadataLanguages.en = href;
+    }
   }
 
-  metadataLanguages["x-default"] = languageLinks.ua || canonicalPath;
+  metadataLanguages["x-default"] = defaultLanguagePath || canonicalPath;
 
   return {
     canonicalPath,
@@ -190,7 +209,12 @@ export function buildRouteMetadata(
 ): Metadata {
   if (!route) {
     return {
-      title: "Маршрут не знайдено | Grand Transfer"
+      title:
+        lang === "en"
+          ? "Route not found | Grand Transfer"
+          : lang === "ru"
+            ? "Маршрут не найден | Grand Transfer"
+            : "Маршрут не знайдено | Grand Transfer"
     };
   }
 
@@ -216,7 +240,7 @@ export function buildRouteMetadata(
       url: canonicalUrl,
       type: "website",
       siteName: SITE_NAME,
-      locale: lang === "ru" ? "ru_RU" : "uk_UA",
+      locale: lang === "ru" ? "ru_RU" : lang === "en" ? "en_US" : "uk_UA",
       images: [DEFAULT_OG_IMAGE]
     },
     twitter: {

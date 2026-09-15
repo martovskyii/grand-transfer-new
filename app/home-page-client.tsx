@@ -201,6 +201,14 @@ const reviewsSeoRoutes = [
   "трансфер Львів — Кишинів"
 ];
 
+const reviewsSeoRoutesEn = [
+  "Odesa to Chisinau transfer",
+  "Kyiv to Chisinau transfer",
+  "Dnipro to Chisinau transfer",
+  "Uman to Chisinau transfer",
+  "Chisinau to Uman transfer"
+];
+
 const featuredArticle = {
   href: "/blog/odesa-kyshyniv-transfer",
   title: "Трансфер Одеса — Кишинів: як швидко та комфортно дістатися",
@@ -262,7 +270,7 @@ function getRouteDestinationPriority(toCity: string | null) {
 type HomePageClientProps = {
   initialHomepageRoutes: HomepageRoute[];
   currentLanguage?: "ua" | "ru" | "en";
-  routeHrefPrefix?: "" | "/ru";
+  routeHrefPrefix?: "" | "/ru" | "/en";
 };
 
 export default function HomePageClient({
@@ -272,18 +280,18 @@ export default function HomePageClient({
 }: HomePageClientProps) {
   const isRu = currentLanguage === "ru";
   const isEn = currentLanguage === "en";
-  const homeHref = currentLanguage === "ru" ? "/ru" : "/";
-  const directionsHref = currentLanguage === "ru" ? "/ru#directions" : "/#directions";
+  const homeHref = isEn ? "/en" : isRu ? "/ru" : "/";
+  const directionsHref = isEn ? "/en#directions" : isRu ? "/ru#directions" : "/#directions";
   const ui = {
-    navHome: isRu ? "ГЛАВНАЯ" : "ГОЛОВНА",
-    navDirections: isRu ? "НАПРАВЛЕНИЯ" : "НАПРЯМКИ",
-    navFleet: isRu ? "АВТОПАРК" : "АВТОПАРК",
-    navContacts: isRu ? "КОНТАКТЫ" : "КОНТАКТИ",
-    navAbout: isRu ? "О НАС" : "ПРО НАС",
-    navBlog: isRu ? "БЛОГ" : "БЛОГ",
-    order: isRu ? "ЗАКАЗАТЬ" : "ЗАМОВИТИ",
-    openMenu: isRu ? "Открыть меню" : "Відкрити меню",
-    closeMenu: isRu ? "Закрыть меню" : "Закрити меню",
+    navHome: isEn ? "HOME" : isRu ? "ГЛАВНАЯ" : "ГОЛОВНА",
+    navDirections: isEn ? "ROUTES" : isRu ? "НАПРАВЛЕНИЯ" : "НАПРЯМКИ",
+    navFleet: isEn ? "FLEET" : isRu ? "АВТОПАРК" : "АВТОПАРК",
+    navContacts: isEn ? "CONTACTS" : isRu ? "КОНТАКТЫ" : "КОНТАКТИ",
+    navAbout: isEn ? "ABOUT" : isRu ? "О НАС" : "ПРО НАС",
+    navBlog: isEn ? "BLOG" : isRu ? "БЛОГ" : "БЛОГ",
+    order: isEn ? "ORDER" : isRu ? "ЗАКАЗАТЬ" : "ЗАМОВИТИ",
+    openMenu: isEn ? "Open menu" : isRu ? "Открыть меню" : "Відкрити меню",
+    closeMenu: isEn ? "Close menu" : isRu ? "Закрыть меню" : "Закрити меню",
     heroTitle: isEn
       ? "VIP transfers Ukraine — Moldova — Poland"
       : isRu
@@ -341,82 +349,106 @@ export default function HomePageClient({
     collapse: isEn ? "Collapse" : isRu ? "Свернуть" : "Згорнути",
     fromPrefix: isEn ? "from" : isRu ? "от" : "від",
     onRequest: isEn ? "on request" : isRu ? "по запросу" : "за запитом",
-    serviceEyebrow: isRu ? "ЧАСТНЫЙ VIP ТРАНСФЕР" : "ПРИВАТНИЙ VIP ТРАНСФЕР",
-    serviceTitle: isRu ? "Премиальный сервис\nна каждом этапе" : "Преміальний сервіс\nна кожному етапі",
+    serviceEyebrow: isEn ? "PRIVATE VIP TRANSFER" : isRu ? "ЧАСТНЫЙ VIP ТРАНСФЕР" : "ПРИВАТНИЙ VIP ТРАНСФЕР",
+    serviceTitle: isEn
+      ? "Premium service\nat every stage"
+      : isRu ? "Премиальный сервис\nна каждом этапе" : "Преміальний сервіс\nна кожному етапі",
     serviceText: isRu
       ? "Мы продумали каждую деталь вашей поездки, чтобы вы чувствовали комфорт и уверенность."
-      : "Ми подбали про кожну деталь вашої подорожі, щоб ви відчували комфорт та впевненість.",
-    howEyebrow: isRu ? "КАК ЭТО РАБОТАЕТ" : "ЯК ЦЕ ПРАЦЮЄ",
-    howTitle: isRu ? "Как это работает" : "Як це працює",
-    bookingEyebrow: isRu ? "ЗАЯВКА" : "ЗАЯВКА",
-    bookingTitle: isRu ? "Забронировать трансфер" : "Забронювати трансфер",
-    bookingText: isRu
+      : isEn
+        ? "Every detail of your trip is planned for comfort, privacy and confidence."
+        : "Ми подбали про кожну деталь вашої подорожі, щоб ви відчували комфорт та впевненість.",
+    howEyebrow: isEn ? "HOW IT WORKS" : isRu ? "КАК ЭТО РАБОТАЕТ" : "ЯК ЦЕ ПРАЦЮЄ",
+    howTitle: isEn ? "How it works" : isRu ? "Как это работает" : "Як це працює",
+    bookingEyebrow: isEn ? "REQUEST" : isRu ? "ЗАЯВКА" : "ЗАЯВКА",
+    bookingTitle: isEn ? "Book a transfer" : isRu ? "Забронировать трансфер" : "Забронювати трансфер",
+    bookingText: isEn
+      ? "We will contact you, confirm the route, vehicle and final trip price."
+      : isRu
       ? "Мы свяжемся с вами, уточним маршрут, авто и финальную стоимость поездки."
       : "Ми зв'яжемося з вами, уточнимо маршрут, авто та фінальну вартість поїздки.",
-    name: isRu ? "Имя" : "Ім’я",
-    yourName: isRu ? "Имя" : "Ім'я",
-    phone: isRu ? "Телефон" : "Телефон",
-    yourPhone: isRu ? "Ваш телефон" : "Ваш телефон",
-    from: isRu ? "Откуда" : "Звідки",
-    to: isRu ? "Куда" : "Куди",
-    date: isRu ? "Дата поездки" : "Дата поїздки",
-    chooseDate: isRu ? "Выберите дату" : "Оберіть дату",
-    passengers: isRu ? "Количество пассажиров" : "Кількість пасажирів",
-    carClass: isRu ? "Класс авто" : "Клас авто",
-    comment: isRu ? "Комментарий" : "Коментар",
-    bookTransfer: isRu ? "ЗАБРОНИРОВАТЬ ТРАНСФЕР" : "Забронювати трансфер",
-    faqTitle: isRu ? "Частые вопросы" : "Поширені питання",
-    faqCta: isRu ? "Не нашли ответ?" : "Не знайшли відповідь?",
-    telegramSentence: isRu ? "Написать в Telegram" : "Написати в Telegram",
-    call: isRu ? "Позвонить" : "Зателефонувати",
-    reviewSeoTitle: isRu ? "Популярные запросы клиентов" : "Популярні запити клієнтів",
-    reviewSeoIntro: isRu
+    name: isEn ? "Name" : isRu ? "Имя" : "Ім’я",
+    yourName: isEn ? "Your name" : isRu ? "Имя" : "Ім'я",
+    phone: isEn ? "Phone" : isRu ? "Телефон" : "Телефон",
+    yourPhone: isEn ? "Your phone" : isRu ? "Ваш телефон" : "Ваш телефон",
+    from: isEn ? "From" : isRu ? "Откуда" : "Звідки",
+    to: isEn ? "To" : isRu ? "Куда" : "Куди",
+    date: isEn ? "Trip date" : isRu ? "Дата поездки" : "Дата поїздки",
+    chooseDate: isEn ? "Choose date" : isRu ? "Выберите дату" : "Оберіть дату",
+    passengers: isEn ? "Passengers" : isRu ? "Количество пассажиров" : "Кількість пасажирів",
+    carClass: isEn ? "Vehicle class" : isRu ? "Класс авто" : "Клас авто",
+    comment: isEn ? "Comment" : isRu ? "Комментарий" : "Коментар",
+    bookTransfer: isEn ? "BOOK TRANSFER" : isRu ? "ЗАБРОНИРОВАТЬ ТРАНСФЕР" : "Забронювати трансфер",
+    faqTitle: isEn ? "Frequently asked questions" : isRu ? "Частые вопросы" : "Поширені питання",
+    faqCta: isEn ? "Didn't find an answer?" : isRu ? "Не нашли ответ?" : "Не знайшли відповідь?",
+    telegramSentence: isEn ? "Write in Telegram" : isRu ? "Написать в Telegram" : "Написати в Telegram",
+    call: isEn ? "Call" : isRu ? "Позвонить" : "Зателефонувати",
+    reviewSeoTitle: isEn ? "Popular client requests" : isRu ? "Популярные запросы клиентов" : "Популярні запити клієнтів",
+    reviewSeoIntro: isEn
+      ? "Popular client requests in Google:"
+      : isRu
       ? "Популярные запросы клиентов в Google:"
       : "Популярні запити клієнтів у Google:",
-    blogEyebrow: isRu ? "БЛОГ" : "БЛОГ",
-    blogTitle: isRu ? "Полезный блог" : "Корисний блог",
-    blogText: isRu
+    blogEyebrow: isEn ? "BLOG" : isRu ? "БЛОГ" : "БЛОГ",
+    blogTitle: isEn ? "Useful blog" : isRu ? "Полезный блог" : "Корисний блог",
+    blogText: isEn
+      ? "Travel tips, routes and useful information for clients."
+      : isRu
       ? "Советы для поездок, маршруты и полезная информация для клиентов."
       : "Поради для поїздок, маршрути та корисна інформація для клієнтів.",
-    mainRouteEyebrow: isRu ? "ОСНОВНОЙ МАРШРУТ" : "ОСНОВНИЙ МАРШРУТ",
-    read: isRu ? "Читать" : "Читати",
-    infoEyebrow: isRu ? "ИНФОРМАЦИЯ" : "ІНФОРМАЦІЯ",
-    infoTitle: isRu
+    mainRouteEyebrow: isEn ? "MAIN ROUTE" : isRu ? "ОСНОВНОЙ МАРШРУТ" : "ОСНОВНИЙ МАРШРУТ",
+    read: isEn ? "Read" : isRu ? "Читать" : "Читати",
+    infoEyebrow: isEn ? "INFORMATION" : isRu ? "ИНФОРМАЦИЯ" : "ІНФОРМАЦІЯ",
+    infoTitle: isEn
+      ? "VIP transfers Ukraine — Moldova — Poland"
+      : isRu
       ? "VIP трансферы Украина — Молдова — Польша"
       : "VIP трансфери Україна — Молдова — Польща",
-    footerDescription: isRu
+    footerDescription: isEn
+      ? "Premium international transfers between Ukraine, Moldova and Poland for private, business and VIP clients."
+      : isRu
       ? "Премиальные международные трансферы между Украиной, Молдовой и Польшей для частных, бизнес- и VIP-клиентов."
       : "Преміальні міжнародні трансфери між Україною, Молдовою та Польщею для приватних, бізнес- та VIP-клієнтів.",
-    footerCtaTitle: isRu ? "Нужен трансфер сегодня?" : "Потрібен трансфер сьогодні?",
-    footerCtaText: isRu
+    footerCtaTitle: isEn ? "Need a transfer today?" : isRu ? "Нужен трансфер сегодня?" : "Потрібен трансфер сьогодні?",
+    footerCtaText: isEn
+      ? "Write to us in Telegram or call — we will match a vehicle to your route and departure time."
+      : isRu
       ? "Напишите нам в Telegram или позвоните — подберём авто под ваш маршрут и время выезда."
       : "Напишіть нам у Telegram або зателефонуйте — підберемо авто під ваш маршрут і час виїзду.",
-    footerServiceTitle: isRu
+    footerServiceTitle: isEn
+      ? "VIP transfers Ukraine — Moldova — Poland"
+      : isRu
       ? "VIP трансферы Украина — Молдова — Польша"
       : "VIP трансфери Україна — Молдова — Польща",
     footerServiceTags: "Airport transfer · Business transfer · Private transfer",
-    footerCompany: isRu ? "Компания" : "Компанія",
-    footerContacts: isRu ? "Контакты" : "Контакти",
-    footerLanguages: isRu ? "Языки" : "Мови",
-    footerHome: isRu ? "Главная" : "Головна",
-    footerDirections: isRu ? "Направления" : "Напрямки",
-    footerAllDirections: isRu ? "Все направления" : "Усі напрямки",
-    footerFleet: isRu ? "Автопарк" : "Автопарк",
-    footerContactsLink: isRu ? "Контакты" : "Контакти",
-    footerAbout: isRu ? "О нас" : "Про нас",
-    footerCopyright: isRu
+    footerCompany: isEn ? "Company" : isRu ? "Компания" : "Компанія",
+    footerContacts: isEn ? "Contacts" : isRu ? "Контакты" : "Контакти",
+    footerLanguages: isEn ? "Languages" : isRu ? "Языки" : "Мови",
+    footerHome: isEn ? "Home" : isRu ? "Главная" : "Головна",
+    footerDirections: isEn ? "Routes" : isRu ? "Направления" : "Напрямки",
+    footerAllDirections: isEn ? "All routes" : isRu ? "Все направления" : "Усі напрямки",
+    footerFleet: isEn ? "Fleet" : isRu ? "Автопарк" : "Автопарк",
+    footerContactsLink: isEn ? "Contacts" : isRu ? "Контакты" : "Контакти",
+    footerAbout: isEn ? "About" : isRu ? "О нас" : "Про нас",
+    footerCopyright: isEn
+      ? "© 2026 Grand Transfer. All rights reserved."
+      : isRu
       ? "© 2026 Grand Transfer. Все права защищены."
       : "© 2026 Grand Transfer. Усі права захищені.",
-    callCompact: isRu ? "Позвонить" : "Подзвонити",
-    successEyebrow: isRu ? "Заявка отправлена" : "Заявку надіслано",
-    successTitle: isRu ? "Спасибо за заявку" : "Дякуємо за заявку",
-    successBody: isRu
+    callCompact: isEn ? "Call" : isRu ? "Позвонить" : "Подзвонити",
+    successEyebrow: isEn ? "Request sent" : isRu ? "Заявка отправлена" : "Заявку надіслано",
+    successTitle: isEn ? "Thank you for your request" : isRu ? "Спасибо за заявку" : "Дякуємо за заявку",
+    successBody: isEn
+      ? "Thank you! We will contact you soon."
+      : isRu
       ? "Спасибо! Мы скоро свяжемся с вами."
       : "Дякуємо! Ми скоро зв'яжемося з вами.",
-    successNote: isRu
+    successNote: isEn
+      ? "If the request is urgent, press “Call now”."
+      : isRu
       ? "Если вопрос срочный — нажмите «Позвонить сейчас»."
       : "Якщо питання термінове — натисніть “Подзвонити зараз”.",
-    successCallButton: isRu ? "Позвонить сейчас" : "Подзвонити зараз",
+    successCallButton: isEn ? "Call now" : isRu ? "Позвонить сейчас" : "Подзвонити зараз",
     popularBadge: isEn ? "TOP" : isRu ? "ТОП" : "ТОП"
   };
   const heroBenefits: HeroBenefit[] = isEn
@@ -447,7 +479,7 @@ export default function HomePageClient({
     { label: ui.navAbout, href: "/pro-kompaniiu" },
     { label: ui.navBlog, href: "/blog" }
   ];
-  const mainRoutesHref = isRu ? "/ru/routes" : "/routes";
+  const mainRoutesHref = isEn ? "/en/routes" : isRu ? "/ru/routes" : "/routes";
   const primaryRouteCityLabels = isEn
     ? ["Odesa", "Kyiv", "Chisinau", "Dnipro", "Krakow", "Lviv", "Warsaw", "Iasi"]
     : isRu
@@ -472,8 +504,20 @@ export default function HomePageClient({
         ];
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
-  const preferredRouteCityOrderLocalized = isRu
+  const preferredRouteCityOrderLocalized = isEn
     ? [
+        "Odesa",
+        "Kyiv",
+        "Chisinau",
+        "Dnipro",
+        "Krakow",
+        "Lviv",
+        "Warsaw",
+        "Iasi",
+        "Uman"
+      ]
+    : isRu
+      ? [
         "Киев",
         "Одесса",
         "Кишинёв",
@@ -503,7 +547,7 @@ export default function HomePageClient({
         "Чернигов"
       ]
     : preferredRouteCityOrder;
-  const defaultPrimaryCity = isRu ? "Одесса" : "Одеса";
+  const defaultPrimaryCity = isEn ? "Chisinau" : isRu ? "Одесса" : "Одеса";
   const defaultRouteCity = initialHomepageRoutes.some((route) => route.from_city === defaultPrimaryCity)
     ? defaultPrimaryCity
     : initialHomepageRoutes.find((route) => route.from_city)?.from_city || defaultPrimaryCity;
@@ -575,7 +619,7 @@ export default function HomePageClient({
       return 1;
     }
 
-    return left.localeCompare(right, isRu ? "ru" : "uk");
+    return left.localeCompare(right, isEn ? "en" : isRu ? "ru" : "uk");
   });
 
   useEffect(() => {
@@ -623,7 +667,7 @@ export default function HomePageClient({
 
     return (left.to_city || "").localeCompare(
       right.to_city || "",
-      isRu ? "ru" : "uk"
+      isEn ? "en" : isRu ? "ru" : "uk"
     );
   });
   // Issue #3: show 9 cards on desktop / 5 on mobile, expandable to every route.
@@ -635,8 +679,17 @@ export default function HomePageClient({
   const highlightedRouteLabels = sortedActiveRoutes
     .slice(0, Math.min(3, sortedActiveRoutes.length))
     .map((route) => `${route.from_city} → ${route.to_city}`);
-  const serviceCardsLocalized = isRu
+  const serviceCardsLocalized = isEn
     ? [
+        { title: "VIP comfort", lines: ["Premium vehicles", "and privacy on the road."], Icon: SeatIcon },
+        { title: "Punctuality", lines: ["On-time pickup", "without delays."], Icon: ClockIcon },
+        { title: "Safety", lines: ["Experienced drivers", "and quality control."], Icon: ShieldIcon },
+        { title: "Personal approach", lines: ["Route and pickup", "matched to your schedule."], Icon: ConciergeIcon },
+        { title: "Luggage assistance", lines: ["Help with luggage", "and meeting on arrival."], Icon: LuggageIcon },
+        { title: "24/7 service", lines: ["Support and pickup", "at any time."], Icon: SupportIcon }
+      ]
+    : isRu
+      ? [
         { title: "VIP комфорт", lines: ["Премиальные авто", "и тишина в дороге."], Icon: SeatIcon },
         { title: "Пунктуальность", lines: ["Подача авто", "без задержек."], Icon: ClockIcon },
         { title: "Безопасность", lines: ["Опытные водители", "и контроль качества."], Icon: ShieldIcon },
@@ -645,8 +698,15 @@ export default function HomePageClient({
         { title: "Сервис 24/7", lines: ["Поддержка и подача", "в любое время."], Icon: SupportIcon }
       ]
     : serviceCards;
-  const processStepsLocalized = isRu
+  const processStepsLocalized = isEn
     ? [
+        { number: "01", title: "Submit a request", description: "Send the key details of your trip." },
+        { number: "02", title: "Confirm route and car", description: "We agree on vehicle class and pickup time." },
+        { number: "03", title: "Driver arrives on time", description: "Pickup without delays or unnecessary waiting." },
+        { number: "04", title: "Comfortable trip to destination", description: "Private transfer according to your schedule." }
+      ]
+    : isRu
+      ? [
         { number: "01", title: "Оставляете заявку", description: "Отправляете основные детали поездки." },
         { number: "02", title: "Согласовываем маршрут и авто", description: "Подбираем класс авто и время подачи." },
         { number: "03", title: "Водитель прибывает вовремя", description: "Подача без задержек и лишнего ожидания." },
@@ -676,9 +736,34 @@ export default function HomePageClient({
             "Да, трансфер доступен в любое время — ранний выезд, ночная подача или индивидуальный график."
         }
       ]
+    : isEn
+      ? [
+          {
+            question: "How much does a private transfer cost?",
+            answer:
+              "The final price depends on the route, vehicle class, departure date, luggage and individual trip details."
+          },
+          {
+            question: "Can I book an international airport transfer?",
+            answer:
+              "Yes, Grand Transfer organizes private city and airport transfers with door-to-door pickup."
+          },
+          {
+            question: "Does the driver assist during the route?",
+            answer:
+              "The driver helps keep the trip calm and organized, including key route and border-crossing stages where needed."
+          },
+          {
+            question: "Are trips available 24/7?",
+            answer:
+              "Yes, early morning, evening, night and individual departure times are available by prior booking."
+          }
+        ]
     : faqItems;
-  const reviewsSeoRoutesLocalized = isRu
-    ? [
+  const reviewsSeoRoutesLocalized = isEn
+    ? reviewsSeoRoutesEn
+    : isRu
+      ? [
         "трансфер Одесса — Кишинёв",
         "трансфер Киев — Кишинёв",
         "трансфер Днепр — Кишинёв",
@@ -686,8 +771,15 @@ export default function HomePageClient({
         "трансфер Львов — Кишинёв"
       ]
     : reviewsSeoRoutes;
-  const featuredArticleLocalized = isRu
+  const featuredArticleLocalized = isEn
     ? {
+        href: "/en/routes",
+        title: "Private transfers between Ukraine, Moldova and Poland",
+        description:
+          "A short guide to routes, pricing, travel time and the benefits of a private transfer."
+      }
+    : isRu
+      ? {
         ...featuredArticle,
         title: "Трансфер Одесса — Кишинёв: как быстро и комфортно добраться",
         description:
@@ -744,7 +836,9 @@ export default function HomePageClient({
             <div className="flex min-h-[72px] items-center justify-between gap-3 md:min-h-[74px] lg:grid lg:min-h-[88px] lg:grid-cols-[190px_minmax(0,1fr)_300px] lg:justify-normal lg:gap-4 xl:grid-cols-[202px_minmax(0,1fr)_470px]">
               <Link href={homeHref} className="header-brand block">
                 <div className="luxury-logo-title">GRAND TRANSFER</div>
-                <div className="luxury-logo-subtitle">{isRu ? "VIP СЕРВИС" : "VIP СЕРВІС"}</div>
+                <div className="luxury-logo-subtitle">
+                  {isEn ? "VIP SERVICE" : isRu ? "VIP СЕРВИС" : "VIP СЕРВІС"}
+                </div>
               </Link>
 
               <nav className="hidden items-center justify-self-center lg:flex lg:gap-2.5 xl:gap-4">
@@ -769,7 +863,7 @@ export default function HomePageClient({
                 />
                 <LanguageSwitcher
                   currentLanguage={currentLanguage}
-                  links={{ ua: "/", ru: "/ru" }}
+                  links={{ ua: "/", ru: "/ru", en: "/en" }}
                 />
                 <a
                   href="#booking-form"
@@ -897,9 +991,13 @@ export default function HomePageClient({
             <div className="routes-wide-panel relative flex min-h-[520px] flex-col overflow-hidden rounded-[32px] px-5 py-8 sm:px-7 md:px-10 md:py-10 lg:min-h-[480px] lg:px-14 lg:py-12 xl:min-h-[500px] xl:px-[3.5rem]">
               <Image
                 src={mapsNewImage}
-                alt={isRu
-                  ? "Карта направлений между Украиной, Молдовой и Польшей"
-                  : "Карта напрямків між Україною, Молдовою та Польщею"}
+                alt={
+                  isEn
+                    ? "Route map between Ukraine, Moldova and Poland"
+                    : isRu
+                      ? "Карта направлений между Украиной, Молдовой и Польшей"
+                      : "Карта напрямків між Україною, Молдовою та Польщею"
+                }
                 fill
                 className="object-cover object-[66%_center] md:object-[68%_center] lg:object-[68%_center] xl:object-[72%_center]"
                 sizes="100vw"
@@ -1271,7 +1369,7 @@ export default function HomePageClient({
                     min={homeFinalForm.today}
                     error={homeFinalForm.errors.travelDate}
                     placeholderText={ui.chooseDate}
-                    locale={isRu ? "ru-RU" : "uk-UA"}
+                    locale={isEn ? "en-US" : isRu ? "ru-RU" : "uk-UA"}
                     fieldClassName="h-14 rounded-[15px] px-4 text-[0.95rem]"
                   />
                   <SelectField
@@ -1449,7 +1547,7 @@ export default function HomePageClient({
           <ReviewsSection
             location="homepage"
             className="mt-12 md:mt-16 xl:mt-20"
-            language={isRu ? "ru" : "ua"}
+            language={isEn ? "en" : isRu ? "ru" : "ua"}
           />
           <div className="mt-5 rounded-[24px] border border-[rgba(216,185,130,0.1)] bg-[rgba(10,13,11,0.34)] px-5 py-5 sm:px-6">
             <p className="text-[0.72rem] font-bold uppercase tracking-[0.2em] text-[var(--champagne)]">
@@ -1518,7 +1616,34 @@ export default function HomePageClient({
                 {ui.infoTitle}
               </h2>
               <div className="mt-5 max-w-[58rem] space-y-4 text-[0.96rem] leading-[1.85] text-[var(--muted)]">
-                {isRu ? (
+                {isEn ? (
+                  <>
+                    <p>
+                      Grand Transfer organizes private VIP transfers between
+                      Ukraine, Moldova and Poland for private clients, family
+                      trips and business routes. Clients most often book
+                      transfers from Odesa, Kyiv, Dnipro, Uman and Chisinau, as
+                      well as international trips to Warsaw, Iasi and other
+                      European cities.
+                    </p>
+                    <p>
+                      We work with individual vehicle pickup, a private driver,
+                      border-route coordination and trips without shared
+                      passengers. You can book a transfer to a city, airport,
+                      hotel, railway station or any agreed address.
+                    </p>
+                    <p>
+                      The final price depends on the route, vehicle class,
+                      departure date, number of passengers, luggage and
+                      additional stops. To confirm the exact price, leave a
+                      request on the website or write to us in Telegram.
+                    </p>
+                    <p>
+                      We serve both private trips and transfers for business
+                      clients and partners.
+                    </p>
+                  </>
+                ) : isRu ? (
                   <>
                     <p>
                       Grand Transfer организует частные VIP трансферы между
@@ -1613,7 +1738,9 @@ export default function HomePageClient({
               <div className="luxury-logo-title text-[1rem] leading-none">
                 GRAND TRANSFER
               </div>
-              <div className="luxury-logo-subtitle mt-2">{isRu ? "VIP СЕРВИС" : "VIP СЕРВІС"}</div>
+              <div className="luxury-logo-subtitle mt-2">
+                {isEn ? "VIP SERVICE" : isRu ? "VIP СЕРВИС" : "VIP СЕРВІС"}
+              </div>
             </div>
             <button
               type="button"
@@ -1641,7 +1768,7 @@ export default function HomePageClient({
           <LanguageSwitcher
             className="mt-8 self-start"
             currentLanguage={currentLanguage}
-            links={{ ua: "/", ru: "/ru" }}
+            links={{ ua: "/", ru: "/ru", en: "/en" }}
           />
 
           <div className="mt-auto space-y-5 pt-10">
@@ -1680,9 +1807,9 @@ export default function HomePageClient({
         bodyText={ui.successBody}
         noteText={ui.successNote}
         callButtonText={ui.successCallButton}
-        closeButtonText={isRu ? "Закрыть" : "Закрити"}
-        closeOverlayLabel={isRu ? "Закрыть сообщение" : "Закрити повідомлення"}
-        closeButtonLabel={isRu ? "Закрыть" : "Закрити"}
+        closeButtonText={isEn ? "Close" : isRu ? "Закрыть" : "Закрити"}
+        closeOverlayLabel={isEn ? "Close message" : isRu ? "Закрыть сообщение" : "Закрити повідомлення"}
+        closeButtonLabel={isEn ? "Close" : isRu ? "Закрыть" : "Закрити"}
       />
       <FloatingContactWidget
         pageType="home"

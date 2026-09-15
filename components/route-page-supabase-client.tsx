@@ -323,106 +323,121 @@ export default function RoutePageSupabaseClient({
   languageLinks
 }: RoutePageSupabaseClientProps) {
   const isRu = routeData.lang === "ru" || currentLanguage === "ru";
-  const homeHref = currentLanguage === "ru" ? "/ru" : "/";
-  const directionsHref = currentLanguage === "ru" ? "/ru#directions" : "/#directions";
-  const routeHrefPrefix = currentLanguage === "ru" ? "/ru" : "";
+  const isEn = routeData.lang === "en" || currentLanguage === "en";
+  const homeHref = isEn ? "/en" : currentLanguage === "ru" ? "/ru" : "/";
+  const directionsHref = isEn
+    ? "/en#directions"
+    : currentLanguage === "ru" ? "/ru#directions" : "/#directions";
+  const routeHrefPrefix = isEn ? "/en" : currentLanguage === "ru" ? "/ru" : "";
   const ui = {
-    navHome: isRu ? "ГЛАВНАЯ" : "ГОЛОВНА",
-    navDirections: isRu ? "НАПРАВЛЕНИЯ" : "НАПРЯМКИ",
-    navFleet: isRu ? "АВТОПАРК" : "АВТОПАРК",
-    navContacts: isRu ? "КОНТАКТЫ" : "КОНТАКТИ",
-    navAbout: isRu ? "О НАС" : "ПРО НАС",
-    navBlog: isRu ? "БЛОГ" : "БЛОГ",
-    breadcrumbHome: isRu ? "Главная" : "Головна",
-    breadcrumbDirections: isRu ? "Направления" : "Напрямки",
-    heroEyebrow: "VIP ТРАНСФЕР",
-    heroOrder: isRu ? "УЗНАТЬ ЦЕНУ" : "ДІЗНАТИСЬ ЦІНУ",
-    telegram: isRu ? "НАПИСАТЬ В TELEGRAM" : "НАПИСАТИ В TELEGRAM",
-    quickRequest: isRu ? "БЫСТРАЯ ЗАЯВКА" : "ШВИДКА ЗАЯВКА",
-    quickCallback: isRu
+    navHome: isEn ? "HOME" : isRu ? "ГЛАВНАЯ" : "ГОЛОВНА",
+    navDirections: isEn ? "ROUTES" : isRu ? "НАПРАВЛЕНИЯ" : "НАПРЯМКИ",
+    navFleet: isEn ? "FLEET" : isRu ? "АВТОПАРК" : "АВТОПАРК",
+    navContacts: isEn ? "CONTACTS" : isRu ? "КОНТАКТЫ" : "КОНТАКТИ",
+    navAbout: isEn ? "ABOUT" : isRu ? "О НАС" : "ПРО НАС",
+    navBlog: isEn ? "BLOG" : isRu ? "БЛОГ" : "БЛОГ",
+    breadcrumbHome: isEn ? "Home" : isRu ? "Главная" : "Головна",
+    breadcrumbDirections: isEn ? "Routes" : isRu ? "Направления" : "Напрямки",
+    heroEyebrow: isEn ? "VIP TRANSFER" : isRu ? "VIP ТРАНСФЕР" : "VIP ТРАНСФЕР",
+    heroOrder: isEn ? "GET PRICE" : isRu ? "УЗНАТЬ ЦЕНУ" : "ДІЗНАТИСЬ ЦІНУ",
+    telegram: isEn ? "WRITE IN TELEGRAM" : isRu ? "НАПИСАТЬ В TELEGRAM" : "НАПИСАТИ В TELEGRAM",
+    quickRequest: isEn ? "QUICK REQUEST" : isRu ? "БЫСТРАЯ ЗАЯВКА" : "ШВИДКА ЗАЯВКА",
+    quickCallback: isEn
+      ? "We will contact you within 5 minutes"
+      : isRu
       ? "Мы свяжемся с вами в течение 5 минут"
       : "Ми зв'яжемося з вами протягом 5 хвилин",
-    name: isRu ? "Имя" : "Ім’я",
-    yourName: isRu ? "Ваше имя" : "Ваше ім’я",
-    phone: isRu ? "Телефон" : "Телефон",
-    yourPhone: isRu ? "Ваш телефон" : "Ваш телефон",
-    from: isRu ? "Откуда" : "Звідки",
-    to: isRu ? "Куда" : "Куди",
-    order: isRu ? "ЗАКАЗАТЬ" : "ЗАМОВИТИ",
-    pricingEyebrow: isRu ? "СТОИМОСТЬ И ЧТО ВЛИЯЕТ НА ЦЕНУ" : "ВАРТІСТЬ ТА ЩО ВПЛИВАЄ НА ЦІНУ",
-    fixedPrice: isRu ? "Фиксированная цена" : "Фіксована ціна",
-    duration: isRu ? "Время в пути" : "Час у дорозі",
-    fromPrefix: isRu ? "от" : "від",
-    basePrice: isRu ? "Цены указаны ориентировочно" : "Ціни вказані орієнтовно",
-    factorsTitle: isRu ? "ЧТО ВЛИЯЕТ НА ЦЕНУ" : "ЩО ВПЛИВАЄ НА ЦІНУ",
-    availabilityNote: isRu
+    name: isEn ? "Name" : isRu ? "Имя" : "Ім’я",
+    yourName: isEn ? "Your name" : isRu ? "Ваше имя" : "Ваше ім’я",
+    phone: isEn ? "Phone" : isRu ? "Телефон" : "Телефон",
+    yourPhone: isEn ? "Your phone" : isRu ? "Ваш телефон" : "Ваш телефон",
+    from: isEn ? "From" : isRu ? "Откуда" : "Звідки",
+    to: isEn ? "To" : isRu ? "Куда" : "Куди",
+    order: isEn ? "ORDER" : isRu ? "ЗАКАЗАТЬ" : "ЗАМОВИТИ",
+    pricingEyebrow: isEn ? "PRICE AND WHAT AFFECTS IT" : isRu ? "СТОИМОСТЬ И ЧТО ВЛИЯЕТ НА ЦЕНУ" : "ВАРТІСТЬ ТА ЩО ВПЛИВАЄ НА ЦІНУ",
+    fixedPrice: isEn ? "Fixed price" : isRu ? "Фиксированная цена" : "Фіксована ціна",
+    duration: isEn ? "Travel time" : isRu ? "Время в пути" : "Час у дорозі",
+    fromPrefix: isEn ? "from" : isRu ? "от" : "від",
+    basePrice: isEn ? "Prices are approximate" : isRu ? "Цены указаны ориентировочно" : "Ціни вказані орієнтовно",
+    factorsTitle: isEn ? "WHAT AFFECTS THE PRICE" : isRu ? "ЧТО ВЛИЯЕТ НА ЦЕНУ" : "ЩО ВПЛИВАЄ НА ЦІНУ",
+    availabilityNote: isEn
+      ? "Vehicle models may vary depending on availability. The exact class and car are confirmed before the trip."
+      : isRu
       ? "Модели авто могут отличаться в зависимости от доступности. Точный класс и авто согласовываются перед поездкой."
       : "Моделі авто можуть відрізнятися залежно від доступності. Точний клас і авто узгоджуються перед поїздкою.",
-    orderTransfer: isRu ? "Заказать трансфер" : "Замовити трансфер",
-    carClassesEyebrow: isRu ? "КЛАССЫ АВТО" : "КЛАСИ АВТО",
-    stepEyebrow: isRu ? "КАК ПРОХОДИТ ПОЕЗДКА" : "ЯК ПРОХОДИТЬ ПОЇЗДКА",
-    routeInfoEyebrow: isRu ? "ИНФОРМАЦИЯ О МАРШРУТЕ" : "ІНФОРМАЦІЯ ПРО МАРШРУТ",
-    seeAlso: isRu ? "Смотрите также:" : "Дивіться також:",
-    airportEyebrow: isRu ? "ТРАНСФЕР В АЭРОПОРТ КИШИНЁВА" : "ТРАНСФЕР В АЕРОПОРТ КИШИНЕВА",
-    faqEyebrow: isRu ? "ЧАСТЫЕ ВОПРОСЫ" : "ПОШИРЕНІ ПИТАННЯ",
-    bookingEyebrow: isRu ? "ЗАБРОНИРОВАТЬ ТРАНСФЕР" : "ЗАБРОНЮВАТИ ТРАНСФЕР",
-    bookingTitle: isRu ? "Забронировать трансфер" : "Забронювати трансфер",
-    bookingText: isRu
+    orderTransfer: isEn ? "Order transfer" : isRu ? "Заказать трансфер" : "Замовити трансфер",
+    carClassesEyebrow: isEn ? "CAR CLASSES" : isRu ? "КЛАССЫ АВТО" : "КЛАСИ АВТО",
+    stepEyebrow: isEn ? "HOW THE TRIP WORKS" : isRu ? "КАК ПРОХОДИТ ПОЕЗДКА" : "ЯК ПРОХОДИТЬ ПОЇЗДКА",
+    routeInfoEyebrow: isEn ? "ROUTE INFORMATION" : isRu ? "ИНФОРМАЦИЯ О МАРШРУТЕ" : "ІНФОРМАЦІЯ ПРО МАРШРУТ",
+    seeAlso: isEn ? "See also:" : isRu ? "Смотрите также:" : "Дивіться також:",
+    airportEyebrow: isEn ? "CHISINAU AIRPORT TRANSFER" : isRu ? "ТРАНСФЕР В АЭРОПОРТ КИШИНЁВА" : "ТРАНСФЕР В АЕРОПОРТ КИШИНЕВА",
+    faqEyebrow: isEn ? "FAQ" : isRu ? "ЧАСТЫЕ ВОПРОСЫ" : "ПОШИРЕНІ ПИТАННЯ",
+    bookingEyebrow: isEn ? "BOOK A TRANSFER" : isRu ? "ЗАБРОНИРОВАТЬ ТРАНСФЕР" : "ЗАБРОНЮВАТИ ТРАНСФЕР",
+    bookingTitle: isEn ? "Book a transfer" : isRu ? "Забронировать трансфер" : "Забронювати трансфер",
+    bookingText: isEn
+      ? "We will contact you, confirm the route, vehicle and final trip price."
+      : isRu
       ? "Мы свяжемся с вами, уточним маршрут, авто и финальную стоимость поездки."
       : "Ми зв'яжемося з вами, уточнимо маршрут, авто та фінальну вартість поїздки.",
-    date: isRu ? "Дата поездки" : "Дата поїздки",
-    passengers: isRu ? "Количество пассажиров" : "Кількість пасажирів",
-    passengersPlaceholder: isRu ? "Количество пассажиров" : "Кількість пасажирів",
-    carClass: isRu ? "Класс авто" : "Клас авто",
-    comment: isRu ? "Комментарий" : "Коментар",
-    bookTransfer: isRu ? "ЗАБРОНИРОВАТЬ ТРАНСФЕР" : "ЗАБРОНЮВАТИ ТРАНСФЕР",
-    seoEyebrowPrefix: isRu ? "ИНФОРМАЦИЯ О ТРАНСФЕРЕ" : "ІНФОРМАЦІЯ ПРО ТРАНСФЕР",
-    relatedEyebrow: isRu ? "ПОХОЖИЕ НАПРАВЛЕНИЯ" : "СХОЖІ НАПРЯМКИ",
-    relatedTitlePrefix: isRu ? "Похожие маршруты из" : "Схожі маршрути з",
-    relatedSubtitlePrefix: isRu
+    date: isEn ? "Trip date" : isRu ? "Дата поездки" : "Дата поїздки",
+    passengers: isEn ? "Passengers" : isRu ? "Количество пассажиров" : "Кількість пасажирів",
+    passengersPlaceholder: isEn ? "Passengers" : isRu ? "Количество пассажиров" : "Кількість пасажирів",
+    carClass: isEn ? "Vehicle class" : isRu ? "Класс авто" : "Клас авто",
+    comment: isEn ? "Comment" : isRu ? "Комментарий" : "Коментар",
+    bookTransfer: isEn ? "BOOK TRANSFER" : isRu ? "ЗАБРОНИРОВАТЬ ТРАНСФЕР" : "ЗАБРОНЮВАТИ ТРАНСФЕР",
+    seoEyebrowPrefix: isEn ? "TRANSFER INFORMATION" : isRu ? "ИНФОРМАЦИЯ О ТРАНСФЕРЕ" : "ІНФОРМАЦІЯ ПРО ТРАНСФЕР",
+    relatedEyebrow: isEn ? "SIMILAR ROUTES" : isRu ? "ПОХОЖИЕ НАПРАВЛЕНИЯ" : "СХОЖІ НАПРЯМКИ",
+    relatedTitlePrefix: isEn ? "Similar routes from" : isRu ? "Похожие маршруты из" : "Схожі маршрути з",
+    relatedSubtitlePrefix: isEn
+      ? "Other popular routes with pickup from"
+      : isRu
       ? "Другие популярные направления с подачей из"
       : "Інші популярні напрямки з подачею з",
-    relatedCta: isRu ? "Подробнее" : "Детальніше",
-    allRoutes: isRu ? "Все маршруты" : "Всі маршрути",
-    footerCompany: isRu ? "Компания" : "Компанія",
-    footerContacts: isRu ? "Контакты" : "Контакти",
-    footerLanguages: isRu ? "Языки" : "Мови",
+    relatedCta: isEn ? "Details" : isRu ? "Подробнее" : "Детальніше",
+    allRoutes: isEn ? "All routes" : isRu ? "Все маршруты" : "Всі маршрути",
+    footerCompany: isEn ? "Company" : isRu ? "Компания" : "Компанія",
+    footerContacts: isEn ? "Contacts" : isRu ? "Контакты" : "Контакти",
+    footerLanguages: isEn ? "Languages" : isRu ? "Языки" : "Мови",
     footerDescription: isRu
       ? "Премиальные международные трансферы между Украиной, Молдовой и Польшей для частных, бизнес- и VIP-клиентов."
       : "Преміальні міжнародні трансфери між Україною, Молдовою та Польщею для приватних, бізнес- та VIP-клієнтів.",
-    footerHome: isRu ? "Главная" : "Головна",
-    footerDirections: isRu ? "Направления" : "Напрямки",
-    footerAllDirections: isRu ? "Все направления" : "Усі напрямки",
-    footerFleet: isRu ? "Автопарк" : "Автопарк",
-    footerContactsLink: isRu ? "Контакты" : "Контакти",
-    footerAbout: isRu ? "О нас" : "Про нас",
+    footerHome: isEn ? "Home" : isRu ? "Главная" : "Головна",
+    footerDirections: isEn ? "Routes" : isRu ? "Направления" : "Напрямки",
+    footerAllDirections: isEn ? "All routes" : isRu ? "Все направления" : "Усі напрямки",
+    footerFleet: isEn ? "Fleet" : isRu ? "Автопарк" : "Автопарк",
+    footerContactsLink: isEn ? "Contacts" : isRu ? "Контакты" : "Контакти",
+    footerAbout: isEn ? "About" : isRu ? "О нас" : "Про нас",
     footerBlog: isRu ? "Блог" : "Блог",
     footerCopyright: isRu
       ? "© 2026 Grand Transfer. Все права защищены."
       : "© 2026 Grand Transfer. Усі права захищені.",
-    openMenu: isRu ? "Открыть меню" : "Відкрити меню",
-    closeMenu: isRu ? "Закрыть меню" : "Закрити меню",
-    openCarImage: isRu ? "Открыть изображение авто" : "Відкрити зображення авто",
-    closeCarImage: isRu ? "Закрыть изображение авто" : "Закрити зображення авто",
-    close: isRu ? "Закрыть" : "Закрити",
-    carClassModal: isRu ? "КЛАСС АВТО" : "КЛАС АВТО",
-    callNow: isRu ? "Позвонить" : "Подзвонити",
-    successEyebrow: isRu ? "Заявка отправлена" : "Заявку надіслано",
-    successTitle: isRu ? "Спасибо за заявку" : "Дякуємо за заявку",
-    successBody: isRu
+    openMenu: isEn ? "Open menu" : isRu ? "Открыть меню" : "Відкрити меню",
+    closeMenu: isEn ? "Close menu" : isRu ? "Закрыть меню" : "Закрити меню",
+    openCarImage: isEn ? "Open vehicle image" : isRu ? "Открыть изображение авто" : "Відкрити зображення авто",
+    closeCarImage: isEn ? "Close vehicle image" : isRu ? "Закрыть изображение авто" : "Закрити зображення авто",
+    close: isEn ? "Close" : isRu ? "Закрыть" : "Закрити",
+    carClassModal: isEn ? "VEHICLE CLASS" : isRu ? "КЛАСС АВТО" : "КЛАС АВТО",
+    callNow: isEn ? "Call" : isRu ? "Позвонить" : "Подзвонити",
+    successEyebrow: isEn ? "Request sent" : isRu ? "Заявка отправлена" : "Заявку надіслано",
+    successTitle: isEn ? "Thank you for your request" : isRu ? "Спасибо за заявку" : "Дякуємо за заявку",
+    successBody: isEn
+      ? "Thank you! We will contact you soon."
+      : isRu
       ? "Спасибо! Мы скоро свяжемся с вами."
       : "Дякуємо! Ми скоро зв'яжемося з вами.",
-    successNote: isRu
+    successNote: isEn
+      ? "If your request is urgent, tap “Call now”."
+      : isRu
       ? "Если вопрос срочный — нажмите «Позвонить сейчас»."
       : "Якщо питання термінове — натисніть “Подзвонити зараз”.",
-    successCallButton: isRu ? "Позвонить сейчас" : "Подзвонити зараз",
-    chooseDate: isRu ? "Выберите дату" : "Оберіть дату",
-    onRequest: isRu ? "по запросу" : "за запитом",
+    successCallButton: isEn ? "Call now" : isRu ? "Позвонить сейчас" : "Подзвонити зараз",
+    chooseDate: isEn ? "Choose date" : isRu ? "Выберите дату" : "Оберіть дату",
+    onRequest: isEn ? "on request" : isRu ? "по запросу" : "за запитом",
     passengersShort: "пас.",
-    luggageShort: isRu ? "багаж" : "багаж",
-    climateShort: isRu ? "Климат" : "Клімат",
-    carCardCta: isRu ? "Выбрать" : "Обрати",
-    priceApproxShort: isRu ? "Цены указаны ориентировочно" : "Ціни вказані орієнтовно"
+    luggageShort: isEn ? "luggage" : isRu ? "багаж" : "багаж",
+    climateShort: isEn ? "Climate" : isRu ? "Климат" : "Клімат",
+    carCardCta: isEn ? "Select" : isRu ? "Выбрать" : "Обрати",
+    priceApproxShort: isEn ? "Prices are approximate" : isRu ? "Цены указаны ориентировочно" : "Ціни вказані орієнтовно"
   };
   const navItems = [
     { label: ui.navHome, href: homeHref },
@@ -437,8 +452,8 @@ export default function RoutePageSupabaseClient({
   const pricePremium = routeData.price_premium ?? 300;
   const priceMinivan = routeData.price_minivan ?? 260;
   const routeSlug = routeData.slug;
-  const fromCity = routeData.from_city || (isRu ? "Город выезда" : "Місто виїзду");
-  const toCity = routeData.to_city || (isRu ? "Город прибытия" : "Місто прибуття");
+  const fromCity = routeData.from_city || (isEn ? "Departure city" : isRu ? "Город выезда" : "Місто виїзду");
+  const toCity = routeData.to_city || (isEn ? "Arrival city" : isRu ? "Город прибытия" : "Місто прибуття");
   const routeLabel = `${fromCity} — ${toCity}`;
   const routeH1 = (routeData.h1 || routeLabel).replace(/\s*\([^)]*\)\s*$/, "").trim();
   const routeInfoBackground =
@@ -449,15 +464,16 @@ export default function RoutePageSupabaseClient({
   const routeDescription = routeData.description || "";
   const routeSubtitle = /приватний\s+vip\s+трансфер/i.test(routeDescription)
     || /частный\s+vip\s+трансфер/i.test(routeDescription)
+    || /private\s+vip\s+transfer/i.test(routeDescription)
     ? routeDescription
       : routeDescription
-      ? `${isRu ? "Частный VIP трансфер." : "Приватний VIP трансфер."} ${routeDescription}`
-      : isRu ? "Частный VIP трансфер." : "Приватний VIP трансфер.";
+      ? `${isEn ? "Private VIP transfer." : isRu ? "Частный VIP трансфер." : "Приватний VIP трансфер."} ${routeDescription}`
+      : isEn ? "Private VIP transfer." : isRu ? "Частный VIP трансфер." : "Приватний VIP трансфер.";
   const routePriceDisplay = `€${priceFrom}`;
   const routeBusinessPriceDisplay = `€${priceBusiness}`;
   const routePremiumPriceDisplay = `€${pricePremium}`;
   const routeMinivanPriceDisplay = `€${priceMinivan}`;
-  const routeDurationDisplay = routeData.duration || (isRu ? "Уточняется" : "Уточнюється");
+  const routeDurationDisplay = routeData.duration || (isEn ? "To be confirmed" : isRu ? "Уточняется" : "Уточнюється");
   const routeSeoParagraphsBase = (routeData.seo_text || "")
     .split(/\n{2,}|\n/)
     .map((paragraph) => paragraph.trim())
@@ -465,17 +481,47 @@ export default function RoutePageSupabaseClient({
   const routeSeoParagraphs = (
     routeSeoParagraphsBase.length > 0 ? routeSeoParagraphsBase : [routeDescription]
   ).filter(Boolean);
-  const routeFinalSeoSentence = isRu
-    ? `Заказать трансфер ${routeLabel} можно в любое время через сайт или Telegram. Мы подберём авто, согласуем маршрут и обеспечим комфортную поездку без попутчиков с индивидуальной подачей под ваш график.`
-    : `Замовити трансфер ${routeLabel} можна у будь-який час через сайт або Telegram. Ми підберемо авто, узгодимо маршрут і забезпечимо комфортну поїздку без попутників з індивідуальною подачею під ваш графік.`;
+  const routeFinalSeoSentence = isEn
+    ? `You can book a ${routeLabel} transfer at any time through the website or Telegram. We will select a vehicle, confirm the route and provide a comfortable private ride with pickup matched to your schedule.`
+    : isRu
+      ? `Заказать трансфер ${routeLabel} можно в любое время через сайт или Telegram. Мы подберём авто, согласуем маршрут и обеспечим комфортную поездку без попутчиков с индивидуальной подачей под ваш график.`
+      : `Замовити трансфер ${routeLabel} можна у будь-який час через сайт або Telegram. Ми підберемо авто, узгодимо маршрут і забезпечимо комфортну поїздку без попутників з індивідуальною подачею під ваш графік.`;
   if (routeSeoParagraphs.length > 0) {
     routeSeoParagraphs[routeSeoParagraphs.length - 1] =
       `${routeSeoParagraphs[routeSeoParagraphs.length - 1]} ${routeFinalSeoSentence}`.trim();
   } else {
     routeSeoParagraphs.push(routeFinalSeoSentence);
   }
-  const benefitItemsLocalized: BenefitItem[] = isRu
+  const benefitItemsLocalized: BenefitItem[] = isEn
     ? [
+        {
+          title: "Private driver",
+          description: "Individual transfer without shared rides",
+          Icon: PassengerIcon
+        },
+        {
+          title: "Border assistance",
+          description: "Guidance at key points of the route",
+          Icon: ShieldCheckIcon
+        },
+        {
+          title: "Airport transfer",
+          description: "Transfer to Chisinau Airport or city address",
+          Icon: PlaneIcon
+        },
+        {
+          title: "Pickup 24/7",
+          description: "Vehicle available day and night",
+          Icon: ClockIcon
+        },
+        {
+          title: "Premium vehicles",
+          description: "Comfort, business and premium class cars",
+          Icon: CarIcon
+        }
+      ]
+    : isRu
+      ? [
         {
           title: "Частный водитель",
           description: "Индивидуальный трансфер без попутчиков",
@@ -503,8 +549,31 @@ export default function RoutePageSupabaseClient({
         }
       ]
     : benefitItems;
-  const routeDetailsLocalized: RouteDetail[] = isRu
+  const routeDetailsLocalized: RouteDetail[] = isEn
     ? [
+        {
+          title: "Pickup address",
+          description: `Pickup from a hotel, residential complex, station or airport in ${fromCity}.`,
+          Icon: MapPinIcon
+        },
+        {
+          title: "Drop-off address",
+          description: `Any address in ${toCity}, city center or airport transfer.`,
+          Icon: TargetIcon
+        },
+        {
+          title: "Possible stops",
+          description: `Coffee, lunch, fuel or other stops if the ${routeLabel} route requires extra comfort.`,
+          Icon: StopIcon
+        },
+        {
+          title: "Individual schedule",
+          description: "Departure at a convenient time, including night trips, with pickup matched to your schedule.",
+          Icon: ScheduleIcon
+        }
+      ]
+    : isRu
+      ? [
         {
           title: "Откуда забираем",
           description: `Подача авто из отеля, ЖК, вокзала или аэропорта в ${fromCity}.`,
@@ -527,8 +596,16 @@ export default function RoutePageSupabaseClient({
         }
       ]
     : routeDetails;
-  const pricingFactorsLocalized = isRu
+  const pricingFactorsLocalized = isEn
     ? [
+        "Vehicle class",
+        "Date and departure time",
+        "Number of passengers",
+        "Amount of luggage",
+        "Additional stops and waiting time"
+      ]
+    : isRu
+      ? [
         "Класс авто",
         "Дата и время выезда",
         "Количество пассажиров",
@@ -548,21 +625,29 @@ export default function RoutePageSupabaseClient({
             : card.title,
     description:
       card.title === "Комфорт"
-        ? isRu
+        ? isEn
+          ? "Comfortable interior for private rides."
+          : isRu
           ? "Удобный салон для индивидуальных поездок."
           : "Зручний салон для індивідуальних поїздок."
         : card.title === "Бізнес"
-          ? isRu
+          ? isEn
+            ? "More quiet, space and comfort for long trips."
+            : isRu
             ? "Повышенный уровень тишины и пространства."
             : "Комфортні автомобілі бізнес-класу для далеких поїздок."
           : card.title === "Преміум"
-            ? isRu
+            ? isEn
+              ? "Executive class and maximum comfort."
+              : isRu
               ? "Представительский класс и максимальный комфорт."
               : "Преміальні автомобілі для максимально комфортних поїздок."
-            : isRu
+            : isEn
+              ? "For several passengers and luggage."
+              : isRu
               ? "Для нескольких пассажиров и багажа."
               : "Оптимальний вибір для групових поїздок.",
-    climate: isRu ? "Климат-контроль" : "Клімат-контроль",
+    climate: isEn ? "Climate control" : isRu ? "Климат-контроль" : "Клімат-контроль",
     price:
       card.title === "Комфорт"
         ? routePriceDisplay
@@ -572,8 +657,36 @@ export default function RoutePageSupabaseClient({
             ? routePremiumPriceDisplay
             : routeMinivanPriceDisplay
   }));
-  const tripStepsLocalized: TripStep[] = isRu
+  const tripStepsLocalized: TripStep[] = isEn
     ? [
+        {
+          number: "01",
+          title: "Request",
+          description: "You submit a request on the website or in messenger."
+        },
+        {
+          number: "02",
+          title: "Confirmation",
+          description: "We confirm the route, vehicle class and pickup time."
+        },
+        {
+          number: "03",
+          title: `Pickup in ${fromCity}`,
+          description: "The driver arrives on time at your chosen address."
+        },
+        {
+          number: "04",
+          title: "Road / border",
+          description: "Comfortable trip with route assistance."
+        },
+        {
+          number: "05",
+          title: `Arrival in ${toCity}`,
+          description: "Drop-off at your address or airport."
+        }
+      ]
+    : isRu
+      ? [
         {
           number: "01",
           title: "Заявка",
@@ -601,16 +714,50 @@ export default function RoutePageSupabaseClient({
         }
       ]
     : tripSteps;
-  const airportFeaturesLocalized = isRu
+  const airportFeaturesLocalized = isEn
     ? [
+        "Pickup planned with traffic and border time",
+        "Luggage assistance",
+        "Timing matched to your flight",
+        "Departure at any time of day"
+      ]
+    : isRu
+      ? [
         "Подача с учётом времени на границу и трафик",
         "Помощь с багажом",
         "Расчёт времени под ваш рейс",
         "Выезд в любое время суток"
       ]
     : airportFeatures;
-  const routeFaqItems: RouteFaqItem[] = isRu
+  const routeFaqItems: RouteFaqItem[] = isEn
     ? [
+        {
+          question: `How much does the ${routeLabel} transfer cost?`,
+          answer: `The approximate price starts from €${priceFrom}. The final price depends on vehicle class, departure time, luggage and individual trip details.`
+        },
+        {
+          question: "How long does the trip take?",
+          answer: `The ${routeLabel} route usually takes ${routeDurationDisplay}, depending on traffic, weather and border crossing time.`
+        },
+        {
+          question: "Can I book a Chisinau Airport transfer?",
+          answer: "Yes, the route can be arranged to the city or directly to Chisinau Airport with timing matched to your flight."
+        },
+        {
+          question: "Does the driver help on the route?",
+          answer: `The driver accompanies you through the key stages of the route and helps keep the trip from ${fromCity} to ${toCity} calm and organized.`
+        },
+        {
+          question: "Is night pickup available?",
+          answer: "Yes, early morning, evening and night departures are available depending on your schedule."
+        },
+        {
+          question: `Is the ${routeLabel} transfer private?`,
+          answer: "Yes, trips are organized as private transfers without shared passengers."
+        }
+      ]
+    : isRu
+      ? [
         {
           question: "Сколько стоит трансфер Одесса — Кишинёв?",
           answer: `Ориентировочная стоимость трансфера Одесса Кишинёв стартует от €${priceFrom}. Финальная цена зависит от класса авто, времени выезда, багажа и индивидуальных пожеланий.`
@@ -652,11 +799,12 @@ export default function RoutePageSupabaseClient({
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
   const [selectedCarCard, setSelectedCarCard] = useState<CarClassCardData | null>(null);
+  const formLanguage = isEn ? "en" : isRu ? "ru" : "ua";
   const routeHeroForm = useTransferForm({
     formName: "route_quick_form",
     pageType: "route",
     route: routeSlug,
-    language: isRu ? "ru" : "ua",
+    language: formLanguage,
     initialValues: {
       fromCity,
       toCity
@@ -666,7 +814,7 @@ export default function RoutePageSupabaseClient({
     formName: "route_booking_form",
     pageType: "route",
     route: routeSlug,
-    language: isRu ? "ru" : "ua",
+    language: formLanguage,
     requireName: true,
     requireDate: true,
     requireCarClass: true,
@@ -682,7 +830,9 @@ export default function RoutePageSupabaseClient({
     routeFaqItems.slice(routeFaqSplitIndex)
   ];
   const routeCanonicalPath = `${routeHrefPrefix}/${routeData.slug}`;
-  const heroImageAlt = isRu
+  const heroImageAlt = isEn
+    ? `Grand Transfer vehicle for ${routeLabel} transfer`
+    : isRu
     ? `Автомобиль Grand Transfer для трансфера ${routeLabel}`
     : `Автомобіль Grand Transfer для трансферу ${routeLabel}`;
   const routeStructuredData = [
@@ -700,8 +850,16 @@ export default function RoutePageSupabaseClient({
       reviews: routeReviews
     })
   ];
-  const passengerOptionsLocalized = isRu
+  const passengerOptionsLocalized = isEn
     ? [
+        { value: "1 пасажир", label: "1 passenger" },
+        { value: "2 пасажири", label: "2 passengers" },
+        { value: "3 пасажири", label: "3 passengers" },
+        { value: "4 пасажири", label: "4 passengers" },
+        { value: "5+ пасажирів", label: "5+ passengers" }
+      ]
+    : isRu
+      ? [
         { value: "1 пасажир", label: "1 пассажир" },
         { value: "2 пасажири", label: "2 пассажира" },
         { value: "3 пасажири", label: "3 пассажира" },
@@ -709,16 +867,28 @@ export default function RoutePageSupabaseClient({
         { value: "5+ пасажирів", label: "5+ пассажиров" }
       ]
     : passengerOptions.map((option) => ({ value: option, label: option }));
-  const carClassOptionsLocalized = isRu
+  const carClassOptionsLocalized = isEn
     ? [
+        { value: "Комфорт", label: "Comfort" },
+        { value: "Бізнес", label: "Business" },
+        { value: "Преміум", label: "Premium" },
+        { value: "Мінівен", label: "Minivan" }
+      ]
+    : isRu
+      ? [
         { value: "Комфорт", label: "Комфорт" },
         { value: "Бізнес", label: "Бизнес" },
         { value: "Преміум", label: "Премиум" },
         { value: "Мінівен", label: "Минивэн" }
       ]
     : carClassOptions.map((option) => ({ value: option, label: option }));
-  const additionalRouteLinks = isRu
+  const additionalRouteLinks = isEn
     ? [
+        { href: "/en/routes", label: "all English routes" },
+        { href: "/routes", label: "all Ukrainian routes" }
+      ]
+    : isRu
+      ? [
         { href: "/ru/odessa-yassy", label: "трансфер Одесса — Яссы" },
         { href: "/ru/odessa-bucharest", label: "трансфер Одесса — Бухарест" }
       ]
@@ -803,7 +973,9 @@ export default function RoutePageSupabaseClient({
             <div className="flex min-h-[72px] items-center justify-between gap-3 md:min-h-[74px] lg:grid lg:min-h-[88px] lg:grid-cols-[190px_minmax(0,1fr)_300px] lg:justify-normal lg:gap-4 xl:grid-cols-[202px_minmax(0,1fr)_470px]">
               <Link href={homeHref} className="header-brand block">
                 <div className="luxury-logo-title">GRAND TRANSFER</div>
-                <div className="luxury-logo-subtitle">{isRu ? "VIP СЕРВИС" : "VIP СЕРВІС"}</div>
+                <div className="luxury-logo-subtitle">
+                  {isEn ? "VIP SERVICE" : isRu ? "VIP СЕРВИС" : "VIP СЕРВІС"}
+                </div>
               </Link>
 
               <nav className="hidden items-center justify-self-center lg:flex lg:gap-3 xl:gap-5">
@@ -830,7 +1002,8 @@ export default function RoutePageSupabaseClient({
                   currentLanguage={currentLanguage}
                   links={{
                     ua: languageLinks?.ua || "/",
-                    ru: languageLinks?.ru || "/ru"
+                    ru: languageLinks?.ru || "/ru",
+                    en: languageLinks?.en || "/en"
                   }}
                 />
                 <a
@@ -898,7 +1071,7 @@ export default function RoutePageSupabaseClient({
                     <span className="text-[rgba(247,243,234,0.82)]">{routeLabel}</span>
                   </div>
 
-                  <p className="eyebrow-lux mt-6">VIP ТРАНСФЕР</p>
+                  <p className="eyebrow-lux mt-6">{ui.heroEyebrow}</p>
                   <h1 className="headline-lux mt-5 text-[2.75rem] font-medium leading-[1.01] tracking-[-0.04em] text-[var(--text)] sm:text-[3.25rem] md:text-[4.05rem] lg:text-[4.45rem] xl:text-[4.8rem]">
                     {routeH1}
                   </h1>
@@ -1015,7 +1188,7 @@ export default function RoutePageSupabaseClient({
                       checked={routeHeroForm.values.privacyAccepted}
                       onChange={routeHeroForm.handlePrivacyAcceptedChange}
                       error={routeHeroForm.errors.privacy}
-                      language={isRu ? "ru" : "ua"}
+                      language={formLanguage}
                     />
                     <button
                       type="submit"
@@ -1353,7 +1526,7 @@ export default function RoutePageSupabaseClient({
                     min={routeFinalForm.today}
                     error={routeFinalForm.errors.travelDate}
                     placeholderText={ui.chooseDate}
-                    locale={isRu ? "ru-RU" : "uk-UA"}
+                    locale={isEn ? "en-US" : isRu ? "ru-RU" : "uk-UA"}
                     fieldClassName="h-14 rounded-[15px] px-4 text-[0.95rem]"
                   />
                   <SelectField
@@ -1399,7 +1572,7 @@ export default function RoutePageSupabaseClient({
                     checked={routeFinalForm.values.privacyAccepted}
                     onChange={routeFinalForm.handlePrivacyAcceptedChange}
                     error={routeFinalForm.errors.privacy}
-                    language={isRu ? "ru" : "ua"}
+                    language={formLanguage}
                     className="md:col-span-2"
                   />
                                     {routeFinalForm.submitError ? (
@@ -1472,7 +1645,7 @@ export default function RoutePageSupabaseClient({
                   >
                     {additionalRouteLinks[0].label}
                   </Link>
-                  {isRu ? " и " : " та "}
+                  {isEn ? " and " : isRu ? " и " : " та "}
                   <Link
                     href={additionalRouteLinks[1].href}
                     className="text-[var(--soft-gold)] transition hover:text-[var(--champagne)]"
@@ -1511,7 +1684,13 @@ export default function RoutePageSupabaseClient({
             <div className="route-airport-shell route-airport-panel relative min-h-[300px] overflow-hidden rounded-[28px] px-5 py-8 sm:px-7 md:px-9 lg:px-11 lg:py-10">
               <Image
                 src={airportImage}
-                alt={isRu ? "Трансфер в аэропорт Кишинёва" : "Трансфер в аеропорт Кишинева"}
+                alt={
+                  isEn
+                    ? "Chisinau airport transfer"
+                    : isRu
+                      ? "Трансфер в аэропорт Кишинёва"
+                      : "Трансфер в аеропорт Кишинева"
+                }
                 fill
                 className="object-cover object-[72%_center] md:object-[70%_center] lg:object-right"
                 sizes="100vw"
@@ -1642,7 +1821,9 @@ export default function RoutePageSupabaseClient({
               <div className="luxury-logo-title text-[1rem] leading-none">
                 GRAND TRANSFER
               </div>
-              <div className="luxury-logo-subtitle mt-2">{isRu ? "VIP СЕРВИС" : "VIP СЕРВІС"}</div>
+              <div className="luxury-logo-subtitle mt-2">
+                {isEn ? "VIP SERVICE" : isRu ? "VIP СЕРВИС" : "VIP СЕРВІС"}
+              </div>
             </Link>
             <button
               type="button"
@@ -1672,7 +1853,8 @@ export default function RoutePageSupabaseClient({
             currentLanguage={currentLanguage}
             links={{
               ua: languageLinks?.ua || "/",
-              ru: languageLinks?.ru || "/ru"
+              ru: languageLinks?.ru || "/ru",
+              en: languageLinks?.en || "/en"
             }}
           />
 
@@ -1832,6 +2014,10 @@ function CloseIcon({ className = "h-4 w-4" }: IconProps) {
 }
 
 function getSourceCityLabel(city: string, language: RouteLanguage = "ua") {
+  if (language === "en") {
+    return city;
+  }
+
   const cityLabelsUa: Record<string, string> = {
     "Одеса": "Одеси",
     "Київ": "Києва",

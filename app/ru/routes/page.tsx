@@ -73,7 +73,7 @@ export default async function RuRoutesPage() {
       title="Все направления трансферов"
       subtitle="Частные трансферы между Украиной, Молдовой, Польшей, Венгрией и Румынией с индивидуальной подачей авто, без попутчиков и с маршрутом под ваш график."
       currentLanguage="ru"
-      languageLinks={{ ua: "/routes", ru: "/ru/routes" }}
+      languageLinks={{ ua: "/routes", ru: "/ru/routes", en: "/en/routes" }}
       navItems={ruNavItems}
       breadcrumbs={[
         { label: "Главная", href: "/ru" },

@@ -81,9 +81,8 @@ export function LanguageSwitcher({
     <div className={cx("language-switcher", className)} aria-label="Мови">
       {[
         { key: "ua" as const, label: "UA" },
-        { key: "ru" as const, label: "RU" }
-        // EN intentionally omitted: English pages are not implemented, so the
-        // non-functional option was removed to avoid dead UI / crawl confusion.
+        { key: "ru" as const, label: "RU" },
+        { key: "en" as const, label: "EN" }
       ].map(({ key, label }) => {
         const href = links?.[key];
         const isActive = currentLanguage === key;
@@ -312,7 +311,7 @@ export function SiteFooter({
 }: SiteFooterProps) {
   const isRu = currentLanguage === "ru";
   const isEn = currentLanguage === "en";
-  const resolvedFaqHref = faqHref || (isRu ? "/ru#faq" : "/#faq");
+  const resolvedFaqHref = faqHref || (isEn ? "/en#faq" : isRu ? "/ru#faq" : "/#faq");
 
   const ui = {
     brandDescription: isEn
@@ -362,11 +361,11 @@ export function SiteFooter({
       ]
     : isEn
       ? [
-          { label: "Odesa — Chisinau", href: "/odesa-kyshyniv" },
-          { label: "Kyiv — Chisinau", href: "/kyiv-kyshyniv" },
-          { label: "Lviv — Warsaw", href: "/lviv-warsaw" },
-          { label: "Odesa — Warsaw", href: "/odesa-warsaw" },
-          { label: "Dnipro — Chisinau", href: "/dnipro-kyshyniv" }
+          { label: "Chisinau — Uman", href: "/en/chisinau-uman" },
+          { label: "Uman — Chisinau", href: "/en/uman-chisinau" },
+          { label: "Odesa — Chisinau", href: "/en/routes" },
+          { label: "Kyiv — Chisinau", href: "/en/routes" },
+          { label: "Dnipro — Chisinau", href: "/en/routes" }
         ]
       : [
           { label: "Одеса — Кишинів", href: "/odesa-kyshyniv" },

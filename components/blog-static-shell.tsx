@@ -33,6 +33,15 @@ const blogNavItems = [
   { label: "БЛОГ", href: "/blog" }
 ];
 
+const enNavItems = [
+  { label: "HOME", href: "/en" },
+  { label: "ROUTES", href: "/en#directions" },
+  { label: "FLEET", href: "/avtopark" },
+  { label: "CONTACTS", href: "/kontakty" },
+  { label: "ABOUT", href: "/pro-kompaniiu" },
+  { label: "BLOG", href: "/blog" }
+];
+
 const phoneNumber = "+38 063 824 3223";
 const phoneHref = "+380638243223";
 
@@ -67,10 +76,12 @@ export function BlogStaticShell({
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const isRu = currentLanguage === "ru";
-  const resolvedNavItems = navItems || blogNavItems;
+  const isEn = currentLanguage === "en";
+  const resolvedNavItems = navItems || (isEn ? enNavItems : blogNavItems);
   const languageSwitcherLinks = languageLinks || {
     ua: "/",
-    ru: "/ru"
+    ru: "/ru",
+    en: "/en"
   };
   const breadcrumbSchema = breadcrumbs?.length
     ? buildBreadcrumbSchema(
@@ -117,9 +128,11 @@ export function BlogStaticShell({
         <div className="mx-auto max-w-[1536px] px-4 pt-5 sm:px-6 md:px-8 lg:px-10 xl:px-12 2xl:px-14">
           <header className="header-shell relative z-30 rounded-[24px] px-[18px] py-3 sm:px-5 md:rounded-[30px] md:px-7 lg:px-[34px]">
             <div className="flex min-h-[72px] items-center justify-between gap-3 md:min-h-[74px] lg:grid lg:min-h-[88px] lg:grid-cols-[190px_minmax(0,1fr)_300px] lg:justify-normal lg:gap-4 xl:grid-cols-[202px_minmax(0,1fr)_470px]">
-              <Link href="/" className="header-brand block">
+              <Link href={isEn ? "/en" : isRu ? "/ru" : "/"} className="header-brand block">
                 <div className="luxury-logo-title">GRAND TRANSFER</div>
-                <div className="luxury-logo-subtitle">VIP СЕРВІС</div>
+                <div className="luxury-logo-subtitle">
+                  {isEn ? "VIP SERVICE" : isRu ? "VIP СЕРВИС" : "VIP СЕРВІС"}
+                </div>
               </Link>
 
               <nav className="hidden items-center justify-self-center lg:flex lg:gap-2.5 xl:gap-4">
@@ -149,10 +162,10 @@ export function BlogStaticShell({
                   links={languageSwitcherLinks}
                 />
                 <Link
-                  href={isRu ? "/ru#booking" : "/#booking"}
+                  href={isEn ? "/en#booking" : isRu ? "/ru#booking" : "/#booking"}
                   className="button-gold inline-flex h-11 items-center justify-center rounded-full px-6 text-[0.75rem] font-bold uppercase tracking-[0.09em] xl:h-12 xl:px-7 xl:text-[0.78rem] xl:tracking-[0.11em]"
                 >
-                  {isRu ? "ЗАКАЗАТЬ" : "ЗАМОВИТИ"}
+                  {isEn ? "ORDER" : isRu ? "ЗАКАЗАТЬ" : "ЗАМОВИТИ"}
                 </Link>
               </div>
 
@@ -161,7 +174,7 @@ export function BlogStaticShell({
                   type="button"
                   aria-expanded={menuOpen}
                   aria-controls="blog-mobile-drawer"
-                  aria-label={isRu ? "Открыть меню" : "Відкрити меню"}
+                  aria-label={isEn ? "Open menu" : isRu ? "Открыть меню" : "Відкрити меню"}
                   onClick={() => setMenuOpen(true)}
                   className="burger-button inline-flex h-12 w-12 items-center justify-center rounded-full"
                 >
@@ -216,11 +229,11 @@ export function BlogStaticShell({
         className={`fixed inset-0 z-50 lg:hidden ${
           menuOpen ? "pointer-events-auto" : "pointer-events-none"
         }`}
-        aria-hidden={!menuOpen}
+          aria-hidden={!menuOpen}
       >
         <button
           type="button"
-          aria-label={isRu ? "Закрыть меню" : "Закрити меню"}
+          aria-label={isEn ? "Close menu" : isRu ? "Закрыть меню" : "Закрити меню"}
           onClick={() => setMenuOpen(false)}
           className={`mobile-drawer-overlay ${menuOpen ? "is-open" : ""}`}
         />
@@ -237,12 +250,12 @@ export function BlogStaticShell({
                 GRAND TRANSFER
               </div>
               <div className="luxury-logo-subtitle mt-2">
-                {isRu ? "VIP СЕРВИС" : "VIP СЕРВІС"}
+                {isEn ? "VIP SERVICE" : isRu ? "VIP СЕРВИС" : "VIP СЕРВІС"}
               </div>
             </div>
             <button
               type="button"
-              aria-label={isRu ? "Закрыть меню" : "Закрити меню"}
+              aria-label={isEn ? "Close menu" : isRu ? "Закрыть меню" : "Закрити меню"}
               onClick={() => setMenuOpen(false)}
               className="burger-button inline-flex h-11 w-11 items-center justify-center rounded-full"
             >
@@ -276,15 +289,15 @@ export function BlogStaticShell({
               pageType="about"
               phoneHref={phoneHref}
               phoneLabel={phoneNumber}
-              compactLabel="Подзвонити"
+              compactLabel={isEn ? "Call" : isRu ? "Позвонить" : "Подзвонити"}
               className="inline-flex"
             />
             <Link
-              href={isRu ? "/ru#booking" : "/#booking"}
+              href={isEn ? "/en#booking" : isRu ? "/ru#booking" : "/#booking"}
               onClick={() => setMenuOpen(false)}
               className="button-gold inline-flex h-[52px] w-full items-center justify-center rounded-full px-7 text-[0.76rem] font-bold uppercase tracking-[0.1em]"
             >
-              {isRu ? "ЗАКАЗАТЬ" : "ЗАМОВИТИ"}
+              {isEn ? "ORDER" : isRu ? "ЗАКАЗАТЬ" : "ЗАМОВИТИ"}
             </Link>
           </div>
         </aside>
